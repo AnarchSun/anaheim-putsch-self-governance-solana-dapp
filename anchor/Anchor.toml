@@ -5,7 +5,7 @@ anchor_version = "0.31.1"
 resolution = true
 skip-lint = false
 
-[programs.localnet]
+[programs.devnet]
 anaheim = "coUnmi3oBUtwtd9fjeAvSsJssXh5A5xyPbhpewyzRVF" # Program ID pour le programme anaheim
 journal = "7vtfmh5CTMaXyFFZWJm9TbPeRK8XJGB1n5rF9G5qFYhm"  # Program ID pour le programme journal
 

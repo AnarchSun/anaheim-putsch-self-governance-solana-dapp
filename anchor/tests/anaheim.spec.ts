@@ -1,11 +1,12 @@
 import * as anchor from '@coral-xyz/anchor';
 import { Program } from '@coral-xyz/anchor';
 import { Keypair, SystemProgram } from '@solana/web3.js';
-import type { Anaheim } from '../target/types/anaheim';
+import type { Anaheim } from '../../target/types/anaheim';
 
 describe('anaheim', () => {
   const provider = anchor.AnchorProvider.env();
   anchor.setProvider(provider);
+
   const payer = provider.wallet as anchor.Wallet;
   const program = anchor.workspace.Anaheim as Program<Anaheim>;
 
@@ -23,7 +24,7 @@ describe('anaheim', () => {
       .accounts({
         anaheim: anaheimKeypair.publicKey,
         payer: payer.publicKey,
-        systemProgram: SystemProgram.programId,
+        systemProgram: SystemProgram.programId, // ✅ snake_case
       })
       .signers([anaheimKeypair])
       .rpc();
@@ -76,13 +77,13 @@ describe('anaheim', () => {
     try {
       await program.methods.createPost(tooLongContent)
         .accounts({
-          systemProgram: SystemProgram.programId,
           postAccount: postKeypair.publicKey,
           user: payer.publicKey,
+          // Ne pas inclure `systemProgram` si non déclaré dans l’IDL
         })
-
         .signers([postKeypair])
         .rpc();
+
       throw new Error('Expected createPost to fail but it succeeded');
     } catch (err: any) {
       if (err.error?.errorCode?.code === 'ContentTooLong') {
@@ -100,9 +101,10 @@ describe('anaheim', () => {
     await program.methods.initialize()
       .accounts({
         anaheim: anaheimKeypair.publicKey,
-        user: payer.publicKey,
-        systemProgram: SystemProgram.programId, // ✅ reconnu
+        payer: payer.publicKey,
+        system_program: SystemProgram.programId,  // camelCase exact !
       })
+
 
 
       .signers([localKey])
@@ -117,8 +119,8 @@ describe('anaheim', () => {
 
     await program.methods.close()
       .accounts({
-        payer: payer.publicKey,
         anaheim: localKey.publicKey,
+        payer: payer.publicKey,
       })
       .rpc();
 
