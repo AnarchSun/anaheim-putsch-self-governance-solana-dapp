@@ -1,43 +1,67 @@
-import { defineConfig } from "eslint-define-config";
+import reactPlugin from 'eslint-plugin-react';
+import tsPlugin from '@typescript-eslint/eslint-plugin';
+import tsParser from '@typescript-eslint/parser';
+import babelParser from '@babel/eslint-parser';
 
-export default defineConfig({
-  // … ton config existante …
-  plugins: ["unicorn", /* … */],
-  extends: [
-    "plugin:unicorn/recommended",
-    // …
-  ],
-  rules: {
-    // tes règles globales
+export default [
+  // Pour fichiers JS/JSX modernes
+  {
+    files: ['**/*.js', '**/*.jsx'],
+    languageOptions: {
+      parser: babelParser,
+      parserOptions: {
+        requireConfigFile: false,
+        ecmaVersion: 2024,
+        sourceType: 'module',
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+    },
+    plugins: {
+      react: reactPlugin,
+    },
+    rules: {
+      'react/react-in-jsx-scope': 'off', // React 17+ ne nécessite plus l'import explicite de React
+    },
+    settings: {
+      react: {
+        version: 'detect', // détecte automatiquement la version de React installée
+      },
+    },
   },
-  overrides: [
-    {
-      // Tests et specs
-      files: ["test/**/*.ts", "anchor/tests/**/*.ts"],
-      rules: {
-        "unicorn/filename-case": "off",
-        "unicorn/catch-error-name": "off",
-        "unicorn/prefer-type-error": "off",
-        "unicorn/no-null": "off",
+
+  // Pour fichiers TS/TSX
+  {
+    files: ['**/*.ts', '**/*.tsx'],
+    languageOptions: {
+      parser: tsParser,
+      parserOptions: {
+        ecmaVersion: 2024,
+        sourceType: 'module',
+        ecmaFeatures: {
+          jsx: true,
+        },
+        project: './tsconfig.json', // Assure que le tsconfig est bien présent à la racine
       },
     },
-    {
-      // Scripts de migration / CLI
-      files: ["bin/**/*.js", "anchor/migrations/**/*.ts"],
-      rules: {
-        "unicorn/filename-case": "off",
-        "unicorn/no-anonymous-default-export": "off",
-        "unicorn/numeric-separators-style": "off",
+    plugins: {
+      '@typescript-eslint': tsPlugin,
+      react: reactPlugin,
+    },
+    rules: {
+      '@typescript-eslint/no-unused-vars': ['error'],
+      'react/react-in-jsx-scope': 'off',
+    },
+    settings: {
+      react: {
+        version: 'detect',
       },
     },
-    {
-      // Composants React front
-      files: ["src/components/**/*.js", "src/components/**/*.tsx"],
-      rules: {
-        "unicorn/no-null": "off",
-        "unicorn/prefer-logical-operator-over-ternary": "off",
-        "unicorn/prefer-number-properties": "off",
-      },
-    },
-  ],
-});
+  },
+
+  // Ignorer les dossiers compilés et dépendances
+  {
+    ignores: ['node_modules/**', 'dist/**', 'build/**', 'tmp/**'],
+  },
+];

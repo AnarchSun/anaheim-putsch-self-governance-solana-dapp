@@ -1,3 +1,5 @@
+#![allow(deprecated)]
+
 use anchor_lang::prelude::*;
 
 // This is your program's public key and it will update
@@ -57,9 +59,9 @@ pub struct JournalEntryState {
 pub struct CreateEntry<'info> {
     #[account(
         init,
-        seeds = [title.as_bytes(), owner.key().as_ref()], 
-        bump, 
-        payer = owner, 
+        seeds = [title.as_bytes(), owner.key().as_ref()],
+        bump,
+        payer = owner,
         space = 8 + 32 + 4 + title.len() + 4 + message.len()
     )]
     pub journal_entry: Account<'info, JournalEntryState>,
@@ -73,11 +75,11 @@ pub struct CreateEntry<'info> {
 pub struct UpdateEntry<'info> {
     #[account(
         mut,
-        seeds = [title.as_bytes(), owner.key().as_ref()], 
-        bump, 
+        seeds = [title.as_bytes(), owner.key().as_ref()],
+        bump,
         realloc = 8 + 32 + 4 + title.len() + 4 + message.len(),
-        realloc::payer = owner, 
-        realloc::zero = true, 
+        realloc::payer = owner,
+        realloc::zero = true,
     )]
     pub journal_entry: Account<'info, JournalEntryState>,
     #[account(mut)]
@@ -88,10 +90,10 @@ pub struct UpdateEntry<'info> {
 #[derive(Accounts)]
 #[instruction(title: String)]
 pub struct DeleteEntry<'info> {
-    #[account( 
-        mut, 
-        seeds = [title.as_bytes(), owner.key().as_ref()], 
-        bump, 
+    #[account(
+        mut,
+        seeds = [title.as_bytes(), owner.key().as_ref()],
+        bump,
         close= owner,
     )]
     pub journal_entry: Account<'info, JournalEntryState>,

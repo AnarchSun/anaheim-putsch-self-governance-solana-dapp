@@ -1,11 +1,13 @@
 use anchor_lang::prelude::*;
 
-use crate::contexts::initialize::Initialize;  // << C’est ça qu’il faut ajouter !
+use crate::contexts::initialize::Initialize;
 
-pub fn initialize_handler(ctx: Context<Initialize>) -> Result<()> {
-  let anaheim = &mut ctx.accounts.anaheim;
-  anaheim.authority = ctx.accounts.user.key();
-  anaheim.count = 0;
-  anaheim.value = 0;
+pub fn initialize_handler(ctx: &mut Context<Initialize>) -> Result<()> {
+  let account = &mut ctx.accounts.anaheim_account;
+  account.authority = ctx.accounts.payer.key();
+  account.count = 0;
+  account.value = 0;
+  account.timestamp = Clock::get()?.unix_timestamp;
+  account.vote_count = 0;
   Ok(())
 }

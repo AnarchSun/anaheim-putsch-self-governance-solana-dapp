@@ -13,8 +13,8 @@ export function namesValues(name) {
 /**
  * Hyphenated to UpperCamelCase
  */
-function toClassName(str) {
-    return toCapitalCase(toPropertyName(str));
+function toClassName(string_) {
+    return toCapitalCase(toPropertyName(string_));
 }
 /**
  * Hyphenated to lowerCamelCase

@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "esnext",
+    "target": "ESNext",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "strict": true,
@@ -8,18 +8,28 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
-    "module": "esnext",
+    "module": "ESNext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "preserve",
-    "baseUrl": ".",
-    "typeRoots": ["./node_modules/@types", "./types"],
+    "jsx": "react-jsx",
+    "baseUrl": "./src",
     "paths": {
-      "*": ["node_modules/*"]
-    }
+      "@/*": ["./*"],
+      "@wallet-ui/react": ["components/wallet/wallet_context.tsx"]
+    },
+    "typeRoots": ["./node_modules/@types", "./types"]
   },
-  "include": ["next-env.d.ts", "src", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules", "tmp", "dist"]
+  "include": [  "next-env.d.ts",
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "test/**/*.ts",
+    "test/**/*.tsx",
+    "anchor/**/*.ts",
+    "*.ts",
+    "*.tsx",
+    "eslint.config.mjs"
+  ],
+  "exclude": ["node_modules", "dist", "tmp"]
 }

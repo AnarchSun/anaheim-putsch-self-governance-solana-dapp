@@ -28,7 +28,6 @@ describe('Anaheim Initialization', () => {
     anchor.setProvider(provider);
     connection = provider.connection;
 
-    // @ts-expect-error: Ignore TS error due to missing IDL mapping
     program = anchor.workspace.Anaheim as anchor.Program<Anaheim>;
     anaheimKeypair = Keypair.generate();
 
@@ -77,8 +76,8 @@ describe('Anaheim Initialization', () => {
       )
     );
 
-    // Access account with the actual account name defined in Rust
-    const account = await program.account["anaheim"].fetch(anaheimKeypair.publicKey);
+    const account = await (program.account as any)["anaheim"].fetch(anaheimKeypair.publicKey);
     expect(account.count.toNumber()).toBe(0);
+
   });
 });

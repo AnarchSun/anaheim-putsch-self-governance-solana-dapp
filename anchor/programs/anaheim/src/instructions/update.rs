@@ -19,10 +19,9 @@ pub fn increment(ctx: Context<UpdatePost>) -> Result<()> {
   Ok(())
 }
 
-pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
-  initialize_handler(ctx)
+pub fn initialize(mut ctx: Context<Initialize>) -> Result<()> {
+  initialize_handler(&mut ctx)
 }
-
 
 pub fn set(ctx: Context<UpdatePost>, value: u8) -> Result<()> {
   ctx.accounts.anaheim.count = value as u64;

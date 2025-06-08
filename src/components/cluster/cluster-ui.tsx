@@ -6,7 +6,7 @@ import { ReactNode } from 'react'
 import { getExplorerLink, GetExplorerLinkArgs } from 'gill'
 import { Button } from '@/components/ui/button'
 import { AppAlert } from '@/components/app-alert'
-import { useWalletUi, useWalletUiCluster } from '@wallet-ui/react'
+import { useWalletUi, useWalletUiCluster } from '@/components/wallet/wallet-hooks'
 
 export function ExplorerLink({
   className,
@@ -34,9 +34,10 @@ export function ClusterChecker({ children }: { children: ReactNode }) {
 
   const query = useQuery({
     queryKey: ['version', { cluster, endpoint: cluster.urlOrMoniker }],
-    queryFn: () => client.rpc.getVersion(),
+    queryFn: () => client.getVersion(),
     retry: 1,
-  })
+  });
+
   if (query.isLoading) {
     return null
   }

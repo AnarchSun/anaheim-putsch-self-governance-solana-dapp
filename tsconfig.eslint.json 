@@ -1,0 +1,20 @@
+// 🧠 Utilisé uniquement pour ESLint (ne compile pas)
+// Assure la vérification des types dans les règles TypeScript ESLint
+
+{
+  "extends": "./tsconfig.json",
+  "include": [
+    "src",
+    "test",
+    "app",
+    "components",
+    "utils",
+    "templates",
+    "lib"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "build"
+  ]
+}

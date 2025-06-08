@@ -21,7 +21,7 @@ export function checkGitVersion() {
     }
 }
 export async function initializeGitRepo(directory, options) {
-    const execute = (args, ignoreErrorStream = false) => {
+    const execute = (arguments_, ignoreErrorStream = false) => {
         const outputStream = 'ignore';
         const errorStream = ignoreErrorStream ? 'ignore' : process.stderr;
         const spawnOptions = {
@@ -45,7 +45,7 @@ export async function initializeGitRepo(directory, options) {
             },
         };
         return new Promise((resolve, reject) => {
-            spawn('git', args, spawnOptions).on('close', (code) => {
+            spawn('git', arguments_, spawnOptions).on('close', (code) => {
                 if (code === 0) {
                     resolve();
                 }

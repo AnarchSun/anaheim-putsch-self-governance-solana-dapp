@@ -4,32 +4,32 @@ import { join } from 'node:path';
 import { execAndWait } from './vendor/child-process-utils';
 import { taskFail } from './vendor/clack-tasks';
 import { getPackageManagerCommand } from './vendor/package-manager';
-export function createAppTaskInstallDependencies(args) {
-    const pm = args.packageManager;
-    const { install, lockFile } = getPackageManagerCommand(pm, args.verbose);
+export function createAppTaskInstallDependencies(arguments_) {
+    const pm = arguments_.packageManager;
+    const { install, lockFile } = getPackageManagerCommand(pm, arguments_.verbose);
     return {
-        enabled: !args.skipInstall,
+        enabled: !arguments_.skipInstall,
         title: `Installing via ${pm}`,
         task: async (result) => {
-            if (args.verbose) {
+            if (arguments_.verbose) {
                 log.warn(`Installing via ${pm}`);
             }
             const deleteLockFiles = ['package-lock.json', 'pnpm-lock.yaml', 'yarn.lock']
                 // We don't want to delete the lock file for the current package manager
                 .filter((item) => item !== lockFile)
                 // We only want to delete the lock file if it exists
-                .filter((item) => existsSync(join(args.targetDirectory, item)));
+                .filter((item) => existsSync(join(arguments_.targetDirectory, item)));
             for (const lockFile of deleteLockFiles) {
-                if (args.verbose) {
+                if (arguments_.verbose) {
                     log.warn(`Deleting ${lockFile}`);
                 }
-                await execAndWait(`rm ${lockFile}`, args.targetDirectory);
+                await execAndWait(`rm ${lockFile}`, arguments_.targetDirectory);
             }
-            if (args.verbose) {
+            if (arguments_.verbose) {
                 log.warn(`Running ${install}`);
             }
             try {
-                await execAndWait(install, args.targetDirectory);
+                await execAndWait(install, arguments_.targetDirectory);
                 return result({ message: `Installed via ${pm}` });
             }
             catch (error) {

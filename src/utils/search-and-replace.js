@@ -9,9 +9,9 @@ export async function searchAndReplace(rootFolder, fromStrings, toStrings, isDry
         try {
             const content = await readFile(filePath, 'utf8');
             let newContent = content;
-            for (const [i, fromString] of fromStrings.entries()) {
+            for (const [index, fromString] of fromStrings.entries()) {
                 const regex = new RegExp(fromString, 'g');
-                newContent = newContent.replace(regex, toStrings[i]);
+                newContent = newContent.replace(regex, toStrings[index]);
                 // Make sure we maintain the possible newline at the end of the file
                 if (content.endsWith('\n') && !newContent.endsWith('\n')) {
                     newContent += '\n';
@@ -24,10 +24,10 @@ export async function searchAndReplace(rootFolder, fromStrings, toStrings, isDry
                 if (isVerbose) {
                     console.log(`${isDryRun ? '[Dry Run] ' : ''}File modified: ${filePath}`);
                 }
-                for (const [index, fromStr] of fromStrings.entries()) {
+                for (const [index, fromString] of fromStrings.entries()) {
                     const count = (newContent.match(new RegExp(toStrings[index], 'g')) || []).length;
                     if (count > 0 && isVerbose) {
-                        console.log(`  Replaced "${fromStr}" with "${toStrings[index]}" ${count} time(s)`);
+                        console.log(`  Replaced "${fromString}" with "${toStrings[index]}" ${count} time(s)`);
                     }
                 }
             }
@@ -81,8 +81,8 @@ export async function searchAndReplace(rootFolder, fromStrings, toStrings, isDry
                 }
                 const oldPath = join(directoryPath, entry.name);
                 let newPath = oldPath;
-                for (const [i, fromString] of fromStrings.entries()) {
-                    newPath = newPath.replace(new RegExp(fromString, 'g'), toStrings[i]);
+                for (const [index, fromString] of fromStrings.entries()) {
+                    newPath = newPath.replace(new RegExp(fromString, 'g'), toStrings[index]);
                 }
                 if (oldPath !== newPath) {
                     if (!isDryRun) {

@@ -1,0 +1,7 @@
+[programs.localnet]
+anaheim = "anchor/target/deploy/anaheim.so"
+journal = "anchor/target/deploy/journal.so"
+
+[provider]
+cluster = "devnet"
+wallet = "~/.config/solana/id.json"

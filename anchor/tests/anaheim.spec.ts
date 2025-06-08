@@ -12,7 +12,7 @@ describe('anaheim', () => {
   let anaheimKeypair: Keypair;
 
   const fetchAndExpectCount = async (expectedCount: number) => {
-    const acc = await program.account.anaheim.fetch(anaheimKeypair.publicKey);
+    const acc = await program.account.anaheimAccount.fetch(anaheimKeypair.publicKey);
     expect(acc.count).toEqual(expectedCount);
   };
 
@@ -65,7 +65,7 @@ describe('anaheim', () => {
       })
       .rpc();
 
-    const accountInfo = await program.account.anaheim.fetchNullable(anaheimKeypair.publicKey);
+    const accountInfo = await program.account.anaheimAccount.fetchNullable(anaheimKeypair.publicKey);
     expect(accountInfo).toBeNull();
   });
 
@@ -76,10 +76,11 @@ describe('anaheim', () => {
     try {
       await program.methods.createPost(tooLongContent)
         .accounts({
+          systemProgram: SystemProgram.programId,
           postAccount: postKeypair.publicKey,
           user: payer.publicKey,
-          systemProgram: SystemProgram.programId,
         })
+
         .signers([postKeypair])
         .rpc();
       throw new Error('Expected createPost to fail but it succeeded');
@@ -98,10 +99,12 @@ describe('anaheim', () => {
 
     await program.methods.initialize()
       .accounts({
-        anaheim: localKey.publicKey,
-        payer: payer.publicKey,
-        systemProgram: SystemProgram.programId,
+        anaheim: anaheimKeypair.publicKey,
+        user: payer.publicKey,
+        systemProgram: SystemProgram.programId, // ✅ reconnu
       })
+
+
       .signers([localKey])
       .rpc();
 
@@ -109,7 +112,7 @@ describe('anaheim', () => {
       .accounts({ anaheim: localKey.publicKey })
       .rpc();
 
-    const result = await program.account.anaheim.fetch(localKey.publicKey);
+    const result = await program.account.anaheimAccount.fetch(localKey.publicKey);
     expect(result.count).toEqual(1);
 
     await program.methods.close()
@@ -119,7 +122,7 @@ describe('anaheim', () => {
       })
       .rpc();
 
-    const closed = await program.account.anaheim.fetchNullable(localKey.publicKey);
+    const closed = await program.account.anaheimAccount.fetchNullable(localKey.publicKey);
     expect(closed).toBeNull();
   });
 });

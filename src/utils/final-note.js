@@ -1,18 +1,18 @@
 import { bold, white } from 'picocolors';
-export function finalNote(args) {
+export function finalNote(arguments_) {
     const lines = [
         `That's it!`,
         `Change to your new directory and start developing:`,
-        msg(`cd ${args.target}`),
+        message(`cd ${arguments_.target}`),
         `Start the app:`,
-        cmd(args.packageManager, 'dev'),
-        ...args.instructions.map((line) => (line.startsWith('+') ? msg(line.slice(1)) : line)),
+        cmd(arguments_.packageManager, 'dev'),
+        ...arguments_.instructions.map((line) => (line.startsWith('+') ? message(line.slice(1)) : line)),
     ];
     return lines.join('\n\n');
 }
 function cmd(pm, command) {
-    return msg(`${pm} run ${command}`);
+    return message(`${pm} run ${command}`);
 }
-function msg(message) {
+function message(message) {
     return bold(white(message));
 }

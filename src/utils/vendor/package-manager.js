@@ -19,9 +19,9 @@ export function detectInvokedPackageManager() {
     if (!invoker) {
         return detectedPackageManager;
     }
-    for (const pkgManager of packageManagers) {
-        if (invoker.path.includes(pkgManager)) {
-            detectedPackageManager = pkgManager;
+    for (const packageManager of packageManagers) {
+        if (invoker.path.includes(packageManager)) {
+            detectedPackageManager = packageManager;
             break;
         }
     }

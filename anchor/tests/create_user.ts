@@ -1,13 +1,13 @@
 import * as anchor from "@coral-xyz/anchor";
 import { Program } from "@coral-xyz/anchor";
 import { describe, it, expect } from "vitest";
-import { YourProgram } from "../target/types/anaheim"; // Remplace par le bon nom
+import { Anaheim } from "../target/types/anaheim"; // Remplace par le bon nom
 
 describe("create_user", () => {
   const provider = anchor.AnchorProvider.env();
   anchor.setProvider(provider);
 
-  const program = anchor.workspace.YourProgram as Program<YourProgram>;
+  const program = anchor.workspace.YourProgram as Program<Anaheim>;
 
   it("Fails on empty username", async () => {
     const [userAccount] = anchor.web3.PublicKey.findProgramAddressSync(

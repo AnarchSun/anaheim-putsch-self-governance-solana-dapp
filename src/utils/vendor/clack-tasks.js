@@ -19,8 +19,8 @@ export async function tasks(tasks) {
             continue;
         const s = spinner();
         s.start(task.title);
-        const result = await task.task((val) => {
-            return val;
+        const result = await task.task((value) => {
+            return value;
         });
         s.stop(result?.message ?? task.title);
         if (result?.instructions) {

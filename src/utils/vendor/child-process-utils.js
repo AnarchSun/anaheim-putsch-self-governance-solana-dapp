@@ -28,10 +28,10 @@ export function execAndWait(command, cwd) {
     return new Promise((res, rej) => {
         exec(command, { cwd, env: { ...process.env } }, (error, stdout, stderr) => {
             if (error) {
-                const errorStr = stderr && stderr.trim().length > 0 ? stderr : `${error}`;
+                const errorString = stderr && stderr.trim().length > 0 ? stderr : `${error}`;
                 const logFile = join(cwd, 'error.log');
-                writeFileSync(logFile, `${stdout}\n${errorStr}`);
-                const message = errorStr.trim().length > 0 ? errorStr : `An error occurred while running ${command}`;
+                writeFileSync(logFile, `${stdout}\n${errorString}`);
+                const message = errorString.trim().length > 0 ? errorString : `An error occurred while running ${command}`;
                 rej(new CreateAppError(message, error.code, logFile));
             }
             else {

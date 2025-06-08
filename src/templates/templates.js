@@ -17,8 +17,8 @@ export function findTemplate(name) {
     return template;
 }
 function getTemplatesForFrameworks(frameworks = []) {
-    return frameworks.reduce((acc, item) => {
-        return [...acc, ...getTemplatesForFramework(item)];
+    return frameworks.reduce((accumulator, item) => {
+        return [...accumulator, ...getTemplatesForFramework(item)];
     }, []);
 }
 export function getTemplatesForFramework(framework) {
