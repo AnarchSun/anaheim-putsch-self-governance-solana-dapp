@@ -1,7 +1,7 @@
 import * as anchor from '@coral-xyz/anchor';
-import { Program } from '@coral-xyz/anchor';
-import { Keypair, SystemProgram } from '@solana/web3.js';
-import type { Anaheim } from '../../target/types/anaheim';
+import { Program, AnchorError } from '@coral-xyz/anchor';
+import { Keypair } from '@solana/web3.js';
+import type { Anaheim } from '../target/types/anaheim';
 
 describe('anaheim', () => {
   const provider = anchor.AnchorProvider.env();
@@ -24,7 +24,7 @@ describe('anaheim', () => {
       .accounts({
         anaheim: anaheimKeypair.publicKey,
         payer: payer.publicKey,
-        systemProgram: SystemProgram.programId, // ✅ snake_case
+        // systemProgram: SystemProgram.programId, // <-- NE PAS INCLURE ICI
       })
       .signers([anaheimKeypair])
       .rpc();
@@ -76,23 +76,23 @@ describe('anaheim', () => {
 
     try {
       await program.methods.createPost(tooLongContent)
-        .accounts({
-          postAccount: postKeypair.publicKey,
-          user: payer.publicKey,
-          // Ne pas inclure `systemProgram` si non déclaré dans l’IDL
-        })
+        .accounts({ /* ... */ })
         .signers([postKeypair])
         .rpc();
 
+      // Cette erreur doit être levée si la promesse ne rejette pas
       throw new Error('Expected createPost to fail but it succeeded');
-    } catch (err: any) {
-      if (err.error?.errorCode?.code === 'ContentTooLong') {
-        expect(err.error.errorCode.code).toBe('ContentTooLong');
+    } catch (err: unknown) {
+      // Gestion spécifique de l'erreur attendue
+      const anchorErr = err as AnchorError;
+      if (anchorErr.error?.errorCode?.code === "ContentTooLong") {
+        expect(anchorErr.error.errorCode.code).toBe('ContentTooLong');
       } else {
-        console.error('Unexpected error:', err);
+        // Pour les autres erreurs, on remonte
         throw err;
       }
     }
+
   });
 
   it('initializes, increments, and closes cleanly', async () => {
@@ -100,13 +100,10 @@ describe('anaheim', () => {
 
     await program.methods.initialize()
       .accounts({
-        anaheim: anaheimKeypair.publicKey,
+        anaheim: localKey.publicKey,
         payer: payer.publicKey,
-        system_program: SystemProgram.programId,  // camelCase exact !
+        // systemProgram: SystemProgram.programId, // <-- NE PAS INCLURE
       })
-
-
-
       .signers([localKey])
       .rpc();
 

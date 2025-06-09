@@ -1,9 +1,8 @@
 use anchor_lang::prelude::*;
 
 use crate::contexts::initialize::Initialize;
-
 pub fn initialize_handler(ctx: &mut Context<Initialize>) -> Result<()> {
-  let account = &mut ctx.accounts.anaheim_account;
+  let account = &mut ctx.accounts.anaheim;
   account.authority = ctx.accounts.payer.key();
   account.count = 0;
   account.value = 0;

@@ -6,26 +6,26 @@ resolution = true
 skip-lint = false
 
 [programs.devnet]
-anaheim = "coUnmi3oBUtwtd9fjeAvSsJssXh5A5xyPbhpewyzRVF" # Program ID pour le programme anaheim
-journal = "7vtfmh5CTMaXyFFZWJm9TbPeRK8XJGB1n5rF9G5qFYhm"  # Program ID pour le programme journal
+anaheim = "AFJWnhBtU3VFjMB4N9fune9GXX42AEFV8tYEWKQY6Hfh"
+journal = "DU5TBit7qCNNX5KsGnNtpmHD46FvsqHjKb2EYGN9RvTx"
 
 [registry]
 url = "https://api.apr.dev"
 
 [provider]
-cluster = "devnet"                              # Cluster local pour les tests
-wallet = "~/.config/solana/id.json"              # Fichier de portefeuille utilisé pour signer les transactions
+cluster = "devnet"
+wallet = "~/.config/solana/id.json"
 
 [scripts]
-test_mocha = "mocha -t 1000000 tests/"           # Commande pour exécuter les tests avec Mocha
-test_jest = "../node_modules/.bin/jest --preset ts-jest" # Commande pour exécuter les tests avec Jest
+test_jest = "../node_modules/.bin/jest --preset ts-jest"
+test_mocha = "mocha -t 1000000 tests/"
 
 [test]
-startup_wait = 5000                               # Attente après le démarrage pour initialisation (en ms)
-shutdown_wait = 2000                              # Attente avant arrêt de la validation (en ms)
-upgradeable = false                               # Ne pas compiler les programmes en mode "Upgradeable loader"
+startup_wait = 5000
+shutdown_wait = 2000
+upgradeable = false
 
 [test.validator]
-bind_address = "127.0.0.1"                        # Adresse de liaison pour le validateur Solana
-ledger = ".anchor/test-ledger"                    # Chemin du registre local (test-ledger)
-rpc_port = 8899                                   # Port RPC local affiché par le validateur
+bind_address = "127.0.0.1"
+ledger = ".anchor/test-ledger"
+rpc_port = 8899

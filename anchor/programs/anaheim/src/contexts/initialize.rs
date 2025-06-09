@@ -10,10 +10,10 @@ pub struct Initialize<'info> {
     seeds = [b"anaheim", payer.key().as_ref()],
     bump
   )]
-  pub anaheim_account: Account<'info, AnaheimAccount>,
+  pub anaheim: Account<'info, AnaheimAccount>,
 
   #[account(mut)]
   pub payer: Signer<'info>,
 
-  pub system_program: Program<'info, System>,
+  pub system_program: Program<'info, System>,  // <<== ici le nom exact et en snake_case
 }

@@ -16,7 +16,7 @@ fn string_to_fixed<const N: usize>(s: &str) -> [u8; N] {
 }
 
 pub fn initialize_handler(ctx: Context<Initialize>) -> Result<()> {
-  let account = &mut ctx.accounts.anaheim_account;
+  let account = &mut ctx.accounts.anaheim;
   account.count = 0;
   account.value = 0;
   Ok(())

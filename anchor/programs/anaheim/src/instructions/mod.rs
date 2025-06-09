@@ -8,13 +8,15 @@ pub mod update;
 pub mod decrement;
 pub mod create_post;
 pub mod create_user;
+
+pub use create_user::*;
 pub mod initialize;
 pub mod mine;
 
-use anchor_lang::system_program::System;
-use anchor_lang::Accounts;
-use anchor_lang::prelude::{Account, Program, Signer};
-use crate::constants::MAX_CONTENT_LENGTH;
+pub use anchor_lang::system_program::System;
+pub use anchor_lang::Accounts;
+pub use anchor_lang::prelude::{Account, Program, Signer};
+pub use crate::constants::MAX_CONTENT_LENGTH;
 
 #[account]
 pub struct Anaheim {

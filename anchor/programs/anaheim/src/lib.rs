@@ -1,24 +1,29 @@
 #![allow(deprecated)]
 
 use anchor_lang::prelude::*;
-pub mod constants;
-pub mod error;
-pub mod state;
-pub mod handlers;
 pub mod instructions;
-pub mod post;
+pub mod handlers;
 pub mod contexts;
-pub mod close;
+pub mod state;
+pub mod error;
+pub mod constants;
 pub mod utils;
+pub mod close;
 
-pub use instructions::*; // exposes instruction structs
+pub use handlers::handle_create_user;
+pub use contexts::create_user::CreateUser as CreateUserContext;
+pub use utils::validation::string_utils::str_to_fixed_array;
+pub use contexts::create_user::CreateUser;
 
-
-declare_id!("CJSrfD5XGt4RkvGYZ8ooCUQfTPbPdZEqfPCo68K1Qxou");
+declare_id!("AFJWnhBtU3VFjMB4N9fune9GXX42AEFV8tYEWKQY6Hfh");
 
 #[program]
 pub mod anaheim {
   use super::*;
+
+  pub fn create_user(ctx: Context<CreateUser>, username: String) -> Result<()> {
+    instructions::create_user(ctx, username)
+  }
 
   pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
     let account = &mut ctx.accounts.anaheim;

@@ -38,9 +38,10 @@ describe("⚙️ initialize & increment", () => {
         anaheim: statePda.publicKey,
         payer: payerKeypair.publicKey,
         systemProgram: web3.SystemProgram.programId,
-      })
+      } as any) // bypass TS
       .signers([payerKeypair])
       .rpc();
+
 
 
     // === 🧪 FETCH
