@@ -15,12 +15,13 @@ pub use contexts::create_user::CreateUser as CreateUserContext;
 pub use utils::validation::string_utils::str_to_fixed_array;
 pub use contexts::create_user::CreateUser;
 pub use instructions::create_user;
-declare_id!("GoLxxrfzRbbSZcYm7W3u1iHF44yWxBuKqQjMEZvfqBFM");
+use crate::contexts::create_user::__client_accounts_create_user;
+
+declare_id!("2oCzFAZPChbHsUaUsictjLbBG6CQsAQEDMrDFRKzZZfJ");
 
 #[program]
 pub mod anaheim {
   use super::*;
-
   pub fn create_user(ctx: Context<CreateUser>, username: String) -> Result<()> {
     create_user::handler(ctx, username)
   }

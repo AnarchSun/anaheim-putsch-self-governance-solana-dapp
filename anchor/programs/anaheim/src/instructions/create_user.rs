@@ -1,4 +1,7 @@
+// instructions/create_user.rs
+
 use anchor_lang::prelude::*;
+
 use crate::contexts::create_user::CreateUser;
 use crate::error::ErrorCode;
 use crate::utils::validation::string_utils::str_to_fixed_array;
