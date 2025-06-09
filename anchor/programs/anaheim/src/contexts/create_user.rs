@@ -1,5 +1,6 @@
 // ===================== contexts/create_user.rs =====================
 use anchor_lang::prelude::*;
+
 use crate::state::user_account::UserAccount; // 🔁 adapte selon ton arborescence exacte
 
 #[derive(Accounts)]

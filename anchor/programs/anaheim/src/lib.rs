@@ -14,15 +14,15 @@ pub use handlers::handle_create_user;
 pub use contexts::create_user::CreateUser as CreateUserContext;
 pub use utils::validation::string_utils::str_to_fixed_array;
 pub use contexts::create_user::CreateUser;
-
-declare_id!("AFJWnhBtU3VFjMB4N9fune9GXX42AEFV8tYEWKQY6Hfh");
+pub use instructions::create_user;
+declare_id!("GoLxxrfzRbbSZcYm7W3u1iHF44yWxBuKqQjMEZvfqBFM");
 
 #[program]
 pub mod anaheim {
   use super::*;
 
   pub fn create_user(ctx: Context<CreateUser>, username: String) -> Result<()> {
-    instructions::create_user(ctx, username)
+    create_user::handler(ctx, username)
   }
 
   pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
