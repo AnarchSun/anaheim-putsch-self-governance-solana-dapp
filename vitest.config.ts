@@ -3,6 +3,10 @@ import path from 'path';
 
 // Export principal
 export default defineConfig({
+  server: {
+    host: true, // ou '0.0.0.0'
+    port: 5173
+  },
   resolve: {
     alias: {
       '@wallet-ui/react': path.resolve(__dirname, './components/wallet/wallet_context.tsx'),

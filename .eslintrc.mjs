@@ -6,7 +6,24 @@ const eslintConfig = {
       plugins: ["babel-plugin-deprecated-import-assert"],
     },
   },
-  // autres règles ESLint ici...
+  env: {
+    browser: true,
+    es2021: true,
+  },
+  extends: [
+    "eslint:recommended",
+    "plugin:react/recommended"
+  ],
+  plugins: ["react"],
+  rules: {
+    '@next/next/no-img-element': 'off',
+    // ajoute ici tes autres règles personnalisées...
+  },
+  settings: {
+    react: {
+      version: "detect",
+    },
+  },
 };
 
 export default eslintConfig;

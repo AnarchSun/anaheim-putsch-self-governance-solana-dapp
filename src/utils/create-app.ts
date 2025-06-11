@@ -7,13 +7,9 @@ import { tasks } from './vendor/clack-tasks'
 
 export async function createApp(args: GetArgsResult) {
   return tasks([
-    // Clone the template to the target directory
-    createAppTaskCloneTemplate(args),
-    // Install the dependencies
-    createAppTaskInstallDependencies(args),
-    // Run the init script define in package.json .init property
-    createAppTaskRunInitScript(args),
-    // Initialize git repository
-    createAppTaskInitializeGit(args),
+    () => createAppTaskCloneTemplate(args),
+    () => createAppTaskInstallDependencies(args),
+    () => createAppTaskRunInitScript(args),
+    () => createAppTaskInitializeGit(args),
   ])
 }

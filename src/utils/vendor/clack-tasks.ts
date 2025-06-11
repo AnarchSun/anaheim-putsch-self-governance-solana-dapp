@@ -31,7 +31,7 @@ export type Task = {
 /**
  * Define a group of tasks to be executed
  */
-export async function tasks(tasks: Task[]): Promise<string[]> {
+export async function tasks(tasks: ((() => Task) | (() => Task) | (() => Task) | (() => Task))[]): Promise<string[]> {
   const instructions: string[] = []
   for (const task of tasks) {
     if (task.enabled === false) continue

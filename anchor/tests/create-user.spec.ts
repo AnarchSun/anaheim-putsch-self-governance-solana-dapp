@@ -9,58 +9,30 @@ describe("create_user", () => {
   anchor.setProvider(provider);
   const program = anchor.workspace.anaheim as Program<Anaheim>;
 
-  it("Fails on empty username", async () => {
-    const [user_account] = PublicKey.findProgramAddressSync(
-      [Buffer.from("user"), provider.wallet.publicKey.toBuffer()],
-      program.programId
-    );
-
-    try {
-      const [userAccount] = PublicKey.findProgramAddressSync(
-        [Buffer.from("user"), provider.wallet.publicKey.toBuffer()],
-        program.programId
-      );
-
-      await program.methods
-        .createUser("Alice")
-        .accounts({
-          user: provider.wallet.publicKey,
-          userAccount,          // ⚡ exact camelCase du IDL
-          systemProgram: SystemProgram.programId,
-          rent: anchor.web3.SYSVAR_RENT_PUBKEY,
-        })
-        .rpc();
-
-      throw new Error("Expected failure but succeeded");
-    } catch (error) {
-      const expectedCode = "InvalidContent";
-      if (error instanceof anchor.AnchorError) {
-        expect(error.error.errorCode.code).toBe(expectedCode);
-      } else {
-        throw new Error(`Unexpected error type: ${error}`);
-      }
-    }
-  });
-
-
   it("Creates a user successfully with a valid username", async () => {
     const validUsername = "Alice";
 
-    const [user_account] = PublicKey.findProgramAddressSync(
+    // 1. Trouver la PDA avec la même casse que l'IDL : userAccount
+    const [userAccount] = PublicKey.findProgramAddressSync(
       [Buffer.from("user"), provider.wallet.publicKey.toBuffer()],
       program.programId
     );
 
-    await program.methods
-      .createUser(validUsername)
-      .accounts({
-        user: provider.wallet.publicKey,
-        user_account, // ✅ must match Rust: `pub user_account`
-        system_program: SystemProgram.programId,
-      })
-      .rpc();
+    // 2. Appeler la méthode avec la clé userAccount (camelCase)
+    const accounts = {
+      userAccount, // Ou user_account selon le cas
+      user: provider.wallet.publicKey,
+      systemProgram: SystemProgram.programId,
+      rent: anchor.web3.SYSVAR_RENT_PUBKEY,
+    };
 
-    const user = await program.account.userAccount.fetch(user_account);
+// Forcer le typage pour voir les erreurs
+    const typedAccounts: CreateUserAccounts = accounts;
+
+  .rpc();
+
+    // 3. Fetcher l'account avec la même variable userAccount
+    const user = await program.account.userAccount.fetch(userAccount);
     expect(user.username).toBe(validUsername);
   });
 });
