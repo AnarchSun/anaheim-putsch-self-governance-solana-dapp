@@ -1,7 +1,7 @@
 // Here we export some useful types and functions for interacting with the Anchor program.
 import { AnchorProvider, Program } from '@coral-xyz/anchor'
 import { Cluster, PublicKey } from '@solana/web3.js'
-import AnaheimIDL from '../../../anchor/target/idl/anaheim.json'
+import AnaheimIDL from '../target/idl/anaheim.json'
 import type { Anaheim } from '../../anchor/target/types/anaheim'
 
 export const ANAHEIM_PROGRAM_ID = new PublicKey(AnaheimIDL.address)
@@ -31,4 +31,3 @@ export function getAnaheimProgramId(cluster: Cluster) {
 }
 
 export { type Anaheim } from '../../anchor/target/types/anaheim'
-export { default as AnaheimIDL } from '../../../anchor/target/idl/anaheim.json'

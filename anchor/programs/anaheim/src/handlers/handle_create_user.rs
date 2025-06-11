@@ -1,5 +1,4 @@
 // handlers/handle_create_user.rs
-
 use anchor_lang::prelude::*;
 
 use crate::contexts::create_user::CreateUser as CreateUserContext;

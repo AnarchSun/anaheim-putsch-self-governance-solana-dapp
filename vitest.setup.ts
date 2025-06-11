@@ -19,6 +19,7 @@ declare global {
 global.program = anchor.workspace.Anaheim as Program<Anaheim>;
 global.anchor = anchor;
 
+
 export default defineConfig({
   resolve: {
     alias: {

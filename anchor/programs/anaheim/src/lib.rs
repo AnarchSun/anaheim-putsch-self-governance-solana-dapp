@@ -17,15 +17,15 @@ pub use contexts::create_user::CreateUser;
 pub use instructions::create_user;
 use crate::contexts::create_user::__client_accounts_create_user;
 
-declare_id!("2oCzFAZPChbHsUaUsictjLbBG6CQsAQEDMrDFRKzZZfJ");
+declare_id!("3yzHrWnQSyzChaHaFxJwMJtqzV8qcqGmMp5KJapQyX28");
 
 #[program]
 pub mod anaheim {
   use super::*;
+
   pub fn create_user(ctx: Context<CreateUser>, username: String) -> Result<()> {
     create_user::handler(ctx, username)
   }
-
   pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
     let account = &mut ctx.accounts.anaheim;
     account.count = 0;
