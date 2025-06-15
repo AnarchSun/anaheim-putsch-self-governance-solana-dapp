@@ -1,7 +1,7 @@
 // hooks/useClusterEndpoint.ts
-import { clusterApiUrl } from '@solana/web3.js'
+import { clusterApiUrl, Cluster } from '@solana/web3.js'
 
-export function useClusterEndpoint() {
-  // TODO: Replace with Zustand/store logic if needed
-  return clusterApiUrl('devnet')
+// TypeScript te proposera 'devnet' | 'testnet' | 'mainnet-beta'
+export function useClusterEndpoint(cluster: Cluster = 'devnet'): string {
+  return clusterApiUrl(cluster)
 }

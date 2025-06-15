@@ -1,46 +1,45 @@
-'use client'
-
 import { useQuery } from '@tanstack/react-query'
-import * as React from 'react'
 import { ReactNode } from 'react'
-import { getExplorerLink, GetExplorerLinkArgs } from 'gill'
 import { Button } from '@/components/ui/button'
 import { AppAlert } from '@/components/app-alert'
-import { useWalletUi, useWalletUiCluster } from '@/components/wallet/wallet-hooks'
 
-export function ExplorerLink({
-  className,
-  label = '',
-  ...link
-}: GetExplorerLinkArgs & {
-  className?: string
-  label: string
-}) {
-  return (
-    <a
-      href={getExplorerLink(link)}
-      target="_blank"
-      rel="noopener noreferrer"
-      className={className ? className : `link font-mono`}
-    >
-      {label}
-    </a>
-  )
-}
+// Assume these are React hooks that return the expected data
+import { useSolanaClient } from 'gill-react'
+import { useWalletUi, useWalletUiCluster } from '@/hooks/wallet/wallet-hooks.ts'
+
+const { client } = useWalletUi()
+
+// Si tu ne l’utilises pas encore, garde-le vivant en l’affichant dans la console :
+console.log('wallet client:', client)
 
 export function ClusterChecker({ children }: { children: ReactNode }) {
-  const { client } = useWalletUi()
-  const { cluster } = useWalletUiCluster()
+  // Hooks React, pas des schémas
+  const walletUi = useWalletUi()
+  const cluster = useWalletUiCluster()
+
+  // Ici client doit être un objet avec propriété `rpc`
+  const client = useSolanaClient()
+
+  if (!client) {
+    return (
+      <AppAlert action={<Button variant="outline">Retry</Button>}>
+        Solana client unavailable — connection impossible.
+      </AppAlert>
+    )
+  }
+
+  // Prends garde aux propriétés de cluster
+  const label = (cluster as any)?.label ?? 'unknown'
+  const endpoint = (cluster as any)?.urlOrMoniker ?? 'unknown'
 
   const query = useQuery({
-    queryKey: ['version', { cluster, endpoint: cluster.urlOrMoniker }],
-    queryFn: () => client.getVersion(),
+    queryKey: ['version', { cluster: label, endpoint }],
+    queryFn: () => client.rpc.getVersion(),
     retry: 1,
-  });
+  })
 
-  if (query.isLoading) {
-    return null
-  }
+  if (query.isLoading) return null
+
   if (query.isError || !query.data) {
     return (
       <AppAlert
@@ -50,9 +49,10 @@ export function ClusterChecker({ children }: { children: ReactNode }) {
           </Button>
         }
       >
-        Error connecting to cluster <span className="font-bold">{cluster.label}</span>.
+        Error connecting to cluster <span className="font-bold">{label}</span>.
       </AppAlert>
     )
   }
-  return children
+
+  return <>{children}</>
 }

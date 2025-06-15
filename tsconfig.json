@@ -18,7 +18,7 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "preserve",
-    "baseUrl": "./src",
+    "baseUrl": "./src-recov-red",
     "paths": {
       "@/*": [
         "./*"
@@ -47,9 +47,9 @@
     "anchor/**/*.ts",
     "eslint.config.mjs",
     "next-env.d.ts",
-    "src/**/*",
-    "src/**/*.ts",
-    "src/**/*.tsx",
+    "src-recov-red/**/*",
+    "src-recov-red/**/*.ts",
+    "src-recov-red/**/*.tsx",
     "test-parser.js",
     "test/**/*.*",
     "test/**/*.ts", // ou "tests/**/*.ts" si tu as des tests TS

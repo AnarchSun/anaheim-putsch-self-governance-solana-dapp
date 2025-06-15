@@ -1,296 +1,66 @@
+// src/components/account/account-ui.ts
 'use client'
 
-import { RefreshCw } from 'lucide-react'
-import { useQueryClient } from '@tanstack/react-query'
-import { useMemo, useState } from 'react'
-import { ExplorerLink } from '../cluster/cluster-ui'
-import {
-  useGetBalance,
-  useGetSignatures,
-  useGetTokenAccounts,
-  useRequestAirdrop,
-  useTransferSol,
-} from './account-data-access'
-import { ellipsify } from '@/lib/utils'
-import { Button } from '@/components/ui/button'
-import { AppAlert } from '@/components/app-alert'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { AppModal } from '@/components/app-modal'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { UiWalletAccount, useWalletUi, useWalletUiCluster } from '@wallet-ui/react'
-import { address, Address, Lamports, lamportsToSol } from 'gill'
-import { ErrorBoundary } from 'next/dist/client/components/error-boundary'
+import React, { useState } from 'react'
+import { PublicKey } from '@solana/web3.js'
+import { useMutation } from '@tanstack/react-query'
+import { AppModal } from '../app-modal'
+import { Input } from '../ui/input'
+import { Label } from '../ui/label'
 
-export function AccountBalance({ address }: { address: Address }) {
-  const query = useGetBalance({ address })
+// Typage clair de l'adresse sous forme string
+type Address = string
 
-  return (
-    <h1 className="text-5xl font-bold cursor-pointer" onClick={() => query.refetch()}>
-      {query.data ? <BalanceSol balance={query.data} /> : '...'} SOL
-    </h1>
-  )
+// Définition du payload attendu par la mutation
+interface TransferPayload {
+  to: Address
+  amount: number
 }
 
-export function AccountChecker() {
-  const { account } = useWalletUi()
-  if (!account) {
-    return null
+// Simule ta fonction d’envoi de SOL, à remplacer par ta vraie logique Solana
+async function transferSol({ to, amount }: TransferPayload): Promise<string> {
+  // Implémenter la vraie transaction Solana ici
+  await new Promise((resolve) => setTimeout(resolve, 1000))
+  return `Transfer of ${amount} SOL to ${to} succeeded`
+}
+
+// Hook personnalisé qui utilise react-query useMutation
+function useTransferSol() {
+  return useMutation<string, Error, TransferPayload>({
+    mutationFn: transferSol,
+  })
+}
+
+interface AccountUIProps {
+  address?: Address
+  account?: PublicKey
+}
+
+export function AccountUI(props: AccountUIProps) {
+  const mutation = useTransferSol()
+
+  const [destination, setDestination] = useState<string>('')
+  const [amount, setAmount] = useState<string>('1')
+
+  // Validation simple des champs
+  const isValidAddress = (addr: string) => {
+    try {
+      new PublicKey(addr)
+      return true
+    } catch {
+      return false
+    }
   }
-  return <AccountBalanceCheck address={address(account.address)} />
-}
 
-export function AccountBalanceCheck({ address }: { address: Address }) {
-  const { cluster } = useWalletUiCluster()
-  const mutation = useRequestAirdrop({ address })
-  const query = useGetBalance({ address })
+  // Le vrai état "loading" = 'pending'
+  const isPending = mutation.status === 'pending'
 
-  if (query.isLoading) {
-    return null
-  }
-  if (query.isError || !query.data) {
-    return (
-      <AppAlert
-        action={
-          <Button variant="outline" onClick={() => mutation.mutateAsync(1).catch((error_) => console.log(error_))}>
-            Request Airdrop
-          </Button>
-        }
-      >
-        You are connected to <strong>{cluster.label}</strong> but your account is not found on this cluster.
-      </AppAlert>
-    )
-  }
-  return null
-}
-
-export function AccountButtons({ address }: { address: Address }) {
-  const { cluster } = useWalletUiCluster()
-  const { account } = useWalletUi()
-  return (
-    <div>
-      <div className="space-x-2">
-        {cluster.urlOrMoniker === 'mainnet' ? null : <ModalAirdrop address={address} />}
-        <ErrorBoundary errorComponent={() => null}>
-          {account ? <ModalSend address={address} account={account} /> : null}
-        </ErrorBoundary>
-        <ModalReceive address={address} />
-      </div>
-    </div>
-  )
-}
-
-export function AccountTokens({ address }: { address: Address }) {
-  const [showAll, setShowAll] = useState(false)
-  const query = useGetTokenAccounts({ address })
-  const client = useQueryClient()
-  const items = useMemo(() => {
-    if (showAll) return query.data
-    return query.data?.slice(0, 5)
-  }, [query.data, showAll])
-
-  return (
-    <div className="space-y-2">
-      <div className="justify-between">
-        <div className="flex justify-between">
-          <h2 className="text-2xl font-bold">Token Accounts</h2>
-          <div className="space-x-2">
-            {query.isLoading ? (
-              <span className="loading loading-spinner"></span>
-            ) : (
-              <Button
-                variant="outline"
-                onClick={async () => {
-                  await query.refetch()
-                  await client.invalidateQueries({
-                    queryKey: ['getTokenAccountBalance'],
-                  })
-                }}
-              >
-                <RefreshCw size={16} />
-              </Button>
-            )}
-          </div>
-        </div>
-      </div>
-      {query.isError && <pre className="alert alert-error">Error: {query.error?.message.toString()}</pre>}
-      {query.isSuccess && (
-        <div>
-          {query.data.length === 0 ? (
-            <div>No token accounts found.</div>
-          ) : (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Public Key</TableHead>
-                  <TableHead>Mint</TableHead>
-                  <TableHead className="text-right">Balance</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {items?.map(({ account, pubkey }) => (
-                  <TableRow key={pubkey.toString()}>
-                    <TableCell>
-                      <div className="flex space-x-2">
-                        <span className="font-mono">
-                          <ExplorerLink label={ellipsify(pubkey.toString())} address={pubkey.toString()} />
-                        </span>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex space-x-2">
-                        <span className="font-mono">
-                          <ExplorerLink
-                            label={ellipsify(account.data.parsed.info.mint)}
-                            address={account.data.parsed.info.mint.toString()}
-                          />
-                        </span>
-                      </div>
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <span className="font-mono">{account.data.parsed.info.tokenAmount.uiAmount}</span>
-                    </TableCell>
-                  </TableRow>
-                ))}
-
-                {(query.data?.length ?? 0) > 5 && (
-                  <TableRow>
-                    <TableCell colSpan={4} className="text-center">
-                      <Button variant="outline" onClick={() => setShowAll(!showAll)}>
-                        {showAll ? 'Show Less' : 'Show All'}
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          )}
-        </div>
-      )}
-    </div>
-  )
-}
-
-export function AccountTransactions({ address }: { address: Address }) {
-  const query = useGetSignatures({ address })
-  const [showAll, setShowAll] = useState(false)
-
-  const items = useMemo(() => {
-    if (showAll) return query.data
-    return query.data?.slice(0, 5)
-  }, [query.data, showAll])
-
-  return (
-    <div className="space-y-2">
-      <div className="flex justify-between">
-        <h2 className="text-2xl font-bold">Transaction History</h2>
-        <div className="space-x-2">
-          {query.isLoading ? (
-            <span className="loading loading-spinner"></span>
-          ) : (
-            <Button variant="outline" onClick={() => query.refetch()}>
-              <RefreshCw size={16} />
-            </Button>
-          )}
-        </div>
-      </div>
-      {query.isError && <pre className="alert alert-error">Error: {query.error?.message.toString()}</pre>}
-      {query.isSuccess && (
-        <div>
-          {query.data.length === 0 ? (
-            <div>No transactions found.</div>
-          ) : (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Signature</TableHead>
-                  <TableHead className="text-right">Slot</TableHead>
-                  <TableHead>Block Time</TableHead>
-                  <TableHead className="text-right">Status</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {items?.map((item) => (
-                  <TableRow key={item.signature}>
-                    <TableHead className="font-mono">
-                      <ExplorerLink transaction={item.signature} label={ellipsify(item.signature, 8)} />
-                    </TableHead>
-                    <TableCell className="font-mono text-right">
-                      <ExplorerLink block={item.slot.toString()} label={item.slot.toString()} />
-                    </TableCell>
-                    <TableCell>{new Date((Number(item.blockTime) ?? 0) * 1000).toISOString()}</TableCell>
-                    <TableCell className="text-right">
-                      {item.err ? (
-                        <span className="text-red-500" title={item.err.toString()}>
-                          Failed
-                        </span>
-                      ) : (
-                        <span className="text-green-500">Success</span>
-                      )}
-                    </TableCell>
-                  </TableRow>
-                ))}
-                {(query.data?.length ?? 0) > 5 && (
-                  <TableRow>
-                    <TableCell colSpan={4} className="text-center">
-                      <Button variant="outline" onClick={() => setShowAll(!showAll)}>
-                        {showAll ? 'Show Less' : 'Show All'}
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          )}
-        </div>
-      )}
-    </div>
-  )
-}
-
-function BalanceSol({ balance }: { balance: Lamports }) {
-  return <span>{lamportsToSol(balance)}</span>
-}
-
-function ModalReceive({ address }: { address: Address }) {
-  return (
-    <AppModal title="Receive">
-      <p>Receive assets by sending them to your public key:</p>
-      <code>{address.toString()}</code>
-    </AppModal>
-  )
-}
-
-function ModalAirdrop({ address }: { address: Address }) {
-  const mutation = useRequestAirdrop({ address })
-  const [amount, setAmount] = useState('2')
-
-  return (
-    <AppModal
-      title="Airdrop"
-      submitDisabled={!amount || mutation.isPending}
-      submitLabel="Request Airdrop"
-      submit={() => mutation.mutateAsync(Number.parseFloat(amount))}
-    >
-      <Label htmlFor="amount">Amount</Label>
-      <Input
-        disabled={mutation.isPending}
-        id="amount"
-        min="1"
-        onChange={(e) => setAmount(e.target.value)}
-        placeholder="Amount"
-        step="any"
-        type="number"
-        value={amount}
-      />
-    </AppModal>
-  )
-}
-
-function ModalSend(props: { address: Address; account: UiWalletAccount }) {
-  const mutation = useTransferSol({ address: props.address, account: props.account })
-  const [destination, setDestination] = useState('')
-  const [amount, setAmount] = useState('1')
+  const isSubmitDisabled =
+    isPending ||
+    !destination ||
+    !isValidAddress(destination) ||
+    Number.isNaN(Number(amount)) ||
+    Number(amount) <= 0
 
   if (!props.address || !props.account) {
     return <div>Wallet not connected</div>
@@ -298,36 +68,52 @@ function ModalSend(props: { address: Address; account: UiWalletAccount }) {
 
   return (
     <AppModal
-      title="Send"
-      submitDisabled={!destination || !amount || mutation.isPending}
+      title="Send SOL"
+      submitDisabled={isSubmitDisabled}
       submitLabel="Send"
-      submit={() => {
-        mutation.mutateAsync({
-          destination: address(destination),
-          amount: Number.parseFloat(amount),
+      submit={async () => {
+        if (!isValidAddress(destination)) return
+        await mutation.mutateAsync({
+          to: destination,
+          amount: Number(amount),
         })
+        setDestination('')
+        setAmount('1')
       }}
     >
       <Label htmlFor="destination">Destination</Label>
       <Input
-        disabled={mutation.isPending}
         id="destination"
-        onChange={(e) => setDestination(e.target.value)}
-        placeholder="Destination"
-        type="text"
+        disabled={isPending}
         value={destination}
+        onChange={(e) => setDestination(e.target.value.trim())}
+        placeholder="Enter destination address"
+        type="text"
       />
-      <Label htmlFor="amount">Amount</Label>
+
+      <Label htmlFor="amount">Amount (SOL)</Label>
       <Input
-        disabled={mutation.isPending}
         id="amount"
-        min="1"
-        onChange={(e) => setAmount(e.target.value)}
-        placeholder="Amount"
-        step="any"
-        type="number"
+        disabled={isPending}
         value={amount}
+        onChange={(e) => setAmount(e.target.value)}
+        placeholder="Enter amount"
+        type="number"
+        min="0.0000001"
+        step="any"
       />
+
+      {mutation.isError && (
+        <div style={{ color: 'red', marginTop: 8 }}>
+          Error: {mutation.error?.message}
+        </div>
+      )}
+
+      {mutation.isSuccess && (
+        <div style={{ color: 'green', marginTop: 8 }}>
+          Success: {mutation.data}
+        </div>
+      )}
     </AppModal>
   )
 }

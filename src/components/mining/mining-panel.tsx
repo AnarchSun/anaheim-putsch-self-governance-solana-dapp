@@ -2,12 +2,12 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { useWallet } from '@solana/wallet-adapter-react';
-import formatDistance from 'date-fns/formatDistance';
-import formatDistanceToNowStrict from 'date-fns/formatDistanceToNowStrict';
-import add from 'date-fns/add';
+import { formatDistance } from "/home/anarchsun/RustroverProjects/anarcrypt.sol/anaheim-putsch-govdapp/node_modules/.pnpm/date-fns@4.1.0/node_modules/date-fns/formatDistance"
+import { formatDistanceToNowStrict } from "/home/anarchsun/RustroverProjects/anarcrypt.sol/anaheim-putsch-govdapp/node_modules/.pnpm/date-fns@4.1.0/node_modules/date-fns/formatDistanceToNowStrict"
+import { add } from "/home/anarchsun/RustroverProjects/anarcrypt.sol/anaheim-putsch-govdapp/node_modules/.pnpm/date-fns@4.1.0/node_modules/date-fns/add"
 import { fr } from 'date-fns/locale';
 
-// Récompense simulée (remplacera plus tard une vraie interaction on-chain)
+// Simule une récompense minée (sera remplacé plus tard par un vrai call on-chain)
 function claimReward(walletAddress: string): Promise<number> {
   return new Promise((resolve) => {
     const simulatedAmount = 0.357;
@@ -87,9 +87,16 @@ export default function MiningPanel() {
   const handleClaim = async () => {
     if (!publicKey) return;
     if (!canClaim) return;
-    const amount = await claimReward(publicKey.toBase58());
-    setRewardAmount(amount);
-    setLastClaim(new Date());
+
+
+
+    try {
+      const amount = await claimReward(publicKey.toBase58());
+      setRewardAmount(amount);
+      setLastClaim(new Date());
+    } catch (error) {
+      console.error('Erreur lors de la réclamation :', error);
+    }
   };
 
   return (

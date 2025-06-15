@@ -1,4 +1,5 @@
 #![allow(deprecated)]
+#![allow(unexpected_cfgs)]
 
 use anchor_lang::prelude::*;
 pub mod instructions;

@@ -1,3 +1,4 @@
+// src/app/layout.tsx
 import type { Metadata } from 'next'
 import './globals.css'
 import { AppProviders } from '@/components/app-providers'
@@ -12,21 +13,22 @@ export const metadata: Metadata = {
 const links: { label: string; path: string }[] = [
   { label: 'Home', path: '/' },
   { label: 'Account', path: '/account' },
-  { label: 'Mining', path: '/mining' }, // ✅ nouveau lien
+  { label: 'Mining', path: '/mining' }, // Nouveau lien ajouté pour l’essor révolutionnaire
 ]
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`antialiased`}>
-        <AppProviders>
-          <AppLayout links={links}>{children}</AppLayout>
-        </AppProviders>
-      </body>
+    <body className={`antialiased`}>
+    <AppProviders>
+      <AppLayout links={links}>{children}</AppLayout>
+    </AppProviders>
+    </body>
     </html>
   )
 }
-// Patch BigInt so we can log it using JSON.stringify without any errors
+
+// Invocation magique pour que BigInt se révèle au JSON sans tracas
 declare global {
   interface BigInt {
     toJSON(): string

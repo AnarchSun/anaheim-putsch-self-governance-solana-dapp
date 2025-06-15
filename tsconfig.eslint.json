@@ -4,7 +4,7 @@
 {
   "extends": "./tsconfig.json",
   "include": [
-    "src",
+    "src-recov-red",
     "test",
     "app",
     "components",

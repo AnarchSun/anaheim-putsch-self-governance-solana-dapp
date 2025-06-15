@@ -4,7 +4,7 @@ import { access, mkdir, mkdtemp, readFile, rm, symlink, writeFile } from 'node:f
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { searchAndReplace } from '../src/utils/search-and-replace';
+import { searchAndReplace } from '../src-recov-red/utils/search-and-replace';
 import fs from 'node:fs';
 import 'core-js/stable';
 import 'regenerator-runtime/runtime'; // Utile pour async/await

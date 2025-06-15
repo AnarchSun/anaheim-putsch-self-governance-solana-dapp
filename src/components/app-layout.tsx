@@ -6,7 +6,7 @@ import { AppHeader } from '@/components/app-header'
 import React from 'react'
 import { AppFooter } from '@/components/app-footer'
 import { ClusterChecker } from '@/components/cluster/cluster-ui'
-import { AccountChecker } from './account/account-ui'
+import { AccountChecker } from './account/account-ui.txs'
 
 export function AppLayout({
   children,

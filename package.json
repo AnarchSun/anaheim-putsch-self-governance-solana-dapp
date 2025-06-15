@@ -44,8 +44,8 @@
     "babel-plugin-deprecated-import-assert": "npm:@babel/plugin-syntax-import-attributes@latest"
   },
   "scripts": {
-    "start": "node --loader ts-node/esm src/index.ts",
-    "dev": "ts-node src/index.ts",
+    "start": "node --loader ts-node/esm src-recov-red/index.ts",
+    "dev": "ts-node src-recov-red/index.ts",
     "test:dev": "vitest dev",
     "test": "vitest run",
     "prepare-idl": "ln -sf anchor/target/idl idl",
