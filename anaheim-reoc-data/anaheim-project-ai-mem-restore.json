@@ -1,0 +1,31 @@
+{
+  "codename": "anaheim",
+  "token": "r=3.57",
+  "mining_component": "src/components/mining/mining-panel.tsx",
+  "governance": ["reddit-style", "realms.today", "AttrakThor DAO"],
+  "citizen_auth": "NAS/Medicare",
+  "staking": "progressive laundering",
+  "status": "alpha",
+  "next_steps": ["Connect mining to r=3.57", "Smart contract claim system", "Citizen auth integration"],
+  "dao_links": ["realms.today", "chaotic fractal"],
+  "submodules": {
+    "anchor_program": "anchor/programs/anaheim",
+    "journal": "anchor/programs/journal"
+  },
+  "components_dir": "src/components/",
+  "hooks_dir": "src/hooks/",
+  "package_manager": "pnpm",
+  "monorepo": {
+    "workspace": "pnpm-workspace.yaml",
+    "lockfile": "pnpm-lock.yaml"
+  },
+  "build_scripts": {
+    "dapp": "pnpm build",
+    "anchor": "anchor build"
+  },
+  "frontend_entry": "src/app/page.tsx",
+  "anchor_tree": {
+    "anaheim": ["contexts/*", "handlers/*", "instructions/*", "state/*", "utils/*", "close/*"],
+    "journal": ["lib.rs only"]
+  }
+}

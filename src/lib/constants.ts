@@ -12,4 +12,4 @@ export const PROGRAM_IDS = {
 
 export const CLUSTERS = ['devnet', 'mainnet-beta', 'testnet', 'localnet'] as const
 
-export type Cluster = typeof CLUSTERS[number]
+export type Cluster = (typeof CLUSTERS)[number]

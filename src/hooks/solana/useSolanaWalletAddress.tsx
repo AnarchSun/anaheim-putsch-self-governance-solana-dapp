@@ -1,7 +1,6 @@
 import React from 'react'
 import { useSolanaWalletAddress as _useSolanaWalletAddress } from '@wallet-ui/react'
 
-
 const useSolanaWalletAddress = _useSolanaWalletAddress as unknown as () => string | undefined
 
 export function MonComposantMystique() {

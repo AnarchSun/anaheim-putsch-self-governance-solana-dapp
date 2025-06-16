@@ -1,7 +1,7 @@
 // src/components/stake/stake-viewer.tsx
 import React, { useEffect, useState } from 'react'
 import { Connection, PublicKey, clusterApiUrl } from '@solana/web3.js'
-import { Stake, Meta } from '@/../../vendor/solana-rpc-client-extensions/js/src/stake'; // à fixer
+import { Stake, Meta } from '@/../../vendor/solana-rpc-client-extensions/js/src/stake' // à fixer
 
 interface StakeAccount {
   activationEpoch: number
@@ -43,13 +43,13 @@ export function StakeViewer({ pubkey }: StakeViewerProps) {
       }
     }
 
-    fetchStakeAccount().catch(e => {
+    fetchStakeAccount().catch((e) => {
       console.error('Unhandled fetch error:', e)
       setError('Erreur inconnue lors de la récupération')
     })
 
     // Pas de return ici ou return undefined / void
-  },  [pubkey, stakeAccount])
+  }, [pubkey, stakeAccount])
 
   if (error) return <p>{error}</p>
 

@@ -7,10 +7,7 @@ import type { Anaheim } from '../../anchor/target/types/anaheim'
 export const ANAHEIM_PROGRAM_ID = new PublicKey(AnaheimIDL.address)
 
 export function getAnaheimProgram(provider: AnchorProvider, address?: PublicKey) {
-  return new Program(
-    { ...AnaheimIDL, address: address?.toBase58() || AnaheimIDL.address } as Anaheim,
-    provider
-  )
+  return new Program({ ...AnaheimIDL, address: address?.toBase58() || AnaheimIDL.address } as Anaheim, provider)
 }
 
 export function getAnaheimProgramId(cluster: Cluster) {

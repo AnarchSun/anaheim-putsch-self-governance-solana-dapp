@@ -1,10 +1,11 @@
 // src/hooks/fetchStakeActivation.tsx
 import { useEffect } from 'react'
+import { PublicKey } from '@solana/web3.js'
+import { publicKey } from '@solana/web3.js/src/layout'
 
 useEffect(() => {
-  fetchStakeActivation()
+  fetchStakeActivation ( publicKey() )
 }, [])
-function fetchStakeActivation() {
-    throw new Error('Function not implemented.')
+export function fetchStakeActivation(pubkey: PublicKey) {
+  throw new Error('Function not implemented.')
 }
-

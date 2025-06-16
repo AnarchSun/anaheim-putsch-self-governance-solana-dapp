@@ -17,8 +17,7 @@ interface WalletUiReturn {
 }
 
 export function useGetSignatures({ address }: { address: Address }) {
-  const { client } = useWalletUi () as unknown as WalletUiReturn
-
+  const { client } = useWalletUi() as unknown as WalletUiReturn
 
   if (!client?.rpc?.getSignaturesForAddress) {
     throw new Error('client.rpc.getSignaturesForAddress is undefined')

@@ -1,21 +1,22 @@
-import { useEffect, useMemo } from 'react'
-import { useSolanaClient } from '@/hooks/solana/useSolanaClient'
+// src/components/stake/stake-watcher.tsx
+'use client'
+
+import { useStakeWatcher } from '@/hooks/stake/useStakeWatcher'
 import { PublicKey } from '@solana/web3.js'
 
-export function StakeWatcher({ address }: { address: string }) {
-  const client = useSolanaClient()
 
-  const pubkey = useMemo(() => new PublicKey(address), [address])
+export function StakeWatcher({ pubkeyString }: { pubkeyString: string }) {
+  const pubkey = new PublicKey(pubkeyString)
+  const { state, error, loading } = useStakeWatcher(pubkey)
 
-  useEffect(() => {
-    const id = client.onAccountChange(pubkey, (info) => {
-      console.log('Stake changed:', info)
-    })
+  if (loading) return <p>🔄 Checking stake status...</p>
+  if (error) return <p>⚠️ Error: {error.message}</p>
+  if (!state) return <p>❌ No stake info found</p>
 
-    return () => {
-      client.removeAccountChangeListener(id).catch(console.error)
-    }
-  }, [client, pubkey]) // maintenant `pubkey` est stable
-
-  return null
+  return (
+    <div className="rounded-xl p-4 bg-black/10 dark:bg-white/5">
+      <h2 className="text-xl font-bold">🛰️ Stake Status</h2>
+      <p>Status: <strong className="text-amber-400">{state}</strong></p>
+    </div>
+  )
 }

@@ -1,19 +1,16 @@
 import { useMemo } from 'react'
 import { Connection } from '@solana/web3.js'
-import { wrapConnectionWithRpc } from '@/lib/solana/wrapConnectionWithRpc'
-import { getPublicSolanaRpcUrl } from 'gill'
-import type { SolanaClient } from 'gill'
+import { getPublicSolanaRpcUrl } from '@/lib/solana/solanaKitShim'
 
-// Par exemple, on hardcode le cluster ici
-const CLUSTER = 'devnet' as const
+const DEFAULT_CLUSTER = 'devnet'
 
-export function useWrappedConnection(): SolanaClient {
-  // On passe le cluster au getter d’URL RPC
-  const rpcUrl = getPublicSolanaRpcUrl(CLUSTER)
+export function useWrappedConnection(cluster = DEFAULT_CLUSTER) {
+  const rpcUrl = new getPublicSolanaRpcUrl(cluster)
 
-  const connection = useMemo(() => new Connection(rpcUrl, 'confirmed'), [rpcUrl])
+  const connection = useMemo(() => {
+    // Ici on passe bien une chaîne URL valide
+    return new Connection(rpcUrl.toString(), 'confirmed')
+  }, [rpcUrl])
 
-  const wrapped = useMemo(() => new wrapConnectionWithRpc ( connection ), [connection])
-
-  return wrapped as SolanaClient
+  return { rpcUrl, connection }
 }

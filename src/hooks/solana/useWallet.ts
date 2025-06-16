@@ -8,6 +8,6 @@ export function useWalletUiAddress(): string {
 }
 
 export function useSolanaCluster(): string {
-  const client = useSolanaClient() as any;
-  return client.cluster ?? 'unknown';
+  const client = useSolanaClient() as any
+  return client.cluster ?? 'unknown'
 }

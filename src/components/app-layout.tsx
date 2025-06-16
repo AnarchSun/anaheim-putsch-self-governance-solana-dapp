@@ -1,12 +1,20 @@
+// src/components/app-layout.tsx
 'use client'
 
 import { ThemeProvider } from './theme-provider'
 import { Toaster } from './ui/sonner'
 import { AppHeader } from '@/components/app-header'
-import React from 'react'
+import * as React from 'react'
 import { AppFooter } from '@/components/app-footer'
 import { ClusterChecker } from '@/components/cluster/cluster-ui'
-import { AccountChecker } from './account/account-ui.txs'
+
+export function AccountChecker(props: { children?: React.ReactNode }) {
+  // logique ici
+
+  return (
+    <>{props.children}</> // ou autre rendu JSX valide
+  );
+}
 
 export function AppLayout({
   children,

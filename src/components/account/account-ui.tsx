@@ -56,11 +56,7 @@ export function AccountUI(props: AccountUIProps) {
   const isPending = mutation.status === 'pending'
 
   const isSubmitDisabled =
-    isPending ||
-    !destination ||
-    !isValidAddress(destination) ||
-    Number.isNaN(Number(amount)) ||
-    Number(amount) <= 0
+    isPending || !destination || !isValidAddress(destination) || Number.isNaN(Number(amount)) || Number(amount) <= 0
 
   if (!props.address || !props.account) {
     return <div>Wallet not connected</div>
@@ -103,17 +99,11 @@ export function AccountUI(props: AccountUIProps) {
         step="any"
       />
 
-      {mutation.isError && (
-        <div style={{ color: 'red', marginTop: 8 }}>
-          Error: {mutation.error?.message}
-        </div>
-      )}
+      {mutation.isError && <div style={{ color: 'red', marginTop: 8 }}>Error: {mutation.error?.message}</div>}
 
-      {mutation.isSuccess && (
-        <div style={{ color: 'green', marginTop: 8 }}>
-          Success: {mutation.data}
-        </div>
-      )}
+      {mutation.isSuccess && <div style={{ color: 'green', marginTop: 8 }}>Success: {mutation.data}</div>}
     </AppModal>
   )
 }
+
+export class AccountChecker {}

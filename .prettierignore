@@ -1,13 +1,8 @@
 # Add files here to ignore them from prettier formatting
-
 /dist
 /coverage
-tmp
-/.yarn
+.next
+/tmp
+package-lock.json
 pnpm-lock.yaml
-
-.nx/cache
-# Ignore generated schema files in packages
-/packages/*/src/generators/**/*-schema.d.ts
-
-/.nx/workspace-data
+yarn.lock

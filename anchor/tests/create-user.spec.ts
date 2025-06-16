@@ -1,38 +1,27 @@
-import * as anchor from "@coral-xyz/anchor";
-import { Program } from "@coral-xyz/anchor";
-import { PublicKey, SystemProgram } from "@solana/web3.js";
-import { describe, it, expect } from "vitest";
-import { Anaheim } from "../target/types/anaheim";
+import * as anchor from '@coral-xyz/anchor'
+import { Program } from '@coral-xyz/anchor'
+import { SystemProgram } from '../../node_modules/@solana/web3.js'
+import { describe, it, expect } from 'vitest'
 
-describe("create_user", () => {
-  const provider = anchor.AnchorProvider.env();
-  anchor.setProvider(provider);
-  const program = anchor.workspace.anaheim as Program<Anaheim>;
+describe('Create User', () => {
+  it('Initializes a user account', async () => {
+    const provider = anchor.AnchorProvider.env()
+    anchor.setProvider(provider)
 
-  it("Creates a user successfully with a valid username", async () => {
-    const validUsername = "Alice";
+    const program = anchor.workspace.Anaheim as Program
 
-    // 1. Trouver la PDA avec la même casse que l'IDL : userAccount
-    const [userAccount] = PublicKey.findProgramAddressSync(
-      [Buffer.from("user"), provider.wallet.publicKey.toBuffer()],
-      program.programId
-    );
+    const userKeypair = anchor.web3.Keypair.generate()
 
-    // 2. Appeler la méthode avec la clé userAccount (camelCase)
-    const accounts = {
-      userAccount, // Ou user_account selon le cas
-      user: provider.wallet.publicKey,
-      systemProgram: SystemProgram.programId,
-      rent: anchor.web3.SYSVAR_RENT_PUBKEY,
-    };
+    await program.methods
+      .createUser('username')
+      .accounts({
+        user: userKeypair.publicKey,
+        systemProgram: SystemProgram.programId,
+      })
+      .signers([userKeypair])
+      .rpc()
 
-// Forcer le typage pour voir les erreurs
-    const typedAccounts: CreateUserAccounts = accounts;
-
-  .rpc();
-
-    // 3. Fetcher l'account avec la même variable userAccount
-    const user = await program.account.userAccount.fetch(userAccount);
-    expect(user.username).toBe(validUsername);
-  });
-});
+    const userAccount = await program.account.userAccount.fetch(userKeypair.publicKey)
+    expect(userAccount.username).toBe('username')
+  })
+})

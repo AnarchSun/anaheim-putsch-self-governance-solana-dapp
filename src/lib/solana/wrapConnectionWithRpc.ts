@@ -9,8 +9,7 @@ export function getSolanaClient() {
 
   return {
     // Ne pas passer le troisième argument, la lib ne le veut pas
-    getStakeActivation: (pubkey: PublicKey) =>
-      getStakeActivation(connection, pubkey),
+    getStakeActivation: (pubkey: PublicKey) => getStakeActivation(connection, pubkey),
 
     getStakeMinimumDelegation: () => Promise.resolve(1000000), // placeholder
 
@@ -21,19 +20,17 @@ export function getSolanaClient() {
     onAccountChange: (
       publicKey: PublicKey,
       callback: Parameters<Connection['onAccountChange']>[1],
-      commitment: Commitment = 'confirmed'
+      commitment: Commitment = 'confirmed',
     ) => {
       return connection.onAccountChange(publicKey, callback, { commitment })
     },
 
-    removeAccountChangeListener: async (id: number) =>
-      connection.removeAccountChangeListener(id),
+    removeAccountChangeListener: async (id: number) => connection.removeAccountChangeListener(id),
   }
 }
 
 export class wrapConnectionWithRpc {
   constructor(connection: Connection) {
-      // YODO ORION XXX
+    // YODO ORION XXX
   }
-
 }

@@ -29,8 +29,6 @@ export function ReactQueryProvider({ children }: { children: React.ReactNode }) 
   const queryClient = getQueryClient()
 
   return (
-    <QueryClientProvider client={queryClient}>
-      {children}
-      </QueryClientProvider> // 👈 ici le bon alignement
-);
+    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider> // 👈 ici le bon alignement
+  )
 }

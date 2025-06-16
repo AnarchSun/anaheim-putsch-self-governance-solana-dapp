@@ -1,4 +1,3 @@
-
 // hooks/useRequestAirdrop.ts
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { PublicKey, LAMPORTS_PER_SOL } from '@solana/web3.js'

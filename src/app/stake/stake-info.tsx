@@ -40,7 +40,11 @@ export function StakeInfo({ stakeAddress, connection }: StakeInfoProps) {
   }, [stakeAddress, connection])
 
   if (!stakeAccount) {
-    return <div>No stake account data available for <code>{stakeAddress}</code></div>
+    return (
+      <div>
+        No stake account data available for <code>{stakeAddress}</code>
+      </div>
+    )
   }
 
   const { activationEpoch, delegatedStake } = stakeAccount

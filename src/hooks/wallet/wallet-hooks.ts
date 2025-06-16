@@ -1,13 +1,11 @@
 // src/components/solana/wallet/wallet-hooks.ts
-import {
-  useSolanaWalletAddress as _useSolanaWalletAddress,
-} from '@wallet-ui/react' // ✅ seulement ce qui est exporté
+import { useSolanaWalletAddress as _useSolanaWalletAddress } from '@wallet-ui/react' // ✅ seulement ce qui est exporté
 // src/hooks/solana/useWallet.ts
 import { useSolanaWalletAddress } from '@wallet-ui/react'
 import { useSolanaClient } from 'gill-react'
 
-const client = useSolanaClient() as any;
-const url = client._connection?.rpcEndpoint ?? '';
+const client = useSolanaClient() as any
+const url = client._connection?.rpcEndpoint ?? ''
 
 export function useWalletUiAddress(): string {
   const walletAddress = new useSolanaWalletAddress()
@@ -15,15 +13,14 @@ export function useWalletUiAddress(): string {
 }
 
 export function useSolanaCluster(): string {
-
   // Supposons que client expose une méthode publique getRpcEndpoint()
-  const client = useSolanaClient() as any;
-  const url = client._connection?.rpcEndpoint ?? '';
+  const client = useSolanaClient() as any
+  const url = client._connection?.rpcEndpoint ?? ''
 
-  if (url.includes('devnet')) return 'devnet';
-  if (url.includes('testnet')) return 'testnet';
-  if (url.includes('mainnet')) return 'mainnet-beta';
-  return 'unknown';
+  if (url.includes('devnet')) return 'devnet'
+  if (url.includes('testnet')) return 'testnet'
+  if (url.includes('mainnet')) return 'mainnet-beta'
+  return 'unknown'
 }
 
 class _useSolanaWalletCluster {
@@ -49,4 +46,3 @@ export function useWalletUi() {
 
   return { client, cluster }
 }
-

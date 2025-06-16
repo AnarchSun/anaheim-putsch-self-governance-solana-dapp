@@ -27,16 +27,12 @@ type StakeActivationManualResult = {
 
 export async function getStakeActivationManual(
   connection: Connection,
-  pubkey: PublicKey
+  pubkey: PublicKey,
 ): Promise<StakeActivationManualResult> {
   const accountInfo = await connection.getParsedAccountInfo(pubkey)
   const parsedData = accountInfo.value?.data
 
-  if (
-    !parsedData ||
-    typeof parsedData !== 'object' ||
-    !('parsed' in parsedData)
-  ) {
+  if (!parsedData || typeof parsedData !== 'object' || !('parsed' in parsedData)) {
     throw new Error('Invalid or empty stake account')
   }
 
@@ -48,15 +44,11 @@ export async function getStakeActivationManual(
   return {
     state,
     active: stake.delegation.stake,
-    inactive: 0 // 🔸 estimation impossible sans `getEpochInfo`
+    inactive: 0, // 🔸 estimation impossible sans `getEpochInfo`
   }
 }
 
-export async function fetchStakeActivationSafe(
-  connection: Connection,
-  pubkey: PublicKey
-) {
+export async function fetchStakeActivationSafe(connection: Connection, pubkey: PublicKey) {
   // On oublie la méthode dépréciée et on va direct au fallback manuel
   return await getStakeActivationManual(connection, pubkey)
 }
-

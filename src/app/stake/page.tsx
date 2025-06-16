@@ -1,6 +1,6 @@
 // src/app/stake/page.tsx
 import React from 'react'
-import { StakeWatcher } from '@/components/stake/StakeWatcher'
+import { StakeWatcher } from '@/hooks/stake/useStakeWatcher'
 
 export default function StakeDashboard() {
   const address = 'TonAdressePubliqueSolanaIci' // ou récupérée dynamiquement

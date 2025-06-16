@@ -8,7 +8,7 @@ async function findDeadComponents() {
   })
 
   const exportsMap: Record<string, string[]> = {} // file => [exported functions]
-  const allContent = files.map(file => ({
+  const allContent = files.map((file) => ({
     path: file,
     content: fs.readFileSync(file, 'utf8'),
   }))
@@ -17,7 +17,7 @@ async function findDeadComponents() {
   for (const { path: file, content } of allContent) {
     const matches = [...content.matchAll(/export function (\w+)/g)]
     if (matches.length > 0) {
-      exportsMap[file] = matches.map(m => m[1])
+      exportsMap[file] = matches.map((m) => m[1])
     }
   }
 
@@ -38,7 +38,7 @@ async function findDeadComponents() {
 
   let deadFound = false
   for (const [file, exports] of Object.entries(exportsMap)) {
-    const unused = exports.filter(fn => !usedExports.has(fn))
+    const unused = exports.filter((fn) => !usedExports.has(fn))
     if (unused.length > 0) {
       deadFound = true
       console.log(`\n📁 ${file}`)

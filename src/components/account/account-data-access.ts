@@ -55,9 +55,4 @@ export function createTxSigner(
 */
 
 // Export natif si besoin
-export {
-  useSolanaWallet,
-  _useSolanaWalletAddress,
-  _useSolanaWalletCluster,
-  UiWalletAccount,
-}
+export { useSolanaWallet, _useSolanaWalletAddress, _useSolanaWalletCluster, UiWalletAccount }

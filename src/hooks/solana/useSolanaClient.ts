@@ -1,15 +1,14 @@
 // src/hooks/solana/useSolanaClient.ts
-import { clusterApiUrl, Connection, PublicKey } from '@solana/web3.js';
-import { useMemo } from 'react';
-import { getStakeActivation } from '@anza-xyz/solana-rpc-get-stake-activation';
+import { clusterApiUrl, Connection, PublicKey } from '@solana/web3.js'
+import { useMemo } from 'react'
+import { getStakeActivation } from '@anza-xyz/solana-rpc-get-stake-activation'
 
 export function useSolanaClient(cluster: 'devnet' | 'testnet' | 'mainnet-beta' = 'devnet') {
   // 🔁 Memoize connection to avoid re-instantiating on each render
-  return useMemo ( () => {
-    return new Connection ( clusterApiUrl ( cluster ), 'confirmed' )
-  }, [cluster] )
+  return useMemo(() => {
+    return new Connection(clusterApiUrl(cluster), 'confirmed')
+  }, [cluster])
 }
-
 
 // TODO: future fallback for deprecated getStakeActivation
 async function getStakeActivationManual(connection: Connection, pubkey: PublicKey) {
@@ -38,19 +37,15 @@ async function getStakeActivationManual(connection: Connection, pubkey: PublicKe
     inactive: 0, // fallback since we can't infer it here
   }
 }
-export async function getStakeActivationSafe(
-  connection: Connection,
-  pubkey: PublicKey
-) {
+export async function getStakeActivationSafe(connection: Connection, pubkey: PublicKey) {
   try {
     // ✅ Appel correct avec deux arguments
-    return await getStakeActivation ( connection, pubkey )
+    return await getStakeActivation(connection, pubkey)
   } catch (err) {
     console.warn('Vendor getStakeActivation failed, falling back manually', err)
     return await getStakeActivationManual(connection, pubkey)
   }
 }
-
 
 type ParsedAccountData = {
   program: 'stake'

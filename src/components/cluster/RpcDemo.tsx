@@ -1,23 +1,27 @@
 'use client'
 
-import React, { useEffect } from 'react'
-import { useWrappedConnection } from '@/hooks/solana/useWrappedConnection'
-import { getClusterUrl, ClusterLabel } from '@/lib/cluster'
-import { ClusterDisplay } from './cluster/ClusterDisplay'
+import { useEffect } from 'react'
+import { useWrappedConnection } from '../../hooks/solana/useWrappedConnection'
+import { getClusterUrl, ClusterLabel } from '../../lib/cluster'
+import { ClusterDisplay } from './ClusterDisplay'
 import { Address } from '@solana/kit' // selon ta stack
 
 export function RpcDemo() {
   const clusterLabel: ClusterLabel = 'devnet'
   const rpcUrl = getClusterUrl(clusterLabel)
-  const wrapped = useWrappedConnection()
+  const wrapped = useWrappedConnection ( rpcUrl )
 
   useEffect(() => {
     const address = '9xQeWvG816bUx9EPZ2gfrzjp1edw6uX7yjzFZZLL8Mjt' as Address
-    wrapped.rpc.getSignaturesForAddress(address).send().then((signatures) => {
-      console.log('Signatures reçues :', signatures)
-    }).catch((err) => {
-      console.error('Erreur RPC :', err)
-    })
+    wrapped.rpc
+      .getSignaturesForAddress(address)
+      .send()
+      .then((signatures) => {
+        console.log('Signatures reçues :', signatures)
+      })
+      .catch((err) => {
+        console.error('Erreur RPC :', err)
+      })
   }, [wrapped])
 
   return (

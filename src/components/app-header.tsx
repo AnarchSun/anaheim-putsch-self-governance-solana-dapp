@@ -9,7 +9,6 @@ import { ThemeSelect } from '@/components/theme-select'
 import { WalletUiDropdown } from '@/components/solana/wallet/wallet-ui-dropdown'
 import { WalletStatus } from '@/components/solana/wallet/wallet-status'
 
-
 export function AppHeader({ links = [] }: { links: { label: string; path: string }[] }) {
   const pathname = usePathname()
   const [showMenu, setShowMenu] = useState(false)
@@ -20,7 +19,7 @@ export function AppHeader({ links = [] }: { links: { label: string; path: string
   // src/components/solana/solana-provider.tsx (ou cluster-button.tsx selon ta structure)
 
   type ClusterButtonProps = {
-    size?: 'sm' | 'md' | 'lg'  // ou juste 'sm' pour commencer
+    size?: 'sm' | 'md' | 'lg' // ou juste 'sm' pour commencer
     // d’autres props éventuelles
   }
 
@@ -28,12 +27,9 @@ export function AppHeader({ links = [] }: { links: { label: string; path: string
     const sizeClass = size === 'sm' ? 'text-xs px-2 py-1' : 'text-base px-3 py-2'
 
     return (
-      <button className={`rounded bg-blue-600 text-white hover:bg-blue-700 transition ${sizeClass}`}>
-        Cluster
-      </button>
+      <button className={`rounded bg-blue-600 text-white hover:bg-blue-700 transition ${sizeClass}`}>Cluster</button>
     )
   }
-
 
   return (
     <header className="relative z-50 px-4 py-2 bg-neutral-100 dark:bg-neutral-900 dark:text-neutral-400">
@@ -63,7 +59,7 @@ export function AppHeader({ links = [] }: { links: { label: string; path: string
         </Button>
 
         <div className="hidden md:flex items-center gap-4">
-          <WalletStatus />  {/* TODO ORION: lots of love. Blessed Be and Merry Meet. 🌒🌓🌕 */}
+          <WalletStatus /> {/* TODO ORION: lots of love. Blessed Be and Merry Meet. 🌒🌓🌕 */}
           <WalletUiDropdown />
           <ClusterButton size="sm" />
           <ThemeSelect />
@@ -86,7 +82,7 @@ export function AppHeader({ links = [] }: { links: { label: string; path: string
                 ))}
               </ul>
               <div className="flex flex-col gap-4">
-                <WalletStatus />  {/* TODO ORION: lots of love. Blessed Be and Merry Meet. 🌒🌓🌕 */}
+                <WalletStatus /> {/* TODO ORION: lots of love. Blessed Be and Merry Meet. 🌒🌓🌕 */}
                 <WalletUiDropdown />
                 <ClusterButton />
                 <ThemeSelect />

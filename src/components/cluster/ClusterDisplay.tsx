@@ -30,8 +30,12 @@ export function ClusterDisplay({ clusterLabel }: { clusterLabel: ClusterLabel })
 
   return (
     <div className="p-4 border rounded-xl bg-zinc-900 text-zinc-100 shadow-md space-y-2">
-      <div><strong>Cluster:</strong> {config.label}</div>
-      <div><strong>RPC URL:</strong> <code>{url}</code></div>
+      <div>
+        <strong>Cluster:</strong> {config.label}
+      </div>
+      <div>
+        <strong>RPC URL:</strong> <code>{url}</code>
+      </div>
     </div>
   )
 }

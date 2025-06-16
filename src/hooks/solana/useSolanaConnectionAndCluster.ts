@@ -4,11 +4,13 @@ export function useSolanaConnectionAndCluster(cluster: 'devnet' | 'testnet' | 'm
   const connection = useSolanaClient(cluster)
   const url = connection.rpcEndpoint
 
-  const clusterName =
-    url.includes('devnet') ? 'devnet' :
-      url.includes('mainnet') ? 'mainnet-beta' :
-        url.includes('testnet') ? 'testnet' :
-          'custom'
+  const clusterName = url.includes('devnet')
+    ? 'devnet'
+    : url.includes('mainnet')
+      ? 'mainnet-beta'
+      : url.includes('testnet')
+        ? 'testnet'
+        : 'custom'
 
   return { connection, cluster: clusterName }
 }

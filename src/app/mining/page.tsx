@@ -1,5 +1,5 @@
-import MiningPanel from '@/components/mining/mining-panel';
-import WalletConnectButton from '../../components/wallet/wallet-connect-button';
+import MiningPanel from '@/components/mining/mining-panel'
+import WalletConnectButton from '../../components/wallet/wallet-connect-button'
 
 export default function MiningPage() {
   return (
@@ -7,5 +7,5 @@ export default function MiningPage() {
       <WalletConnectButton />
       <MiningPanel />
     </main>
-  );
+  )
 }

@@ -7,5 +7,4 @@ export { useGetTokenAccounts } from './useGetTokenAccounts.tsx'
 export { useRequestAirdrop } from './useRequestAirdrop.tsx'
 export { useTransferSol } from './useTransferSol.tsx'
 
-export class useSolanaWalletAddressHook {
-}
+export class useSolanaWalletAddressHook {}

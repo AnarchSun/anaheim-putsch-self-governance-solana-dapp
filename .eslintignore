@@ -1,6 +1,0 @@
-src/utils/**/*.js
-test/**/*.js
-node_modules/
-dist/
-build/
-tmp/

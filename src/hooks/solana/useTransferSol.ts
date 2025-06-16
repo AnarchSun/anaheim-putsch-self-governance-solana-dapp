@@ -22,7 +22,7 @@ export function useTransferSol({ fromAddress }: { fromAddress: Address }) {
           fromPubkey: wallet.publicKey,
           toPubkey,
           lamports: amount * LAMPORTS_PER_SOL,
-        })
+        }),
       )
 
       const signed = await wallet.signTransaction(transaction)

@@ -1,7 +1,7 @@
 // src/lib/solana/useTxSigner.ts
 import { TransactionSendingSigner } from 'gill'
 
-export declare function useWalletAccountTransactionSendingSigner(): TransactionSendingSigner;
+export declare function useWalletAccountTransactionSendingSigner(): TransactionSendingSigner
 
 export function useTxSigner() {
   const signer = useWalletAccountTransactionSendingSigner()

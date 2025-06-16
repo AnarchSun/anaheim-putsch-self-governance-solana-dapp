@@ -9,34 +9,33 @@
  *
  * The full MIT License is available in the LICENSE file at the root of this repository.
  */
-import { exec } from 'node:child_process';
-import { writeFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { exec } from 'node:child_process'
+import { writeFileSync } from 'node:fs'
+import { join } from 'node:path'
 export class CreateAppError extends Error {
-    logMessage;
-    code;
-    logFile;
-    constructor(logMessage, code, logFile) {
-        super(logMessage);
-        this.logMessage = logMessage;
-        this.code = code;
-        this.logFile = logFile;
-        this.name = 'CreateAppError';
-    }
+  logMessage
+  code
+  logFile
+  constructor(logMessage, code, logFile) {
+    super(logMessage)
+    this.logMessage = logMessage
+    this.code = code
+    this.logFile = logFile
+    this.name = 'CreateAppError'
+  }
 }
 export function execAndWait(command, cwd) {
-    return new Promise((res, rej) => {
-        exec(command, { cwd, env: { ...process.env } }, (error, stdout, stderr) => {
-            if (error) {
-                const errorString = stderr && stderr.trim().length > 0 ? stderr : `${error}`;
-                const logFile = join(cwd, 'error.log');
-                writeFileSync(logFile, `${stdout}\n${errorString}`);
-                const message = errorString.trim().length > 0 ? errorString : `An error occurred while running ${command}`;
-                rej(new CreateAppError(message, error.code, logFile));
-            }
-            else {
-                res({ code: 0, stdout });
-            }
-        });
-    });
+  return new Promise((res, rej) => {
+    exec(command, { cwd, env: { ...process.env } }, (error, stdout, stderr) => {
+      if (error) {
+        const errorString = stderr && stderr.trim().length > 0 ? stderr : `${error}`
+        const logFile = join(cwd, 'error.log')
+        writeFileSync(logFile, `${stdout}\n${errorString}`)
+        const message = errorString.trim().length > 0 ? errorString : `An error occurred while running ${command}`
+        rej(new CreateAppError(message, error.code, logFile))
+      } else {
+        res({ code: 0, stdout })
+      }
+    })
+  })
 }

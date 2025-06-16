@@ -13,8 +13,7 @@ let counter = 0
  * @param prefix A custom string to prepend (default: 'sub')
  * @returns A unique client subscription ID string
  */
-export class ClientSubscriptionId {
-}
+export class ClientSubscriptionId {}
 
 let counter = 0
 
@@ -25,4 +24,3 @@ export function generateClientSubscriptionId(prefix = 'sub'): string {
 export function resetClientSubscriptionCounter() {
   counter = 0
 }
-

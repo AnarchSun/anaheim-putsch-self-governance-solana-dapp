@@ -6,7 +6,6 @@ import { getAppInfo } from './utils/get-app-info'
 import { getArgs } from './utils/get-args'
 import { detectInvokedPackageManager } from './utils/vendor/package-manager'
 
-
 export async function main(argv: string[]) {
   // Detect package manager invoked
   const pm = detectInvokedPackageManager()

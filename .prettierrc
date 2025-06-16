@@ -1,9 +1,7 @@
 {
-  "singleQuote": true,
+  "arrowParens": "always",
   "printWidth": 120,
   "semi": false,
-  "trailingComma": "all",
-  "arrowParens": "always",
-  "endOfLine": "auto",
-  "proseWrap": "always"
+  "singleQuote": true,
+  "trailingComma": "all"
 }

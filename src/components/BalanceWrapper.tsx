@@ -1,12 +1,12 @@
 // src/components/BalanceComponent.tsx
-import React from 'react';
+import React from 'react'
 
 type BalanceComponentProps = {
-  userId?: string;
-};
+  userId?: string
+}
 
 export const BalanceComponent: React.FC<BalanceComponentProps> = ({ userId }) => {
-  return <div>Balance pour user : {userId ?? 'inconnu'}</div>;
-};
+  return <div>Balance pour user : {userId ?? 'inconnu'}</div>
+}
 
-export default BalanceComponent;
+export default BalanceComponent

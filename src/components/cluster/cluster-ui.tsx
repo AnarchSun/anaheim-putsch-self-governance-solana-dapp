@@ -56,3 +56,6 @@ export function ClusterChecker({ children }: { children: ReactNode }) {
 
   return <>{children}</>
 }
+
+export class ClusterDisplay {
+}

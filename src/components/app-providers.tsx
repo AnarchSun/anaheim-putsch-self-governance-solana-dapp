@@ -23,9 +23,7 @@ export function AppProviders({ children }: { children: React.ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-        <SolanaProvider>
-          {children}
-        </SolanaProvider>
+        <SolanaProvider>{children}</SolanaProvider>
       </ThemeProvider>
     </QueryClientProvider>
   )

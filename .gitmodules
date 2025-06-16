@@ -1,3 +1,0 @@
-[submodule "create-solana-dapp"]
-	path = create-solana-dapp
-	url = https://github.com/solana-developers/create-solana-dapp.git

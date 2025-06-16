@@ -6,8 +6,8 @@ resolution = true
 skip-lint = false
 
 [programs.devnet]
-anaheim = "78aAD6rT9QNwjXEUwrrTwRdtE35khVh1opAQLjMsxvVb"
-journal = "F4ao4JM1dfxnKNAUJtJP6mPyrHD7QeYEBZwLU5ANVThd"
+anaheim = "DjSdHpSGjPqWFSZuNDDFas2dVrdfrMVTir1xJgQyjLFT"
+journal = "AC2NZK3Xg6HvsZdG1hc3fdWmmgqn2t9ohKHsueZacTgu"
 
 [registry]
 url = "https://api.apr.dev"
@@ -17,6 +17,7 @@ cluster = "devnet"
 wallet = "~/.config/solana/id.json"
 
 [scripts]
+build = "bash -c 'echo test && echo ok done'"
 test_jest = "../node_modules/.bin/jest --preset ts-jest"
 test_mocha = "mocha -t 1000000 tests/"
 
