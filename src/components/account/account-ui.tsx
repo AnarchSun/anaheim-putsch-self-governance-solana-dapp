@@ -107,3 +107,19 @@ export function AccountUI(props: AccountUIProps) {
 }
 
 export class AccountChecker {}
+
+export class AccountBalance {
+  constructor(param: { address: string }) {
+    // TODO MY SWEEETHEART..
+  }
+
+}
+
+export class AccountButtons {
+}
+
+export class AccountTokens {
+}
+
+export class AccountTransactions {
+}

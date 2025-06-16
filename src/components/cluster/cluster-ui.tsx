@@ -1,44 +1,39 @@
-import { useQuery } from '@tanstack/react-query'
 import { ReactNode } from 'react'
+import { useQuery } from '@tanstack/react-query'
 import { Button } from '@/components/ui/button'
 import { AppAlert } from '@/components/app-alert'
-
-// Assume these are React hooks that return the expected data
 import { useSolanaClient } from 'gill-react'
-import { useWalletUi, useWalletUiCluster } from '@/hooks/wallet/wallet-hooks.ts'
+import { useWalletUi, useWalletUiCluster } from '@/hooks/wallet/wallet-hooks'
 
-const { client } = useWalletUi()
-
-// Si tu ne l’utilises pas encore, garde-le vivant en l’affichant dans la console :
-console.log('wallet client:', client)
+// ✅ Composant fonctionnel React
+export function ExplorerLink({ address, label }: { address: string, label?: string }) {
+  return (
+    <a
+      href={`https://explorer.solana.com/address/${address}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="text-blue-500 underline"
+    >
+      {label ?? address}
+    </a>
+  )
+}
 
 export function ClusterChecker({ children }: { children: ReactNode }) {
-  // Hooks React, pas des schémas
-  const walletUi = useWalletUi()
   const cluster = useWalletUiCluster()
-
-  // Ici client doit être un objet avec propriété `rpc`
   const client = useSolanaClient()
 
-  if (!client) {
-    return (
-      <AppAlert action={<Button variant="outline">Retry</Button>}>
-        Solana client unavailable — connection impossible.
-      </AppAlert>
-    )
-  }
-
-  // Prends garde aux propriétés de cluster
   const label = (cluster as any)?.label ?? 'unknown'
   const endpoint = (cluster as any)?.urlOrMoniker ?? 'unknown'
 
   const query = useQuery({
     queryKey: ['version', { cluster: label, endpoint }],
-    queryFn: () => client.rpc.getVersion(),
+    queryFn: () => client?.rpc.getVersion(),
+    enabled: !!client,
     retry: 1,
   })
 
-  if (query.isLoading) return null
+  if (!client || query.isLoading) return null
 
   if (query.isError || !query.data) {
     return (
@@ -55,7 +50,4 @@ export function ClusterChecker({ children }: { children: ReactNode }) {
   }
 
   return <>{children}</>
-}
-
-export class ClusterDisplay {
 }

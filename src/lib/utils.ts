@@ -5,7 +5,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function ellipsify(str = '', len = 4, delimiter = '..') {
+export function ellipsify(str: string = '', len: number = 4, delimiter: string = '..') {
   const strLen = str.length
   const limit = len * 2 + delimiter.length
 

@@ -1,7 +1,7 @@
 // src/components/getClusterDisplay.tsx
 import React from 'react'
 import './App.css'
-import { ClusterLabel, useClusterConfig } from '@/hooks/getClusterConfig.js'
+import { ClusterLabel, useClusterConfig } from '@/hooks/cluster/getClusterConfig.js'
 import { PublicKey } from '@solana/web3.js' // si tu veux appliquer du style
 export function ClusterDisplay({ clusterLabel, label }: { clusterLabel: ClusterLabel; label?: string }) {
   const config = useClusterConfig(clusterLabel)

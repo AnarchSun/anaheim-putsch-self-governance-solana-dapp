@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react'
 import { useWrappedConnection } from '../hooks/solana/useWrappedConnection'
-import { getClusterUrl } from '../hooks/getClusterUrl'
+import { getClusterUrl } from '../hooks/cluster/getClusterUrl'
 import { toAddress } from '../lib/solana/solanaKitShim'
 
 // Un cast brutal mais contrôlé :

@@ -1,3 +1,4 @@
+// src/index.ts
 import { cancel, log, note, outro } from '@clack/prompts'
 import * as process from 'node:process'
 import { createApp } from './utils/create-app'

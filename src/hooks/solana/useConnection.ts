@@ -1,6 +1,6 @@
 // hooks/useConnection.ts
 import { Connection } from '@solana/web3.js'
-import { useClusterEndpoint } from './../useClusterEndpoint'
+import { useClusterEndpoint } from '../cluster/useClusterEndpoint'
 
 export function useConnection() {
   const endpoint = useClusterEndpoint()

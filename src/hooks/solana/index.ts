@@ -1,5 +1,5 @@
 // hooks/solana/index.ts
-export { useClusterEndpoint } from '../useClusterEndpoint'
+export { useClusterEndpoint } from '../cluster/useClusterEndpoint'
 export { useConnection } from './useConnection.tsx'
 export { useGetBalance } from './useGetBalance.tsx'
 export { useGetSignatures } from '../useGetSignatures'

@@ -1,7 +1,6 @@
 packages:
-  - 'src/*'
-  - 'src/components/*'
-
+  - src/*
+  - src/components/*
 
 catalogs:
   react16:
@@ -10,3 +9,10 @@ catalogs:
   react17:
     react: ^17.10.0
     react-dom: ^17.10.0
+
+onlyBuiltDependencies:
+  - '@tailwindcss/oxide'
+  - bufferutil
+  - sharp
+  - unrs-resolver
+  - utf-8-validate

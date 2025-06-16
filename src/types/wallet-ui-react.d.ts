@@ -32,6 +32,7 @@ declare module '@wallet-ui/react' {
 
   export class useWalletUi {
     // à implémenter si utilisé
+    account: UiWalletAccount
   }
 
   export class useWalletUiCluster {
