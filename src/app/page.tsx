@@ -1,20 +1,22 @@
-// src/app/page.tsx
-'use client'
 'use client'
 
+import dynamic from 'next/dynamic'
+import { ReactNode } from 'react'
 
-import React from 'react'
-import { DashboardFeature } from '@/components/dashboard/dashboard-feature'
-import { DebugConstants } from '@/components/DebugConstants'
-import { Rapper } from '@/components/rapper'
+// Charger dynamiquement ClusterChecker sans SSR
+const ClusterChecker = dynamic(
+  () => import('../components/cluster/cluster-ui').then((mod) => mod.ClusterChecker),
+  { ssr: false }
+)
 
-export default function Home() {
+type ClientClusterUIProps = {
+  children?: ReactNode
+}
+
+export default function ClientClusterUI({ children }: ClientClusterUIProps) {
   return (
-    <main>
-      <h1>Bienvenue dans Anaheim Putsch</h1>
-      <Rapper />
-      <DashboardFeature />
-      <DebugConstants />
-    </main>
+    <ClusterChecker>
+      {children}
+    </ClusterChecker>
   )
 }

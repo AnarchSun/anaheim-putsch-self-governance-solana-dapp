@@ -1,29 +1,20 @@
-// src/app/account/page.tsx
+// src/components/account/account-ui.tsx
+'use client'
+
+import { PublicKey } from '@solana/web3.js'
 import AccountListFeature from '@/components/account/account-list-feature'
 import { CreateTransaction } from '@/components/account/createTransaction'
 import { AccountUI } from '@/components/account/account-ui'
-import { PublicKey } from '@solana/web3.js'
-
-// ✅ Fonction composant (correct)
-export function AccountUI() {
-  return (
-    <div>
-      {/* Ton contenu ici */}
-    </div>
-  )
-}
 
 export default function Page() {
-  // Ici tu passes les props address et account nécessaires au composant
-  const address = 'Faisici ton adresse Solana ici'
+  const address = 'GvHe41dnJNzMZH3EcXHsdGLBWR7LPUr9Pb9v2pTxCRQj' // ✅ remplace avec une adresse valide
   const account = new PublicKey(address)
 
   return (
-    <>
+    <main className="space-y-6 p-6">
       <AccountListFeature />
-      <CreateTransaction recipientAddress={''} />
-      <AccountUI address={address} account={account} />
-    </>
+      <CreateTransaction recipientAddress={address} />
+      <AccountUI pubkey={address} account={account} />
+    </main>
   )
-
 }

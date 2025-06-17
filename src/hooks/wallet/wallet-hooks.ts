@@ -1,11 +1,9 @@
-// src/components/solana/wallet/wallet-hooks.ts
-import { useSolanaWalletAddress as _useSolanaWalletAddress } from '@wallet-ui/react' // ✅ seulement ce qui est exporté
-// src/hooks/solana/useWallet.ts
+// src/components/solana/wallet-hooks.ts
+
 import { useSolanaWalletAddress } from '@wallet-ui/react'
 import { useSolanaClient } from 'gill-react'
 
 const client = useSolanaClient() as any
-const url = client._connection?.rpcEndpoint ?? ''
 
 export function useWalletUiAddress(): string {
   const walletAddress = new useSolanaWalletAddress()

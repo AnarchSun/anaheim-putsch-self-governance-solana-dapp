@@ -1,17 +1,40 @@
-// src/components/account/account-detail-feature.tsx
 'use client'
 
-import { assertIsAddress } from 'gill'
-import { useMemo } from 'react'
+import React, { useMemo } from 'react'
 import { useParams } from 'next/navigation'
-import { AccountBalance } from './AccountBalance'
 import { AccountButtons } from './AccountButtons'
 import { AccountTransactions } from './AccountTransactions'
-
 import { AppHero } from '../app-hero'
 import { ellipsify } from '@/lib/utils'
-// ✅ Assure-toi que le fichier est en .tsx, PAS .ts
-import React from "react"
+import { assertIsAddress } from '@solana/addresses'
+import { useQuery } from '@tanstack/react-query'
+import { PublicKey } from '@solana/web3.js'
+import { useSolanaClient } from 'gill-react'
+
+export function useGetBalance(address: string) {
+  const client = useSolanaClient()
+
+  return useQuery({
+    queryKey: ['balance', address],
+    enabled: !!address,
+    queryFn: async () => {
+      assertIsAddress(address)
+      const pubkey = new PublicKey(address)
+      const accountInfo = await client.rpc.getAccountInfo(pubkey).send()
+      if (!accountInfo.value) throw new Error('Account not found')
+      return accountInfo.value.lamports / 1e9 // SOL
+    },
+  })
+}
+
+export const AccountBalance: React.FC<{ address: string }> = ({ address }) => {
+  const { data, isLoading, error } = useGetBalance(address)
+
+  if (isLoading) return <span className="text-muted">Chargement…</span>
+  if (error) return <span className="text-red-600">Erreur chargement solde</span>
+  return <span>{(data ?? 0).toFixed(4)} SOL</span>
+}
+
 
 type Props = {
   address: string
@@ -35,7 +58,6 @@ export function ExplorerLink({ address, label }: { address: string, label?: stri
 
 export default function AccountDetailFeature() {
   const params = useParams()
-
   const address = useMemo(() => {
     const addr = params.address
     if (!addr || typeof addr !== 'string') return undefined
@@ -44,16 +66,19 @@ export default function AccountDetailFeature() {
   }, [params.address])
 
   if (!address) {
-    return <div>Error loading account</div>
+    return <div className="text-red-600">Error loading account</div>
   }
 
   return (
     <div>
-      <AppHero title={<AccountBalance address={address} />} subtitle={
-        <div className="my-4">
-          <ExplorerLink address={address} label={ellipsify(address)} />
-        </div>
-      }>
+      <AppHero
+        title={<AccountBalance address={address} />}
+        subtitle={
+          <div className="my-4">
+            <ExplorerLink address={address} label={ellipsify(address)} />
+          </div>
+        }
+      >
         <div className="my-4">
           <AccountButtons address={address} />
         </div>

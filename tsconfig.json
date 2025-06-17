@@ -1,35 +1,37 @@
 {
   "compilerOptions": {
-    "allowSyntheticDefaultImports": true,
-    "noImplicitAny": true,
-    "strictFunctionTypes": true,
-    "isolatedModules": true,
-    "jsx": "preserve",
-    "target": "esnext",
+    "target": "ESNext",
     "lib": ["dom", "dom.iterable", "esnext"],
+    "module": "ESNext",
+    "moduleResolution": "node", // ✅ essentiel pour @solana/web3.js
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
     "noEmit": true,
+    "isolatedModules": true,
     "esModuleInterop": true,
-    "module": "esnext",
     "resolveJsonModule": true,
     "incremental": true,
+    "jsx": "preserve",
+    "allowSyntheticDefaultImports": true,
+    "noImplicitAny": true,
+    "strictFunctionTypes": true,
+    "baseUrl": ".", // ✅ bon chemin
+    "paths": {
+      "@/*": ["src/*"],
+      "@coral-xyz/anchor": ["node_modules/@coral-xyz/anchor"],
+      "@solana/web3.js": ["node_modules/@solana/web3.js"],
+      "@anaheim/anchor-client": ["../../packages/anchor-client/src/index.ts"]
+    },
     "plugins": [
       { "name": "next" }
-    ],
-    "moduleResolution": "node",
-    "baseUrl": "./src",
-    "paths": {
-      "@/*": ["*"]
-    }
+    ]
   },
   "include": [
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts",
-    "../../.venv/lib/python3.12/site-packages/docutils/writers/s5_html/themes/default/slides.js"
+    ".next/types/**/*.ts"
   ],
   "exclude": ["node_modules"]
 }

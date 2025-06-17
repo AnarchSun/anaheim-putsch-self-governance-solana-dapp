@@ -6,8 +6,8 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Menu, X } from 'lucide-react'
 import { ThemeSelect } from '@/components/theme-select'
-import { WalletUiDropdown } from '@/components/solana/wallet/wallet-ui-dropdown'
-import { WalletStatus } from '@/components/solana/wallet/wallet-status'
+import { WalletUiDropdown } from '@/components/wallet/wallet-ui-dropdown'
+import { WalletStatus } from '@/components/wallet/wallet-status'
 
 export function AppHeader({ links = [] }: { links: { label: string; path: string }[] }) {
   const pathname = usePathname()

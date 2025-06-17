@@ -1,8 +1,14 @@
-// src/components/account/AccountBalance.tsx
-import React from "react";
+import React from 'react'
 
-type Props = { address: string };
+type Props = {
+  address: string
+}
 
 export const AccountBalance: React.FC<Props> = ({ address }) => {
-  return <span>Balance for {address}</span>;
-};
+  return (
+    <div>
+      Solana Balance for: {address}
+      {/* Tu peux ajouter un hook ici pour fetcher le solde */}
+    </div>
+  )
+}
