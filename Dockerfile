@@ -1,39 +1,54 @@
-# Base image avec Ubuntu + Rust
+# ---- Base image with Rust, Solana, Node, and Anchor ----
 FROM ubuntu:22.04
 
+# Avoiding interactive prompts
 ENV DEBIAN_FRONTEND=noninteractive
-ENV PATH=/root/.local/share/solana/install/active_release/bin:/root/.cargo/bin:$PATH
 
-# 1. System dependencies
+# Versions
+ENV RUSTUP_HOME=/usr/local/rustup \
+    CARGO_HOME=/usr/local/cargo \
+    PATH=/usr/local/cargo/bin:$PATH \
+    SOLANA_VERSION=2.1.1 \
+    ANCHOR_VERSION=0.31.1 \
+    NODE_VERSION=20.12.2 \
+    PNPM_VERSION=8.15.5
+
+# System dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
-  curl build-essential pkg-config libssl-dev libudev-dev git wget \
-  ca-certificates python3 python3-pip zsh gnupg nodejs npm \
-  && rm -rf /var/lib/apt/lists/* \
-  && apt full-upgrade -y
+    curl git unzip pkg-config build-essential libssl-dev \
+    libudev-dev clang cmake xz-utils ca-certificates \
+    python3 python3-pip sudo openssh-client jq \
+    && rm -rf /var/lib/apt/lists/*
 
-# 2. Rust
-RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+# Install Node.js + PNPM
+RUN sh -c "$(curl -sSfL https://release.anza.xyz/stable/install)" -o solana.sh \
+    chmod +x solana.sh ./solana.sh
+RUN echo $SHELL && echo 'export PATH="$HOME/.local/share/solana/install/active_release/bin:$PATH"' >> ~/.bashrc && echo 'export PATH="$HOME/.local/share/solana/install/active_release/bin:$PATH"' >> ~/.zshrc \
+   source ~/.bashrc && source ~/.zshrc && agave-install update
 
-# 3. Solana CLI
-RUN curl -sSfL https://release.solana.com/stable/install | bash
+# Rust + Solana + Anchor
+RUN curl https://sh.rustup.rs -sSf | bash -s -- -y \
+    && rustup default stable \
+    && cargo install --git https://github.com/coral-xyz/anchor --tag v${ANCHOR_VERSION} anchor-cli \
+    && curl -sSfL https://release.solana.com/v${SOLANA_VERSION}/install -o solana-install.sh || true \
+    && chmod +x solana-install.sh && ./solana-install.sh || true \
+    && echo "export PATH=\$HOME/.local/share/solana/install/active_release/bin:\$PATH" >> ~/.bashrc \
+    && echo "Solana installed at: \$(which solana)" || true \
+    && anchor --version
 
-# 4. Node, corepack, pnpm
-RUN npm install -g corepack && corepack enable && corepack prepare pnpm@latest --activate
 
-# 5. Anchor CLI via AVM
-RUN cargo install --git https://github.com/coral-xyz/anchor avm --force
-RUN avm install latest && avm use latest
 
-# 6. Codebase
-WORKDIR /app
+# Create app user (optional)
+RUN useradd -m app && mkdir -p /home/app/app && chown -R app:app /home/app
+
+WORKDIR /home/app/app
 COPY . .
 
-# 7. JS deps
-RUN pnpm install --frozen-lockfile
+# Install dependencies using PNPM
+RUN pnpm install
 
-# 8. Init + deploy
-RUN chmod +x scripts/init.sh
-RUN ./scripts/init.sh
+# Build project
+RUN pnpm build
 
-# 9. Expose shell for dev
-CMD ["/bin/bash"]
+# Default command: bash shell
+CMD [ "bash" ]

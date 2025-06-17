@@ -4,15 +4,22 @@
 import { assertIsAddress } from 'gill'
 import { useMemo } from 'react'
 import { useParams } from 'next/navigation'
-import {
-  AccountBalance,
-  AccountButtons,
-  AccountTokens,
-  AccountTransactions,
-} from './account-ui'
+import { AccountBalance } from './AccountBalance'
+import { AccountButtons } from './AccountButtons'
+import { AccountTransactions } from './AccountTransactions'
 
 import { AppHero } from '../app-hero'
 import { ellipsify } from '@/lib/utils'
+// ✅ Assure-toi que le fichier est en .tsx, PAS .ts
+import React from "react"
+
+type Props = {
+  address: string
+}
+
+export const AccountTokens: React.FC<Props> = ({ address }) => {
+  return <div>Tokens of {address}</div>
+}
 
 export function ExplorerLink({ address, label }: { address: string, label?: string }) {
   return (
@@ -42,14 +49,11 @@ export default function AccountDetailFeature() {
 
   return (
     <div>
-      <AppHero
-        title={<>{new AccountBalance ( { address } )}</>}
-        subtitle={
-          <div className="my-4">
-            {new ExplorerLink ( { address, label: ellipsify ( address ) } )}
-          </div>
-        }
-      >
+      <AppHero title={<AccountBalance address={address} />} subtitle={
+        <div className="my-4">
+          <ExplorerLink address={address} label={ellipsify(address)} />
+        </div>
+      }>
         <div className="my-4">
           <AccountButtons address={address} />
         </div>

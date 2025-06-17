@@ -13,7 +13,7 @@ import { useWallet } from '@solana/wallet-adapter-react'
 
 const RPC_ENDPOINT = 'https://api.devnet.solana.com'
 
-export function CreateTransaction({ recipientAddress }: { recipientAddress: string }) {
+export function CreateTransaction({ recipientAddress }: { recipientAddress: string, connection?: any }) {
   const { publicKey, sendTransaction } = useWallet()
   const [connection, setConnection] = useState<Connection | null>(null)
   const [status, setStatus] = useState<string | null>(null)

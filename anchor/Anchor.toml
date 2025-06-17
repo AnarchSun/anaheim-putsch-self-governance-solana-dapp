@@ -6,16 +6,15 @@ resolution = true
 skip-lint = false
 
 [programs.devnet]
-anaheim = "GhVYJAHWWFeEPtfRZhWHuQ7ZjryiFsUctSheuNsHfHqX"
-journal = "9DvHamcBuKThvD8urggWA1DMcsbLj2FLoESrf9f6fbm"
-
+anaheim = "B4wa4mhhsxJ3Z7FYd8y1qx9XQCVBTpyLkBTzm1h9PaNC"
+journal = "5Z83vnTd9UBLfby19h8URuofff6DELAwww5hyEQhtmkb"
 
 [registry]
 url = "https://api.apr.dev"
 
 [provider]
 cluster = "devnet"
-wallet = "/home/anarchsun/RustroverProjects/anarcrypt.sol/anaheim-putsch-govdapp/anchor/target/deploy/anarcrypt.json"
+wallet = "~/RustroverProjects/anarcrypt.sol/anaheim-putsch-govdapp/anchor/target/deploy/anarcrypt.json"
 
 [scripts]
 build = "bash -c 'echo test && echo ok done'"

@@ -18,7 +18,7 @@ pub use contexts::create_user::CreateUser;
 pub use instructions::create_user;
 use crate::contexts::create_user::__client_accounts_create_user;
 
-declare_id!("GhVYJAHWWFeEPtfRZhWHuQ7ZjryiFsUctSheuNsHfHqX");
+declare_id!("B4wa4mhhsxJ3Z7FYd8y1qx9XQCVBTpyLkBTzm1h9PaNC");
 
 #[program]
 pub mod anaheim {

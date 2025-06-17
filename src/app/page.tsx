@@ -1,3 +1,8 @@
+// src/app/page.tsx
+'use client'
+'use client'
+
+
 import React from 'react'
 import { DashboardFeature } from '@/components/dashboard/dashboard-feature'
 import { DebugConstants } from '@/components/DebugConstants'

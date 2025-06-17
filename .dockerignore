@@ -4,3 +4,5 @@ target
 .cache
 *.log
 scripts/id.json
+scripts/
+*.sh

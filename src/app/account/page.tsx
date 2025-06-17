@@ -1,7 +1,17 @@
+// src/app/account/page.tsx
 import AccountListFeature from '@/components/account/account-list-feature'
 import { CreateTransaction } from '@/components/account/createTransaction'
-import { AccountUI } from '@/components/account/account-ui.txs'
+import { AccountUI } from '@/components/account/account-ui'
 import { PublicKey } from '@solana/web3.js'
+
+// ✅ Fonction composant (correct)
+export function AccountUI() {
+  return (
+    <div>
+      {/* Ton contenu ici */}
+    </div>
+  )
+}
 
 export default function Page() {
   // Ici tu passes les props address et account nécessaires au composant
@@ -15,4 +25,5 @@ export default function Page() {
       <AccountUI address={address} account={account} />
     </>
   )
+
 }

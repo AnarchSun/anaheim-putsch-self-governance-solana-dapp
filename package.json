@@ -48,6 +48,7 @@
     "@solana/wallet-adapter-react": "^0.15.39",
     "@solana/wallet-adapter-react-ui": "^0.9.39",
     "@solana/web3.js": "^1.98.2",
+    "@tailwindcss/postcss": "^4.1.10",
     "@tanstack/react-query": "^5.80.7",
     "@types/inflight": "^1.0.1",
     "@types/node": "^24.0.3",
@@ -58,6 +59,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
+    "enquirer": "^2.4.1",
     "gill": "0.10.1",
     "gill-react": "^0.4.3",
     "jotai": "^2.12.5",
@@ -68,8 +70,13 @@
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-error-boundary": "^6.0.0",
+    "react-query -D\n": "link:@tanstack/react-query -D\n",
     "sonner": "^2.0.5",
-    "tailwind-merge": "^3.3.1"
+    "superstruct": "^2.0.2",
+    "tailwind-merge": "^3.3.1",
+    "tailwindcss": "^4.1.10",
+    "tw-animate-css": "^1.3.4",
+    "vite": "^6.3.5"
   },
   "devDependencies": {
     "eslint": "^9.29.0"
