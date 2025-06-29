@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "files.exclude": {
     "**/backups": true
   },
@@ -6,4 +7,9 @@
     "**/backups": true
   },
   "typescript.tsdk": "./node_modules/typescript/lib"
+=======
+  "eslint.validate": ["json"],
+  "rust-analyzer.cargo.features": ["anchor"],
+  "rust-analyzer.procMacro.enable": true
+>>>>>>> main
 }

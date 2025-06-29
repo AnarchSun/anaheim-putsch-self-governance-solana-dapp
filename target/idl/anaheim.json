@@ -1,15 +1,27 @@
 {
-  "address": "Az8vc6tiNbtRMLL5SaNXEiGP7dBXQDm7UemFqhbDfyzv",
+  "address": "B4wa4mhhsxJ3Z7FYd8y1qx9XQCVBTpyLkBTzm1h9PaNC",
   "metadata": {
     "name": "anaheim",
     "version": "0.1.0",
     "spec": "0.1.0",
-    "description": "Solan Governance Dapp and social media for powerr to the people nextjs, react, typescript and anchor used"
+    "description": "Created with Anchor"
   },
+  "docs": [
+    "─── PROGRAMME PRINCIPAL ────────────────────────────────────────────────────"
+  ],
   "instructions": [
     {
       "name": "close",
-      "discriminator": [98, 165, 201, 177, 108, 65, 206, 96],
+      "discriminator": [
+        98,
+        165,
+        201,
+        177,
+        108,
+        65,
+        206,
+        96
+      ],
       "accounts": [
         {
           "name": "anaheim",
@@ -25,7 +37,16 @@
     },
     {
       "name": "create_post",
-      "discriminator": [123, 92, 184, 29, 231, 24, 15, 202],
+      "discriminator": [
+        123,
+        92,
+        184,
+        29,
+        231,
+        24,
+        15,
+        202
+      ],
       "accounts": [
         {
           "name": "post_account",
@@ -51,36 +72,30 @@
     },
     {
       "name": "create_user",
-      "discriminator": [108, 227, 130, 130, 252, 109, 75, 218],
+      "discriminator": [
+        108,
+        227,
+        130,
+        130,
+        252,
+        109,
+        75,
+        218
+      ],
       "accounts": [
         {
           "name": "user_account",
           "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [117, 115, 101, 114]
-              },
-              {
-                "kind": "account",
-                "path": "user"
-              }
-            ]
-          }
+          "signer": true
         },
         {
-          "name": "user",
+          "name": "authority",
           "writable": true,
           "signer": true
         },
         {
           "name": "system_program",
           "address": "11111111111111111111111111111111"
-        },
-        {
-          "name": "rent",
-          "address": "SysvarRent111111111111111111111111111111111"
         }
       ],
       "args": [
@@ -92,7 +107,16 @@
     },
     {
       "name": "decrement",
-      "discriminator": [106, 227, 168, 59, 248, 27, 150, 101],
+      "discriminator": [
+        106,
+        227,
+        168,
+        59,
+        248,
+        27,
+        150,
+        101
+      ],
       "accounts": [
         {
           "name": "anaheim",
@@ -103,7 +127,16 @@
     },
     {
       "name": "increment",
-      "discriminator": [11, 18, 104, 9, 104, 174, 59, 33],
+      "discriminator": [
+        11,
+        18,
+        104,
+        9,
+        104,
+        174,
+        59,
+        33
+      ],
       "accounts": [
         {
           "name": "anaheim",
@@ -114,7 +147,16 @@
     },
     {
       "name": "initialize",
-      "discriminator": [175, 175, 109, 31, 13, 152, 155, 237],
+      "discriminator": [
+        175,
+        175,
+        109,
+        31,
+        13,
+        152,
+        155,
+        237
+      ],
       "accounts": [
         {
           "name": "anaheim",
@@ -135,7 +177,16 @@
     },
     {
       "name": "set",
-      "discriminator": [198, 51, 53, 241, 116, 29, 126, 194],
+      "discriminator": [
+        198,
+        51,
+        53,
+        241,
+        116,
+        29,
+        126,
+        194
+      ],
       "accounts": [
         {
           "name": "anaheim",
@@ -153,15 +204,42 @@
   "accounts": [
     {
       "name": "AnaheimAccount",
-      "discriminator": [26, 253, 236, 239, 22, 181, 47, 158]
+      "discriminator": [
+        26,
+        253,
+        236,
+        239,
+        22,
+        181,
+        47,
+        158
+      ]
     },
     {
       "name": "PostAccount",
-      "discriminator": [85, 236, 139, 84, 240, 243, 196, 23]
+      "discriminator": [
+        85,
+        236,
+        139,
+        84,
+        240,
+        243,
+        196,
+        23
+      ]
     },
     {
       "name": "UserAccount",
-      "discriminator": [211, 33, 136, 16, 186, 110, 242, 127]
+      "discriminator": [
+        211,
+        33,
+        136,
+        16,
+        186,
+        110,
+        242,
+        127
+      ]
     }
   ],
   "errors": [
@@ -245,32 +323,33 @@
           {
             "name": "content",
             "type": "string"
+          },
+          {
+            "name": "author",
+            "type": "pubkey"
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
           }
         ]
       }
     },
     {
       "name": "UserAccount",
+      "docs": [
+        "─── COMPTES STRUCTURÉS ─────────────────────────────────────────────────────"
+      ],
       "type": {
         "kind": "struct",
         "fields": [
           {
-            "name": "username",
-            "type": {
-              "array": ["u8", 32]
-            }
+            "name": "name",
+            "type": "string"
           },
           {
-            "name": "authority",
+            "name": "user_authority",
             "type": "pubkey"
-          },
-          {
-            "name": "timestamp",
-            "type": "i64"
-          },
-          {
-            "name": "bump",
-            "type": "u8"
           }
         ]
       }

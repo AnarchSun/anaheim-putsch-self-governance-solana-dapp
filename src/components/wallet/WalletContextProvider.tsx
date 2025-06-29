@@ -1,7 +1,12 @@
+// src/components/wallet/WalletContextProvider.tsx
 'use client'
 
 import React, { createContext, useContext, ReactNode } from 'react'
-import { useWallet } from '@solana/wallet-adapter-react'
+import { WalletProvider as SolanaWalletProvider, useWallet } from '@solana/wallet-adapter-react'
+import { PhantomWalletAdapter } from '@solana/wallet-adapter-wallets'
+import { WalletModalProvider } from '@solana/wallet-adapter-react-ui'
+
+const wallets = [new PhantomWalletAdapter()]
 
 interface WalletContextType {
   address?: string
@@ -9,6 +14,7 @@ interface WalletContextType {
 
 const WalletContext = createContext<WalletContextType | null>(null)
 
+// Ton propre contexte pour exposer l'adresse au reste de l'app
 export function WalletProvider({ children }: { children: ReactNode }) {
   const { publicKey } = useWallet()
   const address = publicKey?.toBase58()
@@ -20,10 +26,24 @@ export function WalletProvider({ children }: { children: ReactNode }) {
   )
 }
 
+// Hook custom pour récupérer l'adresse wallet via ton contexte
 export function useSolanaWalletAddress(): string | undefined {
   const context = useContext(WalletContext)
   if (!context) {
     throw new Error('useSolanaWalletAddress must be used within a WalletProvider')
   }
   return context.address
+}
+
+// Le provider global à utiliser en haut de ton arbre React (ex: dans src/app/layout.tsx)
+export default function WalletContextProvider({ children }: { children: ReactNode }) {
+  return (
+    <SolanaWalletProvider wallets={wallets} autoConnect>
+      <WalletModalProvider>
+        <WalletProvider>
+          {children}
+        </WalletProvider>
+      </WalletModalProvider>
+    </SolanaWalletProvider>
+  )
 }

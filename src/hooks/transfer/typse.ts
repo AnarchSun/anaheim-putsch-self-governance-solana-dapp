@@ -1,4 +1,4 @@
-// Définit les types des variables, erreurs, résultats de mutation
+// Définit les @types des variables, erreurs, résultats de mutation
 
 export type TransferVariables = {
   to: string;

@@ -1,7 +1,7 @@
 import * as anchor from '@coral-xyz/anchor'
 import { Program } from '@coral-xyz/anchor'
 import { Keypair } from '@solana/web3.js'
-import { Anaheim } from '../anchor/target/types/anaheim'
+import { Anaheim } from '../anchor/target/@types/anaheim'
 
 const provider = anchor.AnchorProvider.env()
 anchor.setProvider(provider)

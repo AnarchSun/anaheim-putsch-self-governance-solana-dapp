@@ -1,21 +1,15 @@
+// src/components/wallet/wallet-status.tsx
 'use client'
 
-import { useSolanaWalletAddress } from '@wallet-ui/react'
-import { useSolanaConnectionAndCluster } from '@/hooks/solana/useSolanaConnectionAndCluster'
+import { useWalletUi } from '@wallet-ui/react'
 
 export function WalletStatus() {
-  const walletAddressInstance = new useSolanaWalletAddress()
-  const { connection, cluster } = useSolanaConnectionAndCluster('devnet')
-
-  const address = walletAddressInstance?.toString?.() ?? 'Adresse inconnue'
+  const { account } = useWalletUi()
+  const address = account?.toBase58?.() ?? account?.address ?? 'Adresse inconnue'
 
   return (
     <div className="flex flex-col text-xs text-right leading-tight">
-      <p>Endpoint RPC : {connection.rpcEndpoint}</p>
-      <p>Cluster actuel : {cluster}</p>
-      <p className="text-neutral-600 dark:text-neutral-300 truncate max-w-[200px]">
-        🧙 Adresse : <span className="font-mono">{address}</span>
-      </p>
+      <p>🧙 Adresse : <span className="font-mono">{address}</span></p>
     </div>
   )
 }

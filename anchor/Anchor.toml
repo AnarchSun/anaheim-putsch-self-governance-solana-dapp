@@ -5,9 +5,9 @@ anchor_version = "0.31.1"
 resolution = true
 skip-lint = false
 
-[programs.devnet]
+[programs.localnet]
 anaheim = "B4wa4mhhsxJ3Z7FYd8y1qx9XQCVBTpyLkBTzm1h9PaNC"
-journal = "5Z83vnTd9UBLfby19h8URuofff6DELAwww5hyEQhtmkb"
+journal = "5Z83vnTd9UBLfby19h8URuofff6DELAwww5hyEQhtmkb"  # Program ID pour le programme journal
 
 [registry]
 url = "https://api.apr.dev"

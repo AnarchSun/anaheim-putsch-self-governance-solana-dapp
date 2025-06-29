@@ -5,6 +5,7 @@ packages:
   - packages/*
   - anchor
   - src/app/**"
+
 catalogs:
   react16:
     react: ^16.7.0
@@ -14,9 +15,15 @@ catalogs:
     react-dom: ^17.10.0
 
 onlyBuiltDependencies:
-  - tailwindcss/oxide
+  - '@tailwindcss/oxide'
+  - blake-hash
   - buffer utils
+  - bufferutil
   - esbuild
+  - protobufjs
   - sharp
+  - tailwindcss/oxide
+  - tiny-secp256k1
   - unrest-resolver
+  - usb
   - utf-8-validate

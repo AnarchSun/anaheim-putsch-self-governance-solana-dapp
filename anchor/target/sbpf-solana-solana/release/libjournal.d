@@ -1,1 +1,1 @@
-/home/anarchsun/RustroverProjects/anarcrypt.sol/anaheim-putsch-govdapp/anchor/target/sbpf-solana-solana/release/libjournal.rlib: /home/anarchsun/RustroverProjects/anarcrypt.sol/anaheim-putsch-govdapp/anchor/programs/journal/src/lib.rs
+/home/anarchsun/RustroverProjects/anarcrypt.sol/anaheim-putsch-self-governance-solana-dapp/anchor/target/sbpf-solana-solana/release/libjournal.rlib: /home/anarchsun/RustroverProjects/anarcrypt.sol/anaheim-putsch-self-governance-solana-dapp/anchor/programs/journal/src/lib.rs
