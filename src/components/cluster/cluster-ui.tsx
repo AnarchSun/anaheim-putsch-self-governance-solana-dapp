@@ -8,8 +8,20 @@ import { AppAlert } from '@/components/app-alert'
 import { useSolanaClient } from 'gill-react'
 import { useWalletUiCluster } from '@/hooks/wallet/wallet-hooks'
 
+class _useSolanaWalletCluster {
+  toString(): string {
+    const client = useSolanaClient()
+    const url = (client as any)?._connection?.rpcEndpoint ?? ''
+
+    if (url.includes('devnet')) return 'devnet'
+    if (url.includes('testnet')) return 'testnet'
+    if (url.includes('mainnet')) return 'mainnet-beta'
+    return 'unknown'
+  }
+}
+
 export function ClusterChecker({ children }: { children: ReactNode }) {
-  const cluster = useWalletUiCluster()
+  const cluster = useWalletUiCluster ()
   const client = useSolanaClient()
 
   const label = (cluster as any)?.label ?? 'unknown'

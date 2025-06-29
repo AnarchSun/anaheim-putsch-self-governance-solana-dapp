@@ -1,19 +1,34 @@
-// src/components/solana/wallet-hooks.ts
+import { useQuery } from '@tanstack/react-query'
+import { createSolanaClient } from 'gill'
+import { useSolanaWalletAddress } from '@/components/wallet/WalletContextProvider'
 
-import { useSolanaWalletAddress } from '@wallet-ui/react'
-import { useSolanaClient } from 'gill-react'
+const solanaClientInstance = createSolanaClient({ urlOrMoniker: 'devnet' })
 
-const client = useSolanaClient() as any
+export function useSolanaClient() {
+  return useQuery({
+    queryKey: ['solana-client'],
+    queryFn: async () => {
+      return solanaClientInstance
+    },
+    staleTime: Infinity,
+  }).data
+}
 
+/**
+ * 🧠 Retourne l'adresse du wallet connecté sous forme de string lisible.
+ * Si aucune adresse, retourne "Adresse inconnue".
+ */
 export function useWalletUiAddress(): string {
-  const walletAddress = new useSolanaWalletAddress()
+  const walletAddress = useSolanaWalletAddress()
   return walletAddress?.toString?.() ?? 'Adresse inconnue'
 }
 
+/**
+ * 🧭 Détecte dynamiquement le cluster courant à partir d'endpoint RPC utilisé par le client.
+ */
 export function useSolanaCluster(): string {
-  // Supposons que client expose une méthode publique getRpcEndpoint()
-  const client = useSolanaClient() as any
-  const url = client._connection?.rpcEndpoint ?? ''
+  const client = useSolanaClient()
+  const url = (client as any)?._connection?.rpcEndpoint ?? ''
 
   if (url.includes('devnet')) return 'devnet'
   if (url.includes('testnet')) return 'testnet'
@@ -21,26 +36,20 @@ export function useSolanaCluster(): string {
   return 'unknown'
 }
 
-class _useSolanaWalletCluster {
-  // TODO BEAUTYFULL ORION DUDE...
-}
-
 /**
- * Hook personnalisé pour accéder au cluster du wallet.
- * Utilisation de `new` pour éviter les erreurs TS.
- * Doit être appelé dans un composant React.
+ * 🔁 Alias explicite pour accéder au cluster via un hook.
  */
 export function useWalletUiCluster(): string {
-  return new _useSolanaWalletCluster().toString()
+  return useSolanaCluster()
 }
 
 /**
- * Hook qui retourne un objet complet pour accéder
- * à la fois à l'adresse et au cluster.
+ * 🧬 Hook combiné : expose client + cluster + adresse publique du wallet.
  */
 export function useWalletUi() {
-  const client = useSolanaClient() // ou autre
+  const client = useSolanaClient()
   const cluster = useSolanaCluster()
+  const address = useWalletUiAddress()
 
-  return { client, cluster }
+  return { client, cluster, address }
 }

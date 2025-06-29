@@ -8,6 +8,16 @@ import { WalletModalProvider } from '@solana/wallet-adapter-react-ui'
 
 const wallets = [new PhantomWalletAdapter()]
 
+export function useSolanaWalletAddress(): string | undefined {
+  const context = useContext(WalletContext)
+  if (!context) {
+    console.error('useSolanaWalletAddress must be used within a WalletProvider')
+    throw new Error('useSolanaWalletAddress must be used within a WalletProvider')
+  }
+  console.log('Wallet Address:', context.address)
+  return context.address
+}
+
 interface WalletContextType {
   address?: string
 }
@@ -24,15 +34,6 @@ export function WalletProvider({ children }: { children: ReactNode }) {
       {children}
     </WalletContext.Provider>
   )
-}
-
-// Hook custom pour récupérer l'adresse wallet via ton contexte
-export function useSolanaWalletAddress(): string | undefined {
-  const context = useContext(WalletContext)
-  if (!context) {
-    throw new Error('useSolanaWalletAddress must be used within a WalletProvider')
-  }
-  return context.address
 }
 
 // Le provider global à utiliser en haut de ton arbre React (ex: dans src/app/layout.tsx)

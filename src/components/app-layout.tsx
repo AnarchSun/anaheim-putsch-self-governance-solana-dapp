@@ -1,5 +1,4 @@
 // src/components/app-layout.tsx
-
 import { ThemeProvider } from './theme-provider'
 import { Toaster } from './ui/sonner'
 import { AppHeader } from '@/components/app-header'

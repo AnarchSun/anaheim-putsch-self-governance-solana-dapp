@@ -8,26 +8,31 @@ import { Menu, X } from 'lucide-react'
 import { ThemeSelect } from '@/components/theme-select'
 import { WalletUiDropdown } from '@/components/wallet/wallet-ui-dropdown'
 import { WalletStatus } from '@/components/wallet/wallet-status'
+import { useWalletUiCluster } from '@/hooks/wallet/wallet-hooks' // notre éclaireur cluster
 
 export function AppHeader({ links = [] }: { links: { label: string; path: string }[] }) {
   const pathname = usePathname()
   const [showMenu, setShowMenu] = useState(false)
+  const cluster = useWalletUiCluster() // cluster révélation, lumière sur l’éther
 
   function isActive(path: string) {
     return path === '/' ? pathname === '/' : pathname.startsWith(path)
   }
-  // src/components/solana/solana-provider.tsx (ou cluster-button.tsx selon ta structure)
 
   type ClusterButtonProps = {
-    size?: 'sm' | 'md' | 'lg' // ou juste 'sm' pour commencer
-    // d’autres props éventuelles
+    size?: 'sm' | 'md' | 'lg'
   }
 
   function ClusterButton({ size = 'md' }: ClusterButtonProps) {
     const sizeClass = size === 'sm' ? 'text-xs px-2 py-1' : 'text-base px-3 py-2'
 
     return (
-      <button className={`rounded bg-blue-600 text-white hover:bg-blue-700 transition ${sizeClass}`}>Cluster</button>
+      <button
+        className={`rounded bg-blue-600 text-white hover:bg-blue-700 transition ${sizeClass}`}
+        title={`Cluster actif : ${cluster}`}
+      >
+        {cluster}
+      </button>
     )
   }
 
@@ -36,14 +41,16 @@ export function AppHeader({ links = [] }: { links: { label: string; path: string
       <div className="mx-auto flex justify-between items-center">
         <div className="flex items-baseline gap-4">
           <Link className="text-xl hover:text-neutral-500 dark:hover:text-white" href="/">
-            <span>Placeholder</span>
+            <span>Anaheim Putsch</span>
           </Link>
           <div className="hidden md:flex items-center">
             <ul className="flex gap-4 flex-nowrap items-center">
               {links.map(({ label, path }) => (
                 <li key={path}>
                   <Link
-                    className={`hover:text-neutral-500 dark:hover:text-white ${isActive(path) ? 'text-neutral-500 dark:text-white' : ''}`}
+                    className={`hover:text-neutral-500 dark:hover:text-white ${
+                      isActive(path) ? 'text-neutral-500 dark:text-white' : ''
+                    }`}
                     href={path}
                   >
                     {label}
@@ -59,7 +66,7 @@ export function AppHeader({ links = [] }: { links: { label: string; path: string
         </Button>
 
         <div className="hidden md:flex items-center gap-4">
-          <WalletStatus /> {/* TODO ORION: lots of love. Blessed Be and Merry Meet. 🌒🌓🌕 */}
+          <WalletStatus />
           <WalletUiDropdown />
           <ClusterButton size="sm" />
           <ThemeSelect />
@@ -72,7 +79,9 @@ export function AppHeader({ links = [] }: { links: { label: string; path: string
                 {links.map(({ label, path }) => (
                   <li key={path}>
                     <Link
-                      className={`hover:text-neutral-500 dark:hover:text-white block text-lg py-2  ${isActive(path) ? 'text-neutral-500 dark:text-white' : ''} `}
+                      className={`hover:text-neutral-500 dark:hover:text-white block text-lg py-2 ${
+                        isActive(path) ? 'text-neutral-500 dark:text-white' : ''
+                      }`}
                       href={path}
                       onClick={() => setShowMenu(false)}
                     >
@@ -82,7 +91,7 @@ export function AppHeader({ links = [] }: { links: { label: string; path: string
                 ))}
               </ul>
               <div className="flex flex-col gap-4">
-                <WalletStatus /> {/* TODO ORION: lots of love. Blessed Be and Merry Meet. 🌒🌓🌕 */}
+                <WalletStatus />
                 <WalletUiDropdown />
                 <ClusterButton />
                 <ThemeSelect />
