@@ -25,6 +25,6 @@ export function useGetSignatures({ address }: { address: Address }) {
 
   return useQuery({
     queryKey: ['get-signatures', { cluster, address }],
-    queryFn: () => client.rpc.getSignaturesForAddress(address).send(),
+    queryFn: () => client.rpc.getSignaturesForAddress().send(),
   })
 }

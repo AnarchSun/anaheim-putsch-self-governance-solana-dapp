@@ -16,5 +16,7 @@ no-idl = []
 no-log-ix-name = []
 idl-build = ["anchor-lang/idl-build"]
 
+8
 [dependencies]
-anchor-lang = { version = "0.31.1", features = ["init-if-needed"] }
+anchor-lang = { version = "0.30.0", features = ["init-if-needed"] }
+solana-program = "2.3.0"

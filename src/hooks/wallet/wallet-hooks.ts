@@ -1,11 +1,14 @@
+// src/hooks/wallet/wallet-hooks.ts
+
+
 import { useQuery } from '@tanstack/react-query'
-import { createSolanaClient } from 'gill'
-import { useSolanaWalletAddress } from '@/components/wallet/WalletContextProvider'
+import { createSolanaClient, SolanaClient } from 'gill'
+import { useSolanaWalletAddress } from '@wallet-ui/react'
 
-const solanaClientInstance = createSolanaClient({ urlOrMoniker: 'devnet' })
+const solanaClientInstance: SolanaClient = createSolanaClient({ urlOrMoniker: 'devnet' })
 
-export function useSolanaClient() {
-  return useQuery({
+export function useSolanaClient(): SolanaClient | undefined {
+  return useQuery<SolanaClient>({
     queryKey: ['solana-client'],
     queryFn: async () => {
       return solanaClientInstance
@@ -24,17 +27,19 @@ export function useWalletUiAddress(): string {
 }
 
 /**
- * 🧭 Détecte dynamiquement le cluster courant à partir d'endpoint RPC utilisé par le client.
+ * 🧭 Détecte dynamiquement le cluster courant à partir de l'endpoint RPC utilisé par le client.
  */
 export function useSolanaCluster(): string {
   const client = useSolanaClient()
-  const url = (client as any)?._connection?.rpcEndpoint ?? ''
+  // Safely check if rpcEndpoint exists on client
+  const url = client && typeof client === 'object' && 'rpcEndpoint' in client ? (client as any).rpcEndpoint : ''
 
   if (url.includes('devnet')) return 'devnet'
   if (url.includes('testnet')) return 'testnet'
   if (url.includes('mainnet')) return 'mainnet-beta'
   return 'unknown'
 }
+
 
 /**
  * 🔁 Alias explicite pour accéder au cluster via un hook.

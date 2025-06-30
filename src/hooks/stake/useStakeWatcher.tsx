@@ -1,69 +1,46 @@
-import { useEffect, useState } from 'react'
+// anarcrypt.sol/eco-subsystem/complementary-modules/getStakeActivation/js/src/stake.ts
+
+import {
+  fixCodecSize,
+  getArrayCodec,
+  getBytesCodec,
+  getStructCodec,
+  getU32Codec,
+  getU64Codec,
+} from '@solana/codecs'
+import type { ReadonlyUint8Array } from '@solana/codecs'
 import { Connection, PublicKey } from '@solana/web3.js'
-import { getStakeActivationSafe } from '../../../../vendor/solana-rpc-client-extensions/js/src/stake'
+
+
+// -------------------- Codecs --------------------
 
 export type StakeActivationState =
   | 'active'
   | 'inactive'
   | 'activating'
   | 'deactivating'
-  | 'uninitialized';
+  | 'uninitialized'
+  | null
 
-type StakeWatcherResult = {
-  state: StakeActivationState | null;
-  error: Error | null;
-  loading: boolean;
-};
+// -------------------- Classe Safe --------------------
 
-export function useStakeActivationStatus(
-  pubkey: PublicKey,
-  connection: Connection,
-  pollInterval = 10000,
-): StakeWatcherResult {
-  const [state, setState] = useState<StakeActivationState | null> ( null )
-  const [error, setError] = useState<Error | null> ( null )
-  const [loading, setLoading] = useState ( true )
+export class getStakeActivationSafe {
+  connection: Connection
+  pollInterval: number
+  pubkey: PublicKey
+  state: StakeActivationState = null
 
-  useEffect ( () => {
-    if (!pubkey || !connection) return
+  constructor(connection: Connection, pollInterval: number, pubkey: PublicKey) {
+    this.connection = connection
+    this.pollInterval = pollInterval
+    this.pubkey = pubkey
+  }
 
-    let cancelled = false
-
-    const fetchAndSet = async () => {
-      try {
-        setLoading ( true )
-        const instance = new getStakeActivationSafe ( connection, pollInterval, pubkey )
-        await instance.fetch ()
-
-        if (!cancelled) {
-          setState ( instance.state as StakeActivationState )
-          setError ( null )
-        }
-      } catch (e) {
-        if (!cancelled) setError ( e as Error )
-      } finally {
-        if (!cancelled) setLoading ( false )
-      }
-    }
-
-    fetchAndSet ().catch ( console.error )
-
-    const interval = setInterval ( () => {
-      fetchAndSet ().catch ( console.error )
-    }, pollInterval )
-
-    return () => {
-      cancelled = true
-      clearInterval ( interval )
-    }
-  }, [pubkey.toBase58 (), connection, pollInterval] )
-
-  return { state, error, loading }
-}
-
-interface StakeWatcherProps {
-  address?: string
-}
-
-export class StakeWatcher {
+  async fetch(): Promise<void> {
+    // TODO ORION: implémenter ici la logique pour récupérer les infos de stake via RPC
+    // Exemple possible :
+    // const accountInfo = await this.connection.getAccountInfo(this.pubkey)
+    // this.state = computeStakeStateFrom(accountInfo)
+    console.log('Fetching stake info (placeholder)...')
+  }
 }

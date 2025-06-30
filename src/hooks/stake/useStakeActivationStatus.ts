@@ -1,7 +1,7 @@
 'use client'
 
 import { Connection, PublicKey } from '@solana/web3.js'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 
 // Typage clair et strict
 export type StakeActivationStatus = {
@@ -25,6 +25,8 @@ export function useStakeActivationStatus(pubkey: PublicKey, connection: Connecti
   const [error, setError] = useState<Error | null>(null)
   const [loading, setLoading] = useState(true)
 
+  const pubkeyStr = useMemo(() => pubkey.toBase58(), [pubkey])
+
   useEffect(() => {
     if (!pubkey || !connection) return
 
@@ -46,7 +48,7 @@ export function useStakeActivationStatus(pubkey: PublicKey, connection: Connecti
       .finally(() => {
         setLoading(false)
       })
-  }, [pubkey.toBase58(), connection])
+  }, [pubkeyStr, connection]) // ✅ propre
 
   return {
     status,

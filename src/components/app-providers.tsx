@@ -3,26 +3,19 @@
 
 import React, { ReactNode } from 'react'
 import { ThemeProvider } from 'next-themes'
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { SolanaProvider as GillSolanaProvider } from 'gill-react'
 import { createSolanaClient } from 'gill'
-
-// Initialisation du client Solana
-const solanaClient = createSolanaClient({ urlOrMoniker: 'devnet' })
-
-// Création du QueryClient (idéalement memo ou singleton, mais ok ici)
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import WalletContextProvider from '@/components/wallet/WalletContextProvider'
 
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      queryFn: async ({ queryKey }) => {
+      queryFn: async ({ queryKey }: { queryKey: readonly unknown[] }) => {
         const url = queryKey[0]
-        if (typeof url !== 'string') {
-          throw new Error('queryKey[0] must be a string URL')
-        }
+        if (typeof url !== 'string') throw new Error('queryKey[0] doit être une URL string')
         const res = await fetch(url)
-        if (!res.ok) throw new Error('Failed to fetch ' + url)
+        if (!res.ok) throw new Error('Erreur fetch ' + url)
         return res.json()
       },
       retry: false,
@@ -30,33 +23,18 @@ const queryClient = new QueryClient({
   },
 })
 
+const solanaClient = createSolanaClient({ urlOrMoniker: 'devnet' })
 
-// Wrapper SolanaProvider (isole le client)
-function SolanaProvider({ children }: { children: ReactNode }) {
-  return (
-    <GillSolanaProvider client={solanaClient}>
-      {children}
-    </GillSolanaProvider>
-  )
-}
-
-// Provider principal combiné pour toute l'app
 export function AppProviders({ children }: { children: ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider
-        attribute="class"
-        defaultTheme="system"
-        enableSystem
-        disableTransitionOnChange
-      >
-        <SolanaProvider>
-          {children}
-        </SolanaProvider>
+      <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+        <WalletContextProvider>
+          <GillSolanaProvider client={solanaClient} queryClient={queryClient}>
+            {children}
+          </GillSolanaProvider>
+        </WalletContextProvider>
       </ThemeProvider>
-      {process.env.NODE_ENV === 'development' && (
-        <ReactQueryDevtools initialIsOpen={false} />
-      )}
     </QueryClientProvider>
   )
 }

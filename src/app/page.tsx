@@ -1,30 +1,31 @@
+// src/app/page.tsx
 'use client'
 
 import React from 'react'
-import { useWalletUi } from '@/hooks/wallet/wallet-hooks'
+import HeroSlider from '@/components/HeroSlider'
 
-export default function HomePage() {
-  const { address, cluster } = useWalletUi()
+function ProgramInfoDisplay() {
+  return null
+}
+
+export default function Page() {
+  const images = [
+    '/banners/anarcrypt-slider-1.png',
+    '/banners/anarcrypt-stake-mining.png',
+  ]
 
   return (
-    <main className="p-8 max-w-4xl mx-auto text-center">
-      <h1 className="text-4xl font-bold mb-6">
-        Bienvenue dans le Putsch dApp
-      </h1>
-      <p className="mb-4">
-        Adresse Wallet connectée : <code>{address ?? 'Non connecté'}</code>
-      </p>
-      <p className="mb-8">
-        Cluster actif : <strong>{cluster}</strong>
-      </p>
-
-      <section className="border rounded p-6 bg-neutral-100 dark:bg-neutral-900">
-        <h2 className="text-2xl font-semibold mb-3">Fractal Governance</h2>
-        <p>
-          Ici s’entrelacent révolution, magie et code. Ton interaction
-          forge les chemins fractals de l’autogestion.
-        </p>
-      </section>
-    </main>
+    <div className="w-full">
+      <div>
+        <h2>Hello World</h2>
+        <p>This is a minimal test page with black background and white text.</p>
+      </div>
+      <div className="p-6">
+        <h1 className="text-4xl font-bold mb-6 text-white">Anaheim Putsch</h1>
+        <ProgramInfoDisplay />
+      </div>
+      <h1 className="text-4xl font-bold mb-6 text-white drop-shadow-lg">Anaheim Putsch</h1>
+      <HeroSlider images={images} />
+    </div>
   )
 }

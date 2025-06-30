@@ -43,4 +43,8 @@ export class getPublicSolanaRpcUrl {
   toString(): string {
     return this.url
   }
+
+  getSignaturesForAddress(publicKey: any) {
+    // TODO ORION MY DUDE!
+  }
 }

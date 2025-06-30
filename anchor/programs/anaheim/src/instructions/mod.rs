@@ -16,7 +16,7 @@ pub mod mine;
 pub use anchor_lang::system_program::System;
 pub use anchor_lang::Accounts;
 pub use anchor_lang::prelude::{Account, Program, Signer};
-pub use crate::constants::MAX_CONTENT_LENGTH;
+use crate::state::state::MAX_CONTENT_LENGTH;
 
 #[account]
 pub struct Anaheim {

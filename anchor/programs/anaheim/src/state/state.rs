@@ -1,38 +1,58 @@
 use anchor_lang::prelude::*;
+use crate::state::{PostAccount, UserVoteMarker, ErrorCode};
 
-pub const MAX_CONTENT_LENGTH: usize = 256;
-pub const MAX_USERNAME_LENGTH: usize = 32;
+#[derive(Accounts)]
+#[instruction(bump: u8)]
+pub struct VotePost<'info> {
+  #[account(mut)]
+  pub user: Signer<'info>,
 
-#[account]
-pub struct UserAccount {
-  pub name: String,
-  pub user_authority: Pubkey,
+  #[account(
+        mut,
+        has_one = author @ ErrorCode::InvalidAuthority,
+  )]
+  pub post: Account<'info, PostAccount>,
+
+  #[account(
+        init_if_needed,
+        payer = user,
+        space = UserVoteMarker::SIZE,
+        seeds = [b"vote", user.key().as_ref(), post.key().as_ref()],
+        bump = bump,
+  )]
+  pub vote_marker: Account<'info, UserVoteMarker>,
+
+  /// CHECK: Ce champ est juste comparé par clé
+  pub author: AccountInfo<'info>,
+
+  pub system_program: Program<'info, System>,
 }
 
-impl UserAccount {
-  pub const SIZE: usize = 8 + 4 + MAX_USERNAME_LENGTH + 32;
+impl<'info> VotePost<'info> {
+  pub fn validate(&self) -> Result<()> {
+    require!(!self.vote_marker.has_voted, ErrorCode::AlreadyVoted);
+    Ok(())
+  }
 }
 
-#[account]
-pub struct PostAccount {
-  pub content: String,
-  pub author: Pubkey,
-  pub timestamp: i64,
-  pub value: u8,
-}
+pub fn handler(ctx: Context<VotePost>, _bump: u8, upvote: bool) -> Result<()> {
+  ctx.accounts.validate()?;
 
-impl PostAccount {
-  pub const SIZE: usize = 8 + 4 + MAX_CONTENT_LENGTH + 32 + 8 + 1;
-}
+  let post = &mut ctx.accounts.post;
+  let vote_marker = &mut ctx.accounts.vote_marker;
 
-#[account]
-pub struct Anaheim {
-  pub authority: Pubkey,
-  pub value: u8,
-  pub count: u64,
-}
+  // Comptage des votes
+  if upvote {
+    post.vote_count = post.vote_count.checked_add(1).ok_or(ErrorCode::Overflow)?;
+  } else {
+    post.vote_count = post.vote_count.saturating_sub(1);
+  }
 
-impl Anaheim {
-  pub const SIZE: usize = 8 + 32 + 1 + 8 + 1;
-}
+  // Mise à jour du marqueur de vote
+  vote_marker.has_voted = true;
+  vote_marker.is_upvote = upvote;
+  vote_marker.post = post.key();
+  vote_marker.user = ctx.accounts.user.key();
 
+  Ok(())
+}

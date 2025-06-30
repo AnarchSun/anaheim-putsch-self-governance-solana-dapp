@@ -1,4 +1,4 @@
-// src/lib/constants.tsx
+// src/lib/constants.ts
 
 export const CLUSTER = 'devnet' as const // Change to 'mainnet-beta' or 'localnet' as needed
 

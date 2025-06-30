@@ -2,7 +2,7 @@
 'use client'
 
 import { Connection, PublicKey } from '@solana/web3.js'
-import { getStakeActivationSafe } from '@/../../vendor/solana-rpc-client-extensions/js/src/stake'
+import { getStakeActivationSafe } from '@/../../eco-subsystem/complementary-modules/getStakeActivation/js/src/stake'
 
 interface Response extends Body {
   readonly headers: Headers
@@ -23,8 +23,8 @@ const pubkeyString = '9xQeWvG816bUx9EPZ2gfrzjp1edw6uX7yjzFZZLL8Mjt'
 
 async function fetchStakeActivation(connection: Connection, pubkey: PublicKey, epoch?: number): Promise<any | null> {
   try {
-    // instantiate with new !
-    new getStakeActivationSafe ( connection, pubkey, { epoch } )
+    // instantiate with new!
+    new getStakeActivationSafe ()
     // assume fetch() is an async method returning data
   } catch (e) {
     console.error('Error fetching stake activation:', e)

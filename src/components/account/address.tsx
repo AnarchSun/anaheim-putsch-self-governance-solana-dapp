@@ -1,20 +1,40 @@
+// src/components/account/address.tsx (ligne 1-27)
+// src/components/account/address.tsx
 import { PublicKey } from '@solana/web3.js'
 import { assertIsAddress } from '@solana/addresses'
 import { useSolanaClient } from 'gill-react'
+import { useEffect, useState } from 'react'
 
-// Fonction asynchrone pour obtenir le solde (en lamports)
-export async function getBalanceRaw(address: string) {
-  assertIsAddress(address) // throws if invalid
+// Hook React pour obtenir le solde de façon asynchrone et sans illusions
+export function useBalanceRaw(address: string | any) {
+  const client = useSolanaClient()
+  const [balance, setBalance] = useState<number | null>(null)
 
-  const client = useSolanaClient() // hook (ou passe en paramètre si hors React)
-  const pubkey = new PublicKey(address)
+  useEffect(() => {
+    if (!address) {
+      setBalance(null)
+      return
+    }
 
-  const result = await client.rpc.getAccountInfo(pubkey).send()
+    async function fetchBalance() {
+      try {
+        assertIsAddress(address)
+        const pubkey = new PublicKey(address)
+        const result = await client.rpc.getAccountInfo(pubkey).send()
+        if (!result.value) {
+          setBalance(null)
+          return
+        }
+        setBalance(result.value.lamports)
+      } catch (error) {
+        console.error('Erreur fetchBalance:', error)
+        setBalance(null)
+      }
+    }
 
-  if (!result.value) throw new Error('Account not found')
+    void fetchBalance() //  Ici, on montre qu'on s'en fiche du résultat direct
+  }, [address, client])
 
-  return result.value.lamports
-}
 
-export class address {
+  return balance
 }

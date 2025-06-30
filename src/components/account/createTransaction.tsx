@@ -1,7 +1,8 @@
 // src/components/account/createTransaction.tsx
+// src/components/account/createTransaction.tsx
 'use client'
 
-import React,{ useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   Connection,
   PublicKey,
@@ -13,15 +14,24 @@ import { useWallet } from '@solana/wallet-adapter-react'
 
 const RPC_ENDPOINT = 'https://api.devnet.solana.com'
 
-export function CreateTransaction({ recipientAddress }: { recipientAddress: string, connection?: any }) {
+interface CreateTransactionProps {
+  recipientAddress: string
+  connection?: Connection  // Typage précis, pas any
+}
+
+export function CreateTransaction({ recipientAddress, connection: externalConnection }: CreateTransactionProps) {
   const { publicKey, sendTransaction } = useWallet()
   const [connection, setConnection] = useState<Connection | null>(null)
   const [status, setStatus] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    setConnection(new Connection(RPC_ENDPOINT))
-  }, [])
+    if (!externalConnection) {
+      setConnection(new Connection(RPC_ENDPOINT))
+    } else {
+      setConnection(externalConnection)
+    }
+  }, [externalConnection])
 
   async function handleCreateTransaction() {
     if (!publicKey) {
@@ -52,7 +62,6 @@ export function CreateTransaction({ recipientAddress }: { recipientAddress: stri
       const signature = await sendTransaction(transaction, connection)
       setStatus(`Transaction envoyée : ${signature}`)
 
-      // ⚡ confirmation moderne — avec blockhash
       await connection.confirmTransaction(
         {
           signature,

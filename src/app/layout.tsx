@@ -1,25 +1,20 @@
 // src/app/layout.tsx
-import './globals.css'
-import type { Metadata } from 'next'
-import React from 'react'
-import { AppProviders } from '@/components/app-providers'
-import WalletContextProvider from '@/components/wallet/WalletContextProvider'  // <-- importer
+'use client'
 
-export const metadata: Metadata = {
-  title: 'Anaheim',
-  description: 'Putsch dApp – Chaotic Fractal DAO',
-}
+import React from 'react'
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="fr">
-    <body>
-    <AppProviders>
-      <WalletContextProvider>
-        {children}
-      </WalletContextProvider>
-    </AppProviders>
+    <html lang="en" className="dark">
+    <body style={{ backgroundColor: 'black', color: 'white', minHeight: '100vh' }}>
+    <header style={{ padding: 16, borderBottom: '1px solid white' }}>
+      <h1>Header visible</h1>
+    </header>
+    <main style={{ padding: 16 }}>
+      {children}
+    </main>
     </body>
     </html>
   )
 }
+

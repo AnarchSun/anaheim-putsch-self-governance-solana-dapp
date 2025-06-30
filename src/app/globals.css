@@ -1,5 +1,9 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
+@import "tailwindcss/preflight";
+
+@tailwind utilities;
+
 
 @custom-variant dark (&:is(.dark *));
 
@@ -109,6 +113,9 @@
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
 }
+.animate-fade-in {
+  animation: fadeIn 1s ease-in-out;
+}
 
 @layer base {
   * {
@@ -117,7 +124,33 @@
 
   body {
     @apply bg-background text-foreground;
+      background: black;
+      color: white;
   }
+
+  section.module {
+    @apply rounded-2xl border border-border bg-card text-card-foreground shadow-xl p-6 transition duration-300 hover:shadow-2xl hover:ring-2 hover:ring-accent/50;
+  }
+
+  .card-shiny {
+    @apply bg-gradient-to-br from-primary to-accent text-primary-foreground rounded-xl shadow-lg p-4 ring-1 ring-border/10 hover:shadow-2xl hover:ring-accent;
+  }
+
+  .glass-box {
+    @apply backdrop-blur-md bg-white/10 dark:bg-black/20 border border-white/20 dark:border-white/10 rounded-lg p-6 shadow-lg hover:shadow-2xl transition;
+  }
+}
+
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  overflow-x: hidden;
+  box-sizing: border-box;
 }
 
 .wallet-adapter-button-trigger {
