@@ -2,9 +2,10 @@ use anchor_lang::prelude::*;
 
 #[account]
 pub struct UserVoteMarker {
-  pub user: Pubkey,
-  pub post: Pubkey,
   pub has_voted: bool,
+  pub is_upvote: bool,
+  pub post: Pubkey,
+  pub user: Pubkey,
 }
 
 impl UserVoteMarker {

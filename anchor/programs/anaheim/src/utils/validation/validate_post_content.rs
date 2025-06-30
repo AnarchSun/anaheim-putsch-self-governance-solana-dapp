@@ -1,6 +1,7 @@
 use anchor_lang::prelude::*;
+use crate::constants::MAX_CONTENT_LENGTH;
 use crate::error::ErrorCode;
-use crate::state::state::MAX_CONTENT_LENGTH;
+
 
 pub fn validate_post_content(content: &str) -> Result<()> {
   let trimmed = content.chars().filter(|c| !c.is_whitespace()).collect::<String>();

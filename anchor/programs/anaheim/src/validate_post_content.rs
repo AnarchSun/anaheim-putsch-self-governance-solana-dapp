@@ -1,7 +1,9 @@
-pub const MAX_MESSAGE_LENGTH: usize = 256;
+use crate::constants::MAX_MESSAGE_LENGTH;
 
+/// anarcrypt.sol/anaheim-putsch-self-governance-solana-dapp/anchor/programs/anaheim/src/validate_post_content.rs
 /// Vérifie que `content` n'est pas vide et ne dépasse pas la longueur max.
 /// Retourne `Ok(())` ou une chaîne d'erreur statique.
+#[allow(dead_code)]
 pub fn validate_post_content(content: &str) -> Result<(), &'static str> {
   let trimmed = content.trim();
   if trimmed.is_empty() {

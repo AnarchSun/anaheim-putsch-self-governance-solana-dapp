@@ -1,3 +1,4 @@
+// close/close_account.rs
 use anchor_lang::prelude::*;
 use crate::state::post_account::PostAccount;
 

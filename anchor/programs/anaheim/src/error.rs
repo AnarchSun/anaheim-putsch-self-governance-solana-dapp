@@ -32,4 +32,7 @@ pub enum ErrorCode {
 
   #[msg("Unauthorized action.")]
   Unauthorized,
+  
+  #[msg("Invalid authority on post.")]
+  InvalidAuthority,
 }

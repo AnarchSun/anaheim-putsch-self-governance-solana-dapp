@@ -9,5 +9,6 @@ pub mod set;
 pub mod shared;
 pub mod update_post;
 pub mod handler_mine;
-
+pub mod close;
+pub use close::close_post_account;
 

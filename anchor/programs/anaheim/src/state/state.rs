@@ -1,5 +1,6 @@
 use anchor_lang::prelude::*;
-use crate::state::{PostAccount, UserVoteMarker, ErrorCode};
+use crate::state::{PostAccount, UserVoteMarker};
+use crate::error::ErrorCode;
 
 #[derive(Accounts)]
 #[instruction(bump: u8)]
@@ -12,14 +13,7 @@ pub struct VotePost<'info> {
         has_one = author @ ErrorCode::InvalidAuthority,
   )]
   pub post: Account<'info, PostAccount>,
-
-  #[account(
-        init_if_needed,
-        payer = user,
-        space = UserVoteMarker::SIZE,
-        seeds = [b"vote", user.key().as_ref(), post.key().as_ref()],
-        bump = bump,
-  )]
+    
   pub vote_marker: Account<'info, UserVoteMarker>,
 
   /// CHECK: Ce champ est juste comparé par clé

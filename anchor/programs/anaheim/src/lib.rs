@@ -11,7 +11,10 @@ pub mod error;
 pub mod constants;
 pub mod utils;
 pub mod close;
-
+mod validate_post_content;
+pub use close::close_post;
+use crate::close::CloseAccount;
+pub use close::close_post::ClosePost;
 pub use handlers::handle_create_user;
 pub use contexts::create_user::CreateUser as CreateUserContext;
 pub use utils::validation::string_utils::str_to_fixed_array;
@@ -172,4 +175,8 @@ pub mod anaheim {
   pub fn close(_ctx: Context<CloseAnaheim>) -> Result<()> {
     Ok(())
   }
+}
+pub fn close_post_account(_ctx: Context<CloseAccount>) -> Result<()> {
+  msg!("Account will be closed!");
+  Ok(())
 }
