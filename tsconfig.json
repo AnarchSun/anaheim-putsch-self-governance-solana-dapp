@@ -3,7 +3,7 @@
     "target": "ESNext",
     "lib": ["dom", "dom.iterable", "esnext"],
     "module": "ESNext",
-    "moduleResolution": "node", // ✅ essentiel pour @solana/web3.js
+    "moduleResolution": "node",
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -16,22 +16,16 @@
     "allowSyntheticDefaultImports": true,
     "noImplicitAny": true,
     "strictFunctionTypes": true,
-    "baseUrl": ".", // ✅ bon chemin
+    "baseUrl": ".",
     "paths": {
+      "anchor/*": ["../../anchor/*"],
       "@/*": ["src/*"],
       "@coral-xyz/anchor": ["node_modules/@coral-xyz/anchor"],
       "@solana/web3.js": ["node_modules/@solana/web3.js"],
       "@anaheim/anchor-client": ["../../packages/anchor-client/src/index.ts"]
     },
-    "plugins": [
-      { "name": "next" }
-    ]
+    "plugins": [{ "name": "next" }]
   },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    ".next/types/**/*.ts"
-  ],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]
 }

@@ -1,8 +1,9 @@
 // src/app/api/program-info/route.ts
 import { Keypair, Transaction, VersionedTransaction } from '@solana/web3.js'
-import { Wallet } from '@coral-xyz/anchor'
+import { backendWallet } from '@/lib/backendWallet' // ou peu importe le chemin
 import fs from 'fs'
 import path from 'path'
+import { NextResponse } from 'next/server'
 
 const KEYPAIR_PATH = path.join(process.cwd(), 'wallet', 'id.json')
 
@@ -31,4 +32,6 @@ async function signAllTxs<T extends Transaction | VersionedTransaction>(txs: T[]
 }
 
 // Backend Wallet compatible Anchor
-export const backendWallet: Wallet = {payer: keypair, publicKey: keypair.publicKey, signTransaction: signTx, signAllTransactions: signAllTxs,}
+export async function GET() {
+  return NextResponse.json({ backendWallet })
+}

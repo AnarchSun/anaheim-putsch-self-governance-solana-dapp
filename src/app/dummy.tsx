@@ -1,4 +1,4 @@
-import { Dummy } from '../components/dummys/dummy.ts'
+import { Dummy } from '@/components/dummys/dummy'
 
 export function App() {
   return (

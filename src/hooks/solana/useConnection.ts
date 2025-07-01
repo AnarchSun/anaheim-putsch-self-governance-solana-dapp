@@ -1,8 +1,10 @@
 // hooks/useConnection.ts
-import { Connection } from '@solana/web3.js'
-import { useClusterEndpoint } from '../cluster/useClusterEndpoint'
+// src/hooks/solana/useConnection.ts
+import { useMemo } from 'react'
+import { Connection, clusterApiUrl } from '@solana/web3.js'
 
 export function useConnection() {
-  const endpoint = useClusterEndpoint()
-  return new Connection(endpoint, 'confirmed')
+  const endpoint = clusterApiUrl('devnet') // ou un endpoint custom
+  const connection = useMemo(() => new Connection(endpoint, 'confirmed'), [endpoint])
+  return { connection }
 }

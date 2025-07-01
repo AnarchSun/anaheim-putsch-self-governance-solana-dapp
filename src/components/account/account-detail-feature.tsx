@@ -8,9 +8,32 @@ import { AppHero } from '../app-hero'
 import { ellipsify } from '@/lib/utils'
 import { assertIsAddress } from '@solana/addresses'
 import { useQuery } from '@tanstack/react-query'
-import { PublicKey } from '@solana/web3.js'
 import { useSolanaClient } from 'gill-react'
+import { Base64EncodedDataResponse, Slot } from 'gill'
+import { PublicKey } from '@solana/web3.js'
+import { Address } from '@solana/kit'
+import { address } from '@trezor/utxo-lib'
+import { client } from 'jayson' // le type
 
+const pubkey = new PublicKey(address)
+// soit ici
+const nominalAddress = pubkey as unknown as Address
+// ou mieux si fonction dispo:
+// const nominalAddress = publicKeyToAddress(pubkey)
+
+const accountInfo = await client['rpc'].getAccountInfo(nominalAddress).send()
+
+class GetAccountInfoApiResponse<T> {
+}
+const response = await fetch(pubkey)
+export const {value}: Readonly<{
+  context: Readonly<{
+    slot: Slot
+  }>
+  value: GetAccountInfoApiResponse<Readonly<{
+    data: Base64EncodedDataResponse
+  }>>
+}>
 export function useGetBalance(address: string) {
   const client = useSolanaClient()
 

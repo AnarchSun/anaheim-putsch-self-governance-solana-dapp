@@ -1,5 +1,6 @@
 import MiningPanel from '@/components/mining/mining-panel'
-import WalletConnectButton from '../../components/wallet/wallet-connect-button'
+import { WalletConnectButton } from '@solana/wallet-adapter-react-ui'
+
 
 export default function MiningPage() {
   return (

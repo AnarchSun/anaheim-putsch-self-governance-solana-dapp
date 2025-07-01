@@ -1,6 +1,11 @@
 // src/hooks/solana/useWallet.ts
-import { useSolanaWalletAddress } from '@wallet-ui/react'
 import { useSolanaClient } from 'gill-react'
+import { useWallet } from '@solana/wallet-adapter-react';
+
+export const useSolanaWalletAddress = () => {
+  const { publicKey } = useWallet();
+  return publicKey?.toBase58();
+};
 
 // On utilise le hook normalement, pas "new"
 export function useWalletUiAddress(): string {
