@@ -9,31 +9,14 @@ import { ellipsify } from '@/lib/utils'
 import { assertIsAddress } from '@solana/addresses'
 import { useQuery } from '@tanstack/react-query'
 import { useSolanaClient } from 'gill-react'
-import { Base64EncodedDataResponse, Slot } from 'gill'
-import { PublicKey } from '@solana/web3.js'
-import { Address } from '@solana/kit'
-import { address } from '@trezor/utxo-lib'
-import { client } from 'jayson' // le type
 
-const pubkey = new PublicKey(address)
-// soit ici
-const nominalAddress = pubkey as unknown as Address
-// ou mieux si fonction dispo:
-// const nominalAddress = publicKeyToAddress(pubkey)
+// --- on supprime ces imports inutiles et problématiques ---
+// import { Base64EncodedDataResponse, Slot } from 'gill'
+// import { PublicKey } from '@solana/web3.js'
+// import { Address } from '@solana/kit'
+// import { address } from '@trezor/utxo-lib'
+// import { client } from 'jayson'
 
-const accountInfo = await client['rpc'].getAccountInfo(nominalAddress).send()
-
-class GetAccountInfoApiResponse<T> {
-}
-const response = await fetch(pubkey)
-export const {value}: Readonly<{
-  context: Readonly<{
-    slot: Slot
-  }>
-  value: GetAccountInfoApiResponse<Readonly<{
-    data: Base64EncodedDataResponse
-  }>>
-}>
 export function useGetBalance(address: string) {
   const client = useSolanaClient()
 
@@ -42,13 +25,31 @@ export function useGetBalance(address: string) {
     enabled: !!address,
     queryFn: async () => {
       assertIsAddress(address)
-      const pubkey = new PublicKey(address)
-      const accountInfo = await client.rpc.getAccountInfo(pubkey).send()
+      const accountInfo = await client.rpc.getAccountInfo(address).send()
       if (!accountInfo.value) throw new Error('Account not found')
-      return accountInfo.value.lamports / 1e9 // SOL
+
+      // Ici lamportsRaw est défini et accessible
+      const lamportsRaw = accountInfo.value.lamports
+
+      let lamportsNum: number
+
+      if (typeof lamportsRaw === 'number') {
+        lamportsNum = lamportsRaw
+      } else if (typeof (lamportsRaw as any).toNumber === 'function') {
+        lamportsNum = (lamportsRaw as any).toNumber()
+      } else if (typeof lamportsRaw === 'bigint') {
+        lamportsNum = Number(lamportsRaw)
+      } else {
+        lamportsNum = Number(lamportsRaw) // fallback brutal
+      }
+
+      return lamportsNum / 1e9
     },
   })
 }
+
+
+
 
 export const AccountBalance: React.FC<{ address: string }> = ({ address }) => {
   const { data, isLoading, error } = useGetBalance(address)
@@ -58,7 +59,6 @@ export const AccountBalance: React.FC<{ address: string }> = ({ address }) => {
   return <span>{(data ?? 0).toFixed(4)} SOL</span>
 }
 
-
 type Props = {
   address: string
 }
@@ -67,7 +67,7 @@ export const AccountTokens: React.FC<Props> = ({ address }) => {
   return <div>Tokens of {address}</div>
 }
 
-export function ExplorerLink({ address, label }: { address: string, label?: string }) {
+export function ExplorerLink({ address, label, transaction }: { address: string, label?: string, transaction?: string }) {
   return (
     <a
       href={`https://explorer.solana.com/address/${address}`}

@@ -1,10 +1,26 @@
-// hooks/solana/index.ts
-export { useClusterEndpoint } from '../cluster/useClusterEndpoint'
-export { useConnection } from './useConnection.tsx'
-export { useGetBalance } from './useGetBalance.tsx'
-export { useGetSignatures } from '../useGetSignatures'
-export { useGetTokenAccounts } from './useGetTokenAccounts.tsx'
-export { useRequestAirdrop } from './useRequestAirdrop.tsx'
-export { useTransferSol } from './useTransferSol.tsx'
+// src/hooks/solana/index.ts
 
-export class useSolanaWalletAddressHook {}
+export { useClusterEndpoint } from '../cluster/useClusterEndpoint'
+export { useConnection } from './useConnection'
+export { useGetBalance } from './useGetBalance'
+export { useGetSignatures } from '../useGetSignatures'
+export { useGetTokenAccounts } from './useGetTokenAccounts'
+export { useRequestAirdrop } from './useRequestAirdrop'
+export { useTransferSol } from './useTransferSol'
+export { useWrappedConnection } from './useWrappedConnection'
+export { useSolanaClient } from './useSolanaClient'
+export { useSolanaConnectionAndCluster } from './useSolanaConnectionAndCluster'
+
+// export const useSolanaWalletAddress = () => {
+//  const { publicKey } = useWallet();
+//  return publicKey?.toBase58();
+// };
+
+// ...
+
+// Supprime cette fonction vide qui crée le problème
+// export function useWallet() {
+//   // TODO ORION
+// }
+export class useSolanaWalletAddressHook {
+}

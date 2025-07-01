@@ -1,40 +1,45 @@
 // src/components/account/address.tsx (ligne 1-27)
-// src/components/account/address.tsx
 import { PublicKey } from '@solana/web3.js'
-import { assertIsAddress } from '@solana/addresses'
-import { useSolanaClient } from 'gill-react'
-import { useEffect, useState } from 'react'
+import { isAddress } from '@solana/kit'
+import { client } from 'jayson'
+import bs58 from 'bs58'
 
-// Hook React pour obtenir le solde de façon asynchrone et sans illusions
-export function useBalanceRaw(address: string | any) {
-  const client = useSolanaClient()
-  const [balance, setBalance] = useState<number | null>(null)
+function base64ToBase58(input: string): string {
+  const decoded = Buffer.from(input, 'base64')
+  return bs58.encode(decoded)
+}
 
-  useEffect(() => {
-    if (!address) {
-      setBalance(null)
-      return
-    }
+async function fetchBalance(addressRaw: string | null | undefined) {
+  if (!addressRaw || !isAddress(addressRaw)) {
+    throw new Error('Invalid address input')
+  }
 
-    async function fetchBalance() {
-      try {
-        assertIsAddress(address)
-        const pubkey = new PublicKey(address)
-        const result = await client.rpc.getAccountInfo(pubkey).send()
-        if (!result.value) {
-          setBalance(null)
-          return
-        }
-        setBalance(result.value.lamports)
-      } catch (error) {
-        console.error('Erreur fetchBalance:', error)
-        setBalance(null)
-      }
-    }
+  const pubkey = new PublicKey(addressRaw)
 
-    void fetchBalance() //  Ici, on montre qu'on s'en fiche du résultat direct
-  }, [address, client])
+  const { value } = await client.arguments.getAccountInfo(pubkey.toBase58()).send()
 
+  if (!value) {
+    throw new Error('Account not found')
+  }
 
-  return balance
+  const { lamports, owner, space, executable, rentEpoch, data } = value
+
+  // Ici on reste sur le format base64 si tu veux parser plus tard
+  const [encodedData, format] = data
+
+  if (format !== 'base64') {
+    throw new Error(`Unsupported data format: ${format}`)
+  }
+
+  // Si tu veux un base58 propre
+  const base58Data = base64ToBase58(encodedData)
+
+  return {
+    lamports,
+    owner: owner.toString (), // évite Address type
+    space,
+    executable,
+    rentEpoch,
+    data: base58Data, // reste une string, pas besoin de cast vers Base58EncodedBytes
+  }
 }

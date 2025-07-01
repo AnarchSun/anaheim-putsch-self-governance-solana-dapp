@@ -1,5 +1,5 @@
 import { Connection, PublicKey } from '@solana/web3.js'
-import { getStakeActivation } from '@/../../vendor/solana-rpc-client-extensions/js/src/stake'
+import { getStakeActivation } from '@/../../eco-subsystem/complementary-modules/getStakeActivation/js/src/stake'
 
 export async function getStakeActivationSafe(connection: Connection, pubkey: PublicKey): Promise<getStakeActivation> {
   try {

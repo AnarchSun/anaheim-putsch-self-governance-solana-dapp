@@ -1,46 +1,47 @@
-// anarcrypt.sol/eco-subsystem/complementary-modules/getStakeActivation/js/src/stake.ts
-
-import {
-  fixCodecSize,
-  getArrayCodec,
-  getBytesCodec,
-  getStructCodec,
-  getU32Codec,
-  getU64Codec,
-} from '@solana/codecs'
-import type { ReadonlyUint8Array } from '@solana/codecs'
+// src/hooks/stake/useStakeWatcher.ts
+import { useState, useEffect } from 'react'
 import { Connection, PublicKey } from '@solana/web3.js'
+import { getStakeActivationSafe, StakeActivationState } from '@/../../eco-subsystem/complementary-modules/getStakeActivation/js/src/stake'
 
+interface UseStakeWatcherReturn {
+  state: StakeActivationState | null
+  loading: boolean
+  error: Error | null
+}
 
-// -------------------- Codecs --------------------
+export function useStakeWatcher(pubkey: PublicKey): UseStakeWatcherReturn {
+  const [state, setState] = useState<StakeActivationState | null>(null)
+  const [loading, setLoading] = useState<boolean>(true)
+  const [error, setError] = useState<Error | null>(null)
 
-export type StakeActivationState =
-  | 'active'
-  | 'inactive'
-  | 'activating'
-  | 'deactivating'
-  | 'uninitialized'
-  | null
+  useEffect(() => {
+    let isActive = true
 
-// -------------------- Classe Safe --------------------
+    async function fetchState() {
+      setLoading(true)
+      setError(null)
 
-export class getStakeActivationSafe {
-  connection: Connection
-  pollInterval: number
-  pubkey: PublicKey
-  state: StakeActivationState = null
+      const connection = new Connection('https://api.devnet.solana.com')
+      const watcher = new getStakeActivationSafe(connection, 10000, pubkey)
 
-  constructor(connection: Connection, pollInterval: number, pubkey: PublicKey) {
-    this.connection = connection
-    this.pollInterval = pollInterval
-    this.pubkey = pubkey
-  }
+      try {
+        await watcher.fetch()
+        if (!isActive) return
+        setState(watcher.state)
+      } catch (err) {
+        if (!isActive) return
+        setError(err as Error)
+      } finally {
+        if (isActive) setLoading(false)
+      }
+    }
 
-  async fetch(): Promise<void> {
-    // TODO ORION: implémenter ici la logique pour récupérer les infos de stake via RPC
-    // Exemple possible :
-    // const accountInfo = await this.connection.getAccountInfo(this.pubkey)
-    // this.state = computeStakeStateFrom(accountInfo)
-    console.log('Fetching stake info (placeholder)...')
-  }
+    fetchState().catch(console.error)
+
+    return () => {
+      isActive = false
+    }
+  }, [pubkey])
+
+  return { state, loading, error }
 }

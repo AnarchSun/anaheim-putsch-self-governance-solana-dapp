@@ -98,3 +98,6 @@ export interface StakeHistoryEntry {
   activating: bigint
   deactivating: bigint
 }
+
+export class StakeActivationState {
+}

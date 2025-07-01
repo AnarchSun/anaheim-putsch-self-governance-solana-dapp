@@ -21,8 +21,10 @@
       "anchor/*": ["../../anchor/*"],
       "@/*": ["src/*"],
       "@coral-xyz/anchor": ["node_modules/@coral-xyz/anchor"],
+      "@stake-lib/*": ["eco-subsystem/complementary-modules/getStakeActivation/js/src/*"],
       "@solana/web3.js": ["node_modules/@solana/web3.js"],
-      "@anaheim/anchor-client": ["../../packages/anchor-client/src/index.ts"]
+      "@anaheim/anchor-client": ["../../packages/anchor-client/src/index.ts"],
+      "@vendor/*": ["vendor/*"]
     },
     "plugins": [{ "name": "next" }]
   },
