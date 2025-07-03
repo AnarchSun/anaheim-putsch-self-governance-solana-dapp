@@ -1,12 +1,11 @@
+// File: src/components/stake/staking.tsx
+
 import { Connection, PublicKey } from '@solana/web3.js'
 import { getStakeActivation } from '@/../../eco-subsystem/complementary-modules/getStakeActivation/js/src/stake'
 
-export async function getStakeActivationSafe(connection: Connection, pubkey: PublicKey): Promise<getStakeActivation> {
-  try {
-    return new getStakeActivation(connection, pubkey, 'confirmed') // <-- utilise la version non-dépréciée ici
-    // <-- utilise la version non-dépréciée ici
-  } catch (e) {
-    console.error('getStakeActivation (safe) failed', e)
-    throw e
-  }
+export async function stakeAccountDebug(pubkey: PublicKey) {
+  const connection = new Connection('https://api.devnet.solana.com')
+  const activation = new getStakeActivation(connection, pubkey.toBase58(), 'confirmed')
+  await activation.fetch()
+  console.log('Activation state:', (activation as any)?.state)
 }

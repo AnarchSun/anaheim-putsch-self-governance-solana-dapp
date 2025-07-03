@@ -298,6 +298,11 @@ export type Anaheim = {
       "code": 6009,
       "name": "unauthorized",
       "msg": "Unauthorized action."
+    },
+    {
+      "code": 6010,
+      "name": "invalidAuthority",
+      "msg": "Invalid authority on post."
     }
   ],
   "types": [
@@ -362,3 +367,4 @@ export type Anaheim = {
     }
   ]
 };
+

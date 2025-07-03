@@ -2,6 +2,7 @@
 #![allow(unexpected_cfgs)]
 
 use anchor_lang::prelude::*;
+use anchor_lang::solana_program::pubkey::Pubkey;
 
 pub mod instructions;
 pub mod handlers;
@@ -19,9 +20,19 @@ pub use handlers::handle_create_user;
 pub use contexts::create_user::CreateUser as CreateUserContext;
 pub use utils::validation::string_utils::str_to_fixed_array;
 pub use instructions::create_user;
+use crate::program::Anaheim;
 
-declare_id!("B4wa4mhhsxJ3Z7FYd8y1qx9XQCVBTpyLkBTzm1h9PaNC");
+declare_id!("8RmTVazK1G3ZJ7EqYZC9FYJejFge98Vyz7T4zVdY8okX");
 
+pub const ANAHEIM_IDL_ID: Pubkey = Pubkey::new_from_array([
+  132, 157, 218, 39, 146, 184, 154, 229, 157, 208, 222, 217, 179, 105, 214, 114,
+  145, 251, 14, 120, 48, 169, 34, 96, 132, 73, 172, 248, 93, 142, 25, 203,
+]);
+
+// 👇 Déclare le trait manquant
+pub trait IdlInstruction {
+  fn id() -> Pubkey;
+}
 pub const MAX_CONTENT_LENGTH: usize = 256;
 pub const MAX_USERNAME_LENGTH: usize = 32;
 
@@ -104,6 +115,14 @@ pub struct CloseAnaheim<'info> {
   #[account(mut)]
   pub payer: Signer<'info>,
 }
+
+
+impl IdlInstruction for Anaheim {
+  fn id() -> Pubkey {
+    ANAHEIM_IDL_ID
+  }
+}
+
 
 /// ─── PROGRAMME PRINCIPAL ────────────────────────────────────────────────────
 #[program]

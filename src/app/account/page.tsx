@@ -13,6 +13,7 @@ export default function Page() {
   const address = 'GvHe41dnJNzMZH3EcXHsdGLBWR7LPUr9Pb9v2pTxCRQj' // ✅ remplace avec une adresse valide
   const account = new PublicKey(address)
 
+
   return (
     <main className="space-y-6 p-6">
       <AccountListFeature />
