@@ -10,5 +10,11 @@ export function useConnection() {
     getParsedTokenAccountsByOwner() {
       //  TODO ORION..
     },
+    requestAirdrop(pubkey: PublicKey, number: number) {
+        return Promise.resolve ( undefined )
+    },
+    sendRawTransaction(buffer: Buffer) {
+      return Promise.resolve ( undefined )
+    },
   }
 }

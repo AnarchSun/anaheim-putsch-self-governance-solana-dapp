@@ -100,4 +100,7 @@ export interface StakeHistoryEntry {
 }
 
 export class StakeActivationState {
+  inactive: any
+  active: any
+  state: any
 }

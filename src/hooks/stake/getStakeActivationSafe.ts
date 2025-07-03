@@ -1,42 +1,41 @@
-// File: src/hooks/stake/useStakeActivationSafe.ts
-
-import { useState, useEffect } from 'react'
 import { Connection, PublicKey } from '@solana/web3.js'
-import { getStakeActivationSafe, StakeActivationState } from '@/hooks/stake/useStakeWatcher'
+// Supprime cette ligne si tu ne l'utilises pas dans ce fichier
+// import { useStakeActivationSafe } from '@/hooks/stake/useStakeActivationSafe'
 
+export class getStakeActivationSafe {
+  public state = {
+    state: 'unknown',
+    active: 0,
+    inactive: 0,
+  }
 
-export function useStakeActivationSafe(pubkey: PublicKey, connection: Connection) {
-  const [state, setState] = useState<StakeActivationState>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<Error | null>(null);
+  private readonly connection: Connection
+  private readonly pubkey: PublicKey
 
-  useEffect(() => {
-    if (!pubkey || !connection) return;
+  constructor(connection: Connection, pubkey: PublicKey) {
+    this.connection = connection
+    this.pubkey = pubkey
+  }
 
-    let isMounted = true;
-    const activation = new getStakeActivationSafe(connection, 5000, pubkey);
+  async fetch() {
+    const pubkeyStr = this.pubkey.toBase58()
+    console.log('Fetching stake info for:', pubkeyStr)
 
-    setLoading(true);
-    setError(null);
+    const accountInfo = await this.connection.getAccountInfo(this.pubkey)
 
-    activation.fetch()
-      .then(() => {
-        if (isMounted) {
-          setState(activation.state);
-          setLoading(false);
-        }
-      })
-      .catch((err: Error) => {
-        if (isMounted) {
-          setError(err);
-          setLoading(false);
-        }
-      });
-
-    return () => {
-      isMounted = false;
-    };
-  }, [pubkey?.toString(), connection]);
-
-  return { state, loading, error };
+    if (accountInfo?.data) {
+      // Ici, tu feras ton décodage réel
+      this.state = {
+        state: 'active',
+        active: 100,
+        inactive: 0,
+      }
+    } else {
+      this.state = {
+        state: 'inactive',
+        active: 0,
+        inactive: 0,
+      }
+    }
+  }
 }

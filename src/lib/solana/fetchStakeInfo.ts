@@ -1,5 +1,6 @@
 import { PublicKey } from '@solana/web3.js'
-import { getSolanaClient } from './solanaClient'
+import { getSolanaClient } from './getSolanaClient'
+
 
 export async function fetchStakeInfo(publicKey: PublicKey) {
   const solanaClient = getSolanaClient()

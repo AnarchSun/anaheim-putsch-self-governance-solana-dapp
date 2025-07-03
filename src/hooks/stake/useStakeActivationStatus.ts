@@ -1,3 +1,4 @@
+// src/hooks/stake/useStakeActivationStatus.ts
 'use client'
 
 import { Connection, PublicKey } from '@solana/web3.js'
