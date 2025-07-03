@@ -1,16 +1,19 @@
+// src/utils/validate-project-name.ts
 import { existsSync } from 'node:fs'
 
-export function validateProjectName(name: string): string | void {
-  // Name must be a valid directory name
+export function validateProjectName(name: string): string | Error | undefined {
   if (!/^[\w-]+$/i.test(name)) {
-    return 'Please enter a valid directory name (alphanumeric characters and dashes only)'
+    return new Error('Invalid characters: use only alphanumerics, dashes and underscores.')
   }
-  // Name must be at least 1 character long
+
   if (name.length === 0) {
-    return 'Please enter at least 1 character'
+    return new Error('Name must not be empty.')
   }
-  // Check if the directory already exists
+
   if (existsSync(name)) {
-    return 'Directory already exists'
+    return 'Directory already exists.'
   }
+
+  return undefined
 }
+

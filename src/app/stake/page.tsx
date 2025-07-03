@@ -2,7 +2,6 @@
 
 import { StakeWatcher } from '@/components/stake/StakeWatcher'
 import { DebugStakeStatus } from '@/hooks/stake/debugStakeStatus'
-import { connection } from 'next/server'
 
 export default function Page() {
   return (

@@ -1,12 +1,16 @@
 // src/lib/solanaClient.ts
-
 import { Connection, clusterApiUrl } from '@solana/web3.js'
 
 const defaultConnection = new Connection(clusterApiUrl('mainnet-beta'))
 
-export function getConnection(): Connection {
-  return defaultConnection
-}
+export * from '@solana/web3.js'
 
-// Exporte tout ce dont tu as besoin ici, ajoute selon ta vision
+// Cette constante n’est pas utilisée, on la supprime
+// const defaultConnection = new Connection (clusterApiUrl('mainnet-beta'))
+
+// Suppression aussi de la fonction getConnection si inutilisés exports
+//  function getConnection(): Connection {
+//   return defaultConnection
+//}
+
 export * from '@solana/web3.js'

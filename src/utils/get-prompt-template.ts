@@ -1,6 +1,7 @@
+// src/utils/get-prompt-template.ts
 import { isCancel, log, select, SelectOptions } from '@clack/prompts'
-import { Framework, frameworks } from '../templates/frameworks'
-import { getTemplatesForFramework, Template } from '../templates/templates'
+import { Framework, frameworks } from '@/templates/frameworks'
+import { getTemplatesForFramework, Template } from '@/templates/templates'
 import { GetArgsResult } from './get-args-result'
 
 export function getPromptTemplate({ options }: { options: GetArgsResult }) {
@@ -21,7 +22,7 @@ export function getPromptTemplate({ options }: { options: GetArgsResult }) {
 
 function getFrameworkSelectOptions(
   values: Framework[],
-): SelectOptions<{ value: Framework; label: string; hint?: string | undefined }[], Framework> {
+): SelectOptions<Framework> {
   return {
     message: 'Select a framework',
     options: values.map((value) => ({
@@ -32,13 +33,12 @@ function getFrameworkSelectOptions(
   }
 }
 
+
 function selectFramework(values: Framework[]): Promise<Framework> {
   return select(getFrameworkSelectOptions(values)) as Promise<Framework>
 }
 
-function getTemplateSelectOptions(
-  values: Template[],
-): SelectOptions<{ value: Template; label: string; hint?: string | undefined }[], Template> {
+function getTemplateSelectOptions(values: Template[]) {
   return {
     message: 'Select a template',
     options: values.map((value) => ({
@@ -48,6 +48,7 @@ function getTemplateSelectOptions(
     })),
   }
 }
+
 
 function selectTemplate(values: Template[]): Promise<Template> {
   return select(getTemplateSelectOptions(values)) as Promise<Template>
