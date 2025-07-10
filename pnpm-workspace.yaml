@@ -25,5 +25,6 @@ onlyBuiltDependencies:
   - tailwindcss/oxide
   - tiny-secp256k1
   - unrest-resolver
+  - unrs-resolver
   - usb
   - utf-8-validate
