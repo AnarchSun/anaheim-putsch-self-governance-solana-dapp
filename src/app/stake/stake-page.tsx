@@ -3,7 +3,7 @@ import { StakeWatcher } from '@/components/stake/StakeWatcher'
 import { DebugStakeStatus } from '@/hooks/stake/debugStakeStatus'
 import { useEffect, useState } from 'react'
 import { Connection, PublicKey } from '@solana/web3.js'
-import { getStakeActivationSafe } from '@/lib/stakeHelpers' // adjust the path as needed
+import { getStakeActivationSafe } from '@/lib/stake/stakeHelpers' // adjust the path as needed
 
 async function fetchStakeState(pubkey: PublicKey): Promise<string | null> {
   try {

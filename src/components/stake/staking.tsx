@@ -1,11 +1,13 @@
 // File: src/components/stake/staking.tsx
 
 import { Connection, PublicKey } from '@solana/web3.js'
-import { getStakeActivation } from '@/../../eco-subsystem/complementary-modules/getStakeActivation/js/src/stake'
+import { getStakeActivation } from '@anza-xyz/solana-rpc-get-stake-activation'
+import {state} from "@lit/reactive-element/decorators.js";
+
 
 export async function stakeAccountDebug(pubkey: PublicKey) {
-  const connection = new Connection('https://api.devnet.solana.com')
-  const activation = new getStakeActivation(connection, pubkey.toBase58(), 'confirmed')
-  await activation.fetch()
-  console.log('Activation state:', (activation as any)?.state)
+  // Appelle la fonction directement (sans "new") et en passant bien un PublicKey
+  const connection = new Connection('https://api.devnet.solana.com'), {} = await getStakeActivation(connection, pubkey);
+
+  console.log('Activation state:', state)
 }

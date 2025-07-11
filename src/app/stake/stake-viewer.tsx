@@ -1,7 +1,7 @@
 // src/components/stake/stake-viewer.tsx
 import React, { useEffect, useState } from 'react'
 import { Connection, PublicKey, clusterApiUrl } from '@solana/web3.js'
-import { Stake, Meta } from '@/../../eco-subsystem/complementary-modules/getStakeActivation/js' // à fixer
+import {Meta, Stake} from "@solana-program/stake";
 
 interface StakeAccount {
   activationEpoch: number
