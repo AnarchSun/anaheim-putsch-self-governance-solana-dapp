@@ -18,7 +18,7 @@ url = "https://api.apr.dev"
 
 [provider]
 cluster = "devnet"
-wallet = "~/RustroverProjects/anarcrypt.sol/anaheim-putsch-govdapp/anchor/target/deploy/anarcrypt.json"
+wallet = "~/.config/solana/id.json"
 
 [scripts]
 build = "bash -c 'echo test && echo ok done'"

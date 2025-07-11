@@ -1,9 +1,27 @@
 // File: src/lib/stakeHelpers.ts
-
 import { getStakeActivation } from '@anza-xyz/solana-rpc-get-stake-activation'
 import { Connection, PublicKey } from '@solana/web3.js'
 
-type StakeState = 'active' | 'inactive' | 'activating' | 'deactivating'
+export type StakeState = 'active' | 'inactive' | 'activating' | 'deactivating'
+
+export async function getStakeActivationSafe(
+    connection: Connection,
+    pubkey: PublicKey
+): Promise<StakeState | null> {
+  try {
+    const result = await getStakeActivation(connection, pubkey) as unknown as {
+      state: StakeState
+      active: number
+      inactive: number
+    }
+
+    return result.state ?? null
+  } catch (e) {
+    console.error('getStakeActivationSafe error:', e)
+    return null
+  }
+}
+
 
 export async function fetchStakeState(pubkey: PublicKey): Promise<StakeState | null> {
   try {

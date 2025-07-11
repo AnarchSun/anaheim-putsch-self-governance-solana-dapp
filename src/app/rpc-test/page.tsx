@@ -1,7 +1,16 @@
 // src/app/rpc-test/page.tsx
-// src/app/rpc-test/page.tsx
-import { RpcDemo } from '@/components/cluster/RpcDemo' // or wherever it's located
+'use client'
 
-export default function Page() {
-  return <RpcDemo />
+import React, { useMemo } from 'react'
+import { clusterApiUrl } from '@solana/web3.js'
+
+export default function RpcTestPage() {
+  const endpoint = useMemo(() => clusterApiUrl('devnet'), [])
+
+  return (
+      <div className="p-4 text-white">
+        <h1>RPC Test</h1>
+        <p>Endpoint utilisé : {endpoint}</p>
+      </div>
+  )
 }

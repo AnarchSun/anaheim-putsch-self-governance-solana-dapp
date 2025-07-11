@@ -1,11 +1,10 @@
-// File: src/app/stake/page.tsx
 'use client'
 
 import { useEffect, useState } from 'react'
 import { PublicKey } from '@solana/web3.js'
 import { StakeWatcher } from '@/components/stake/StakeWatcher'
 import { DebugStakeStatus } from '@/hooks/stake/debugStakeStatus'
-import { fetchStakeState } from '@/lib/stake/fetchStakeState'  // ✅ Import fonctionnel
+import { fetchStakeState } from '@/lib/stake/stakeHelpers'
 
 const STAKE_ACCOUNT = new PublicKey('9xQeWvG816bUx9EPZ2gfrzjp1edw6uX7yjzFZZLL8Mjt')
 
@@ -13,7 +12,6 @@ export default function StakePage() {
     const [state, setState] = useState<string | null>(null)
 
     useEffect(() => {
-        // ✅ Corriger l'avertissement "Promise returned from loadState is ignored"
         void (async () => {
             const stakeState = await fetchStakeState(STAKE_ACCOUNT)
             setState(stakeState)
