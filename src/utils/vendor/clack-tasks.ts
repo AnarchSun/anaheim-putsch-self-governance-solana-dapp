@@ -1,4 +1,4 @@
-/**
+/** src/utils/vendor/clack-tasks.ts
  * Vendor in the clack tasks code until it's released to npm
  * Read more here: https://github.com/bombshell-dev/clack/issues/181
  *
@@ -23,7 +23,7 @@ export type Task = {
   ) => Promise<{ message: string; instructions?: string[] }> | void | Promise<void>
 
   /**
-   * If enabled === false the task will be skipped
+   * If enabled === false, the task will be skipped
    */
   enabled?: boolean
 }
@@ -31,9 +31,11 @@ export type Task = {
 /**
  * Define a group of tasks to be executed
  */
-export async function tasks(tasks: ((() => Task) | (() => Task) | (() => Task) | (() => Task))[]): Promise<string[]> {
+export async function tasks(tasks: ((() => Task) )[]): Promise<string[]> {
   const instructions: string[] = []
-  for (const task of tasks) {
+  for (const taskFn of tasks) {
+    const task = taskFn() // On appelle la fonction pour obtenir l'objet Task
+
     if (task.enabled === false) continue
 
     const s = spinner()

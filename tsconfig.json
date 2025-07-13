@@ -15,7 +15,9 @@
     "jsx": "preserve",
     "allowSyntheticDefaultImports": true,
     "noImplicitAny": true,
+    "noImplicitReturns": true,
     "strictFunctionTypes": true,
+    "types": ["vitest/globals", "node"],
     "baseUrl": ".",
     "paths": {
       "anchor/*": ["../../anchor/*"],
@@ -28,6 +30,14 @@
     },
     "plugins": [{ "name": "next" }]
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "node_modules/.pnpm/vitest@3.2.3_@types+node@24.0.10/node_modules/vitest/globals.d.ts",
+    "node_modules/.pnpm/vitest@3.2.3_@types+node@24.0.10/node_modules/vitest/globals.d.ts",
+    "node_modules/.pnpm/vitest@3.2.3_@types+node@24.0.10/node_modules/vitest/globals.d.ts"
+  ],
   "exclude": ["node_modules"]
 }

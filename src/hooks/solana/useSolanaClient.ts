@@ -10,7 +10,26 @@ export function useSolanaClient(cluster: 'devnet' | 'testnet' | 'mainnet-beta' =
   }, [cluster])
 }
 
-// TODO: future fallback for deprecated getStakeActivation
+// Type pour le parsing manuel des données d’un compte stake
+type ParsedAccountData = {
+  program: 'stake'
+  parsed: {
+    type: string
+    info: {
+      state: string
+      stake?: {
+        delegation: {
+          stake: number
+          activationEpoch: string
+          deactivationEpoch: string
+          voter: string
+        }
+      }
+    }
+  }
+}
+
+// Fallback manuel si le fournisseur officiel échoue ou est déprécié
 async function getStakeActivationManual(connection: Connection, pubkey: PublicKey) {
   const accountInfo = await connection.getParsedAccountInfo(pubkey)
 
@@ -37,6 +56,8 @@ async function getStakeActivationManual(connection: Connection, pubkey: PublicKe
     inactive: 0, // fallback since we can't infer it here
   }
 }
+
+// Fonction robuste qui tente d’abord l’appel officiel, puis tombe sur la version manuelle si nécessaire
 export async function getStakeActivationSafe(connection: Connection, pubkey: PublicKey) {
   try {
     // ✅ Appel correct avec deux arguments
@@ -44,23 +65,5 @@ export async function getStakeActivationSafe(connection: Connection, pubkey: Pub
   } catch (err) {
     console.warn('Vendor getStakeActivation failed, falling back manually', err)
     return await getStakeActivationManual(connection, pubkey)
-  }
-}
-
-type ParsedAccountData = {
-  program: 'stake'
-  parsed: {
-    type: string
-    info: {
-      state: string
-      stake?: {
-        delegation: {
-          stake: number
-          activationEpoch: string
-          deactivationEpoch: string
-          voter: string
-        }
-      }
-    }
   }
 }

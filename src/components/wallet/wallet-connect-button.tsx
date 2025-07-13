@@ -4,7 +4,19 @@
 import { useEffect, useState } from 'react'
 import { getStakeActivation } from '@/lib/solana/stake-utils'
 import { Connection, PublicKey } from '@solana/web3.js'
-import { StakeActivationState } from '@/hooks/stake/stake-codecs'
+
+export type StakeActivationState = {
+  state: 'active' | 'inactive' | 'activating' | 'deactivating'
+  active: number
+  inactive: number
+}
+
+const validStates = ['active', 'inactive', 'activating', 'deactivating'] as const
+type ValidState = typeof validStates[number]
+
+function isValidStakeState(value: string): value is ValidState {
+  return validStates.includes(value as ValidState)
+}
 
 export function useStakeActivationStatus(pubkey: PublicKey, connection: Connection) {
   const [status, setStatus] = useState<StakeActivationState | null>(null)
@@ -22,16 +34,23 @@ export function useStakeActivationStatus(pubkey: PublicKey, connection: Connecti
       try {
         const result = await getStakeActivation(pubkey, connection)
 
+        if (!isValidStakeState(result.state)) {
+          console.warn(`Invalid stake state: ${result.state}`)
+          setError(new Error(`Invalid stake state: ${result.state}`))
+          setStatus(null)
+          return
+        }
+
+
         setStatus({
           state: result.state,
           active: Number(result.active),
           inactive: Number(result.inactive),
-        } as unknown as StakeActivationState)
+        })
 
         setError(null)
       } catch (err: unknown) {
-        if (err instanceof Error) setError(err)
-        else setError(new Error('Erreur inconnue'))
+        setError(err instanceof Error ? err : new Error('Erreur inconnue'))
       } finally {
         setLoading(false)
       }

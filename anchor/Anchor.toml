@@ -1,20 +1,24 @@
 [toolchain]
-anchor_version = "0.30.1"
+anchor_version = "0.31.1"
 
 [features]
 resolution = true
 skip-lint = false
 
 [programs.localnet]
-anaheim = "B4wa4mhhsxJ3Z7FYd8y1qx9XQCVBTpyLkBTzm1h9PaNC"
-journal = "5Z83vnTd9UBLfby19h8URuofff6DELAwww5hyEQhtmkb"
+anaheim = "8RmTVazK1G3ZJ7EqYZC9FYJejFge98Vyz7T4zVdY8okX"
+journal = "3EqwhRqpPezsiVTSBcbbTdSJNsJs8ufN2m2EBCqCVmXC"
+
+[programs.devnet]
+anaheim = "4tHvPpUkEcF4US6pW5xWJAHnUg7kpeAKNNcGBrw1PTyH"
+journal = "3EqwhRqpPezsiVTSBcbbTdSJNsJs8ufN2m2EBCqCVmXC"
 
 [registry]
 url = "https://api.apr.dev"
 
 [provider]
 cluster = "devnet"
-wallet = "~/RustroverProjects/anarcrypt.sol/anaheim-putsch-govdapp/anchor/target/deploy/anarcrypt.json"
+wallet = "~/.config/solana/id.json"
 
 [scripts]
 build = "bash -c 'echo test && echo ok done'"

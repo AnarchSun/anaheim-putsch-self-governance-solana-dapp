@@ -292,6 +292,11 @@
       "code": 6009,
       "name": "Unauthorized",
       "msg": "Unauthorized action."
+    },
+    {
+      "code": 6010,
+      "name": "InvalidAuthority",
+      "msg": "Invalid authority on post."
     }
   ],
   "types": [

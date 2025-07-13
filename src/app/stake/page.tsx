@@ -1,60 +1,41 @@
 'use client'
 
-import { StakeWatcher } from '@/components/stake/stake-watcher'
-import { useState, useEffect, useCallback } from 'react'
-import { getStakeActivationSafe } from '@/../../eco-subsystem/complementary-modules/getStakeActivation/js/src/stake'
-import { PublicKey, Connection } from '@solana/web3.js'
-import { ExplorerLink } from '@/components/account/account-detail-feature'
-import { toast } from 'sonner'
+import { useEffect, useState } from 'react'
+import { PublicKey } from '@solana/web3.js'
+import { StakeWatcher } from '@/components/stake/StakeWatcher'
+import { DebugStakeStatus } from '@/hooks/stake/debugStakeStatus'
+import { fetchStakeState } from '@/lib/stake/stakeHelpers'
 
-function useTransactionToast(pubkeyString: string) {
-  return useCallback(
-    (signature: string) => {
-      toast('Transaction sent', {
-        description: (
-          <ExplorerLink
-            address={pubkeyString}
-            transaction={signature}
-            label="View Transaction"
-          />
-        ),
-      })
-    },
-    [pubkeyString]
-  )
-}
+const STAKE_ACCOUNT = new PublicKey('9xQeWvG816bUx9EPZ2gfrzjp1edw6uX7yjzFZZLL8Mjt')
 
-export default function StakingPage() {
-  const [status, setStatus] = useState<string>('')
-  const pubkey = new PublicKey('9xQeWvG816bUx9EPZ2gfrzjp1edw6uX7yjzFZZLL8Mjt')
-  const pubkeyString = pubkey.toBase58()
-  const notify = useTransactionToast(pubkeyString)
+export default function StakePage() {
+    const [state, setState] = useState<string | null>(null)
 
-  useEffect(() => {
-    async function fetchActivation() {
-      try {
-        const connection = new Connection('https://api.devnet.solana.com')
-        const watcher = new getStakeActivationSafe(connection, 10000, pubkey)
-        await watcher.fetch()
-        setStatus(watcher.state ?? 'unknown')
+    useEffect(() => {
+        void (async () => {
+            const stakeState = await fetchStakeState(STAKE_ACCOUNT)
+            setState(stakeState)
+        })()
+    }, [])
 
-        // Simuler une signature transactionnelle
-        const fakeSignature = '5NJS3f...fakeSignature'
-        notify(fakeSignature)
-      } catch (err) {
-        console.error('Erreur récupération stake:', err)
-        setStatus('error')
-      }
-    }
+    return (
+        <main className="p-4">
+            <h1 className="text-xl font-bold">Stake Page</h1>
 
-    fetchActivation().catch(console.error)
-  }, [pubkey, notify])
+            <div>
+                <h2>Statut du Stake</h2>
+                <p>État : {state ?? 'Inconnu'}</p>
+                <p>Actif : {state === 'active' ? 'Oui' : 'Non'}</p>
+                <p>Inactif : {state === 'inactive' ? 'Oui' : 'Non'}</p>
+            </div>
 
-  return (
-    <div className="p-6 bg-neutral-900 text-white rounded-xl shadow-lg border border-white/10 max-w-xl mx-auto mt-10">
-      <StakeWatcher pubkeyString={pubkeyString} />
-      <h1 className="text-3xl font-bold mb-4">🧪 Vérification du staking</h1>
-      <p>{status}</p>
-    </div>
-  )
+            <div>
+                <h2>État du stake : {state ?? 'chargement...'}</h2>
+                <StakeWatcher address="8RmTVazK1G3ZJ7EqYZC9FYJejFge98Vyz7T4zVdY8okX" />
+            </div>
+
+            <h2 className="mt-4 font-semibold">Debug Stake</h2>
+            <DebugStakeStatus />
+        </main>
+    )
 }

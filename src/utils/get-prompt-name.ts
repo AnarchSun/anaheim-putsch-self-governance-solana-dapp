@@ -1,3 +1,4 @@
+// src/utils/get-prompt-name.ts
 import { log, text } from '@clack/prompts'
 import { GetArgsResult } from './get-args-result'
 import { validateProjectName } from './validate-project-name'
@@ -10,7 +11,7 @@ export function getPromptName({ options }: { options: GetArgsResult }) {
     }
     return text({
       message: 'Enter project name',
-      validate: validateProjectName,
+      validate: validateProjectName, // ✅ maintenant conforme
     })
   }
 }

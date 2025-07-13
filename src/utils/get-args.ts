@@ -1,6 +1,6 @@
 import { intro, log, outro } from '@clack/prompts'
 import { program } from 'commander'
-import { findTemplate, listTemplates, Template } from '../templates/templates'
+import { findTemplate, listTemplates, Template } from '@/templates/templates'
 import { AppInfo } from './get-app-info'
 import { GetArgsResult } from './get-args-result'
 import { getPrompts } from './get-prompts'

@@ -1,37 +1,47 @@
-// src/app/api/program-info/route.ts
-import { Keypair, Transaction, VersionedTransaction } from '@solana/web3.js'
-import { backendWallet } from '@/lib/backendWallet' // ou peu importe le chemin
-import fs from 'fs'
-import path from 'path'
+// File: src/app/api/program-info/route.ts
+import { Transaction, VersionedTransaction } from '@solana/web3.js'
 import { NextResponse } from 'next/server'
+import { loadKeypair } from '@/lib/wallet/loadKeypair'
 
-const KEYPAIR_PATH = path.join(process.cwd(), 'wallet', 'id.json')
-
-function loadKeypair(): Keypair {
-  const raw = fs.readFileSync(KEYPAIR_PATH, 'utf-8')
-  const secret = Uint8Array.from(JSON.parse(raw))
-  return Keypair.fromSecretKey(secret)
-}
-
+// Charge le wallet depuis wallet/id.json
 const keypair = loadKeypair()
 
-// Helper pour signer partiellement selon le type de transaction
+// ✅ Fallback si le fichier est manquant
+if (!keypair) {
+  console.warn('🛑 Aucun keypair trouvé. Le backend fonctionnera en mode readonly.')
+}
+
+// Signature d'une transaction selon son type
 async function signTx<T extends Transaction | VersionedTransaction>(tx: T): Promise<T> {
+  if (!keypair) throw new Error('Backend wallet not available')
+
   if (tx instanceof Transaction) {
     tx.partialSign(keypair)
     return tx as T
-  } else if (tx instanceof VersionedTransaction) {
+  }
+
+  if (tx instanceof VersionedTransaction) {
     tx.sign([keypair])
     return tx as T
   }
-  throw new Error('Transaction type not supported for partial signing')
+
+  throw new Error('Unsupported transaction type')
 }
 
+// Signature multiple
 async function signAllTxs<T extends Transaction | VersionedTransaction>(txs: T[]): Promise<T[]> {
   return Promise.all(txs.map(signTx))
 }
 
-// Backend Wallet compatible Anchor
+// Endpoint de test du backend wallet
 export async function GET() {
-  return NextResponse.json({ backendWallet })
+  if (!keypair) {
+    return NextResponse.json({
+      error: 'No backend wallet available',
+    }, { status: 500 })
+  }
+
+  return NextResponse.json({
+    backendWallet: keypair.publicKey.toBase58(),
+  })
 }

@@ -2,9 +2,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { PublicKey, SystemProgram, Transaction, LAMPORTS_PER_SOL } from '@solana/web3.js'
 import { useAnchorWallet } from '@solana/wallet-adapter-react'
-import { useConnection } from './useConnection.tsx'
-import { Address } from './useGetBalance.tsx'
+import { useConnection } from './useConnection'
 import { toast } from 'sonner'
+import { Address } from 'cluster'
 
 export function useTransferSol({ fromAddress }: { fromAddress: Address }) {
   const wallet = useAnchorWallet()

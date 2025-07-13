@@ -1,48 +1,53 @@
-// src/hooks/fetchStakeActivation.ts
-import { stakeAccountCodec, StakeActivationState } from '@/hooks/stake/stake-codecs';
-import { PublicKey, Connection } from '@solana/web3.js';
+// src/hooks/stake/useStakeActivationSafe.tsx
+import { useEffect, useState } from 'react'
+import { Connection, PublicKey } from '@solana/web3.js'
+import { getStakeActivationSafe } from './getStakeActivationSafe'
+import {StakeActivationState} from "@/components/wallet/wallet-connect-button";
 
-export class getStakeActivationSafe {
-  state: StakeActivationState | null = null;
-  private _pubkey: PublicKey;
-  private _connection: Connection;
-  private _programId?: PublicKey;
 
-  constructor(connection: Connection, pubkey: PublicKey, programId?: PublicKey) {
-    this._connection = connection;
-    this._pubkey = pubkey;
-    this._programId = programId;
-  }
+export function useStakeActivationSafe(pubkey: PublicKey, connection: Connection) {
+  const [state, setState] = useState<StakeActivationState | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<Error | null>(null)
 
-  async fetch() {
-    try {
-      const accountInfo = await this._connection.getAccountInfo(this._pubkey);
+  useEffect(() => {
+    if (!pubkey || !connection) return
+    let active = true
 
-      if (!accountInfo || !accountInfo.data) {
-        this.state = 'uninitialized';
-        return;
+    const run = async () => {
+      setLoading(true)
+      try {
+        const watcher = new getStakeActivationSafe(connection, pubkey)
+        await watcher.fetch()
+
+        if (active) {
+          const { state, active: act, inactive: inact } = watcher.state
+
+          // Validation stricte de `state`
+          const validStates = ['active', 'inactive', 'activating', 'deactivating'] as const
+          if (validStates.includes(state as typeof validStates[number])) {
+            setState({
+              state: state as "active" | "inactive" | "activating" | "deactivating",
+              active: act,
+              inactive: inact,
+            })
+          } else {
+            console.warn("Invalid stake state:", state)
+          }
+        }
+      } catch (e) {
+        if (active) setError(e as Error)
+      } finally {
+        if (active) setLoading(false)
       }
-
-      const decodedStakeAccount = stakeAccountCodec.decode(accountInfo.data);
-
-      const delegation = decodedStakeAccount.stake.delegation;
-      const currentEpoch = await this._connection.getEpochInfo().then(info => info.epoch);
-
-      if (delegation.deactivationEpoch === BigInt('18446744073709551615')) {
-        this.state = 'active';
-      } else if (delegation.activationEpoch > BigInt(currentEpoch)) {
-        this.state = 'activating';
-      } else if (delegation.deactivationEpoch < BigInt(currentEpoch)) {
-        this.state = 'inactive';
-      } else if (delegation.deactivationEpoch >= BigInt(currentEpoch)) {
-        this.state = 'deactivating';
-      } else {
-        this.state = 'uninitialized';
-      }
-    } catch (error) {
-      this.state = null;
-      throw error;
     }
-  }
 
+    run().catch(console.error)
+
+    return () => {
+      active = false
+    }
+  }, [pubkey, connection])
+
+  return { state, loading, error }
 }
