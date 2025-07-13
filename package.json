@@ -41,7 +41,7 @@
   },
   "dependencies": {
     "@anza-xyz/solana-rpc-get-stake-activation": "^1.0.1",
-    "@babel/types": "^7.28.0",
+    "@babel/types": "^7.28.1",
     "@clack/prompts": "^0.11.0",
     "@coral-xyz/borsh": "^0.31.1",
     "@eslint/eslintrc": "^3.3.1",
