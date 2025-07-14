@@ -5,6 +5,7 @@ import { useQuery } from '@tanstack/react-query'
 import { createSolanaClient, SolanaClient } from 'gill'
 import { useSolanaWalletAddress } from '@wallet-ui/react'
 
+
 const solanaClientInstance: SolanaClient = createSolanaClient({ urlOrMoniker: 'devnet' })
 
 export function useSolanaClient(): SolanaClient | undefined {

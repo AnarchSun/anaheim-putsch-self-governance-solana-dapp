@@ -1,24 +1,17 @@
 // src/components/Providers.tsx
 'use client'
 
-import { QueryClientProvider } from '@tanstack/react-query'
-import { ThemeProvider } from 'next-themes'
-import { WalletProvider, ConnectionProvider } from '@solana/wallet-adapter-react'
+import { ThemeProvider } from '@/components/theme-provider'
+import { SolanaProvider } from '@/components/solana/solana-provider'
 import React from 'react'
+import { ReactQueryProvider } from './query-client-provider'
 
-// Configure ici tes clients et providers
-
-export default function Providers({children}: { children: React.ReactNode }, queryClient: any, endpoint: any, wallets: any) {
-    // configs (queryClient, wallets, endpoint...) restent ici
+export function AppProviders({ children }: Readonly<{ children: React.ReactNode }>) {
     return (
-        <QueryClientProvider client={queryClient}>
-            <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-                <ConnectionProvider endpoint={endpoint}>
-                    <WalletProvider wallets={wallets} autoConnect>
-                        {children}
-                    </WalletProvider>
-                </ConnectionProvider>
+        <ReactQueryProvider>
+            <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+                    <SolanaProvider>{children}</SolanaProvider>
             </ThemeProvider>
-        </QueryClientProvider>
+        </ReactQueryProvider>
     )
 }

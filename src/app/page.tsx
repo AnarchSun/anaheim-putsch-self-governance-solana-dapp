@@ -1,7 +1,6 @@
-export default function Page() {
-  return (
-      <div>
-        <h2>Welcome to your anarcrypt dApp</h2>
-      </div>
-  )
+'use client'
+
+import { DashboardFeature } from '@/components/dashboard/dashboard-feature'
+export default function Home() {
+    return <DashboardFeature />
 }
