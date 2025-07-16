@@ -1,14 +1,15 @@
 // File: src/components/app-layout.tsx
 'use client'
 
-import { ThemeProvider } from './theme-provider'
+
 import { Toaster } from './ui/sonner'
 import { AppHeader } from '@/components/app-header'
 import React from 'react'
 import { AppFooter } from '@/components/app-footer'
 import { AccountChecker } from '@/components/account/account-ui'
-import { WalletUiDropdown } from '@/components/solana/solana-provider'
-import {WalletButton} from "@/components/solana/WalletButton";
+import { WalletButton } from '@/components/wallet/ui/wallet-button'
+import WalletUiDropdown from '@/components/wallet/ui/wallet-ui-dropdown'
+import {ThemeProvider} from "next-themes";
 
 export function AppLayout({
                               children,

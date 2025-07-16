@@ -1,3 +1,5 @@
+// src/components/dashboard/dashboard-feature.tsx
+
 import { AppHero } from '@/components/app-hero'
 
 const links: { label: string; href: string }[] = [

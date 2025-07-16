@@ -1,4 +1,5 @@
 // File: src/components/app-header.tsx
+
 'use client'
 
 import React, { useState } from 'react'
@@ -24,11 +25,6 @@ export function AppHeader({ links, WalletButton, WalletUiDropdown }: AppHeaderPr
 
   return (
       <header className="relative z-50 px-4 py-2 bg-neutral-100 dark:bg-neutral-900 dark:text-neutral-400">
-        <AppHeader
-            links={links}
-            WalletButton={WalletButton} // Importé et non undefined
-            WalletUiDropdown={WalletUiDropdown} // Ne pas passer undefined
-        />
         <div className="mx-auto flex justify-between items-center">
           <div className="flex items-baseline gap-4">
             <Link className="text-xl font-bold hover:text-neutral-500 dark:hover:text-white" href="/">

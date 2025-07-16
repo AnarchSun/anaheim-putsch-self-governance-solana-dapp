@@ -1,26 +1,34 @@
-// File: src/components/solana/solana-provider.tsx
+// src/components/solana/solana-provider.tsx
 'use client'
 
-import dynamic from 'next/dynamic'
-import React, { ReactNode } from 'react'
-import type { WalletUiDropdownProps } from '@wallet-ui/react'
-import { WalletButton } from './WalletButton'
+import React, { useMemo } from 'react'
+import {
+    ConnectionProvider,
+    WalletProvider
+} from '@solana/wallet-adapter-react'
+import {
+    WalletModalProvider
+} from '@solana/wallet-adapter-react-ui'
+import {
+    PhantomWalletAdapter,
+    // ajoute d'autres adaptateurs si nécessaire
+} from '@solana/wallet-adapter-wallets'
 
-export function SolanaProvider({ children }: { children: ReactNode }) {
-    return <>{children}</>
+import { clusterApiUrl } from '@solana/web3.js'
+
+import '@solana/wallet-adapter-react-ui/styles.css'
+
+export function SolanaProvider({ children }: { children: React.ReactNode }) {
+    const endpoint = useMemo(() => clusterApiUrl('devnet'), [])
+    const wallets = useMemo(() => [new PhantomWalletAdapter()], [])
+
+    return (
+        <ConnectionProvider endpoint={endpoint}>
+            <WalletProvider wallets={wallets} autoConnect>
+                <WalletModalProvider>
+                    {children}
+                </WalletModalProvider>
+            </WalletProvider>
+        </ConnectionProvider>
+    )
 }
-
-// ✅ Use dynamic import for WalletUiDropdown
-export const WalletUiDropdown = dynamic<WalletUiDropdownProps>(
-    () =>
-        import('@wallet-ui/react').then((mod) =>
-            mod.WalletUiDropdown
-                ? mod.WalletUiDropdown
-                : () => <div className="text-red-500">WalletUiDropdown not found</div>
-        ),
-    { ssr: false }
-)
-
-
-// Supprimer la tentative de dynamic import pour WalletButton puisque nous avons notre propre composant
-export { WalletButton }

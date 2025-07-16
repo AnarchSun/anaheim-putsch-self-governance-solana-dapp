@@ -1,5 +1,5 @@
 import { AlertCircle } from 'lucide-react'
-import { Alert, AlertDescription, AlertTitle } from '../../src/components/ui/alert'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { ReactNode } from 'react'
 
 export function AppAlert({ action, children }: { action: ReactNode; children: ReactNode }) {

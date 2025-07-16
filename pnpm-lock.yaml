@@ -200,6 +200,9 @@ importers:
       tw-animate-css:
         specifier: ^1.3.5
         version: 1.3.5
+      types:
+        specifier: link:@/types
+        version: link:@/types
       vite:
         specifier: ^6.3.5
         version: 6.3.5(@types/node@24.0.14)(jiti@2.4.2)(lightningcss@1.30.1)(terser@5.43.1)(tsx@4.20.3)
@@ -237,6 +240,9 @@ importers:
       pino-pretty:
         specifier: ^13.0.0
         version: 13.0.0
+      solana:
+        specifier: link:@/types/solana
+        version: link:@/types/solana
       ts-node:
         specifier: ^10.9.2
         version: 10.9.2(@types/node@24.0.14)(typescript@5.8.3)
