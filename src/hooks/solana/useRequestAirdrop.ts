@@ -3,7 +3,6 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { PublicKey, LAMPORTS_PER_SOL } from '@solana/web3.js'
 import { useConnection } from './useConnection'
 import { toast } from 'sonner'
-import { Address } from 'cluster'
 
 export function useRequestAirdrop({ address }: { address: Address }) {
   const connection = useConnection()

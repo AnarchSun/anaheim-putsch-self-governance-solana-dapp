@@ -1,6 +1,10 @@
 // src/@types/wallet-ui-react.d.ts
 declare module '@wallet-ui/react' {
-  import * as React from 'react'
+  WalletButton = undefined;
+    WallteUi = undefined;
+  WalletMultiButton = undefined;
+
+    import * as React from 'react'
 
   export function useSolanaWallet(): {
     connected: boolean
@@ -33,4 +37,7 @@ declare module '@wallet-ui/react' {
       return this.address
     }
   }
+
+    export class WalletUiContextProvider {
+    }
 }

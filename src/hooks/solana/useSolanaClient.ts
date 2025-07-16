@@ -1,14 +1,8 @@
 // src/hooks/solana/useSolanaClient.ts
-import { clusterApiUrl, Connection, PublicKey } from '@solana/web3.js'
+import { Connection, PublicKey } from '@solana/web3.js'
 import { useMemo } from 'react'
 import { getStakeActivation } from '@anza-xyz/solana-rpc-get-stake-activation'
 
-export function useSolanaClient(cluster: 'devnet' | 'testnet' | 'mainnet-beta' = 'devnet') {
-  // 🔁 Memoize connection to avoid re-instantiating on each render
-  return useMemo(() => {
-    return new Connection(clusterApiUrl(cluster), 'confirmed')
-  }, [cluster])
-}
 
 // Type pour le parsing manuel des données d’un compte stake
 type ParsedAccountData = {

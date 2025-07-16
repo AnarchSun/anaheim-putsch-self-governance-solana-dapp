@@ -1,9 +1,28 @@
-// 📄 src/components/wallet/ClientWalletProvider.tsx
+// File: src/components/wallet/ClientWalletProvider.tsx
 'use client'
 
-import { WalletProvider } from '@wallet-ui/react'
-import React from 'react'
+import React, {ReactNode} from 'react'
+import { SolanaProvider } from 'gill-react'
+
+function WalletUiProvider(props: { children: ReactNode }) {
+    return null;
+}
 
 export function ClientWalletProvider({ children }: { children: React.ReactNode }) {
-    return <WalletProvider>{children}</WalletProvider>
+    return (
+        <SolanaProvider
+            client={{
+                sendAndConfirmTransaction: async () => {
+                    throw new Error('sendAndConfirmTransaction not implemented.')
+                },
+                simulateTransaction: async () => {
+                    throw new Error('simulateTransaction not implemented.')
+                },
+            }}
+        >
+            <WalletUiProvider>
+                {children}
+            </WalletUiProvider>
+        </SolanaProvider>
+    )
 }

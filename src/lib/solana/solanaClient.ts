@@ -1,7 +1,5 @@
 // src/lib/solanaClient.ts
-import { Connection, clusterApiUrl } from '@solana/web3.js'
 
-const defaultConnection = new Connection(clusterApiUrl('mainnet-beta'))
 
 export * from '@solana/web3.js'
 

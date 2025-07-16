@@ -1,7 +1,9 @@
-// src/components/stake/stake-viewer.tsx
+// File: src/components/stake/stake-viewer.tsx
+'use client'
+
 import React, { useEffect, useState } from 'react'
-import { Connection, PublicKey, clusterApiUrl } from '@solana/web3.js'
-import {Meta, Stake} from "@solana-program/stake";
+import { Connection, PublicKey } from '@solana/web3.js'
+import { Meta, Stake } from '@solana-program/stake'
 
 interface StakeAccount {
   activationEpoch: number
@@ -20,45 +22,53 @@ export function StakeViewer({ pubkey }: StakeViewerProps) {
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    if (!pubkey) return
-
-    const connection = new Connection(clusterApiUrl('devnet'))
+    const connection = new Connection('https://api.mainnet-beta.solana.com')
 
     async function fetchStakeAccount() {
       try {
-        const accountInfo = await connection.getAccountInfo(pubkey)
-        if (!accountInfo) {
+        const accountInfo = await connection.getParsedAccountInfo(pubkey)
+        if (!accountInfo.value) {
           setStakeAccount(null)
-          setError('No account info found')
+          setError('Aucune information de compte trouvée.')
           return
         }
 
-        setStakeAccount(stakeAccount)
+        const data = accountInfo.value.data
+        if (typeof data !== 'object' || !('parsed' in data)) {
+          throw new Error('Format de compte inattendu')
+        }
+
+        const parsed = (data as any).parsed
+        const info = parsed?.info
+        if (!info || !info.stake) {
+          throw new Error('Aucune info stake')
+        }
+
+        setStakeAccount({
+          activationEpoch: info.stake.activationEpoch,
+          delegatedStake: info.stake.delegatedStake,
+          discriminant: 0,
+          meta: info.meta,
+          stake: info.stake,
+        })
 
         setError(null)
       } catch (err) {
-        console.error('Error fetching stake account:', err)
-        setError('Erreur lors de la récupération du stake account')
-        setStakeAccount(null)
+        console.error('Erreur lors de la récupération du compte de stake:', err)
+        setError('Erreur lors de la récupération du compte de stake')
       }
     }
 
-    fetchStakeAccount().catch((e) => {
-      console.error('Unhandled fetch error:', e)
-      setError('Erreur inconnue lors de la récupération')
-    })
-
-    // Pas de return ici ou return undefined / void
-  }, [pubkey, stakeAccount])
+    fetchStakeAccount()
+  }, [pubkey])
 
   if (error) return <p>{error}</p>
-
-  if (!stakeAccount) return <p>Loading stake info...</p>
+  if (!stakeAccount) return <p>Chargement du compte de stake...</p>
 
   return (
-    <div>
-      <p>Activation Epoch: {stakeAccount.activationEpoch}</p>
-      <p>Delegated Stake: {stakeAccount.delegatedStake}</p>
-    </div>
+      <div>
+        <p>Activation Epoch: {stakeAccount.activationEpoch}</p>
+        <p>Delegated Stake: {stakeAccount.delegatedStake}</p>
+      </div>
   )
 }
