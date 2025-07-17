@@ -1,116 +1,157 @@
-'use client'
+// FILE: src/components/account/account-detail-feature.tsx
+'use client';
 
-import React, { useMemo } from 'react'
-import { useParams } from 'next/navigation'
-import { AccountButtons } from './AccountButtons'
-import { AccountTransactions } from './AccountTransactions'
-import { AppHero } from '../app-hero'
-import { ellipsify } from '@/lib/utils'
-import { assertIsAddress } from '@solana/addresses'
-import { useQuery } from '@tanstack/react-query'
-import { useSolanaClient } from 'gill-react'
+import React, { useMemo } from 'react';
+import { useParams } from 'next/navigation';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-// --- on supprime ces imports inutiles et problématiques ---
-// import { Base64EncodedDataResponse, Slot } from 'gill'
-// import { PublicKey } from '@solana/web3.js'
-// import { Address } from '@solana/kit'
-// import { address } from '@trezor/utxo-lib'
-// import { client } from 'jayson'
+// --- Corrected Library Imports ---
+import { assertIsAddress } from '@solana/addresses';
+import { Lamports } from 'gill'; // FIX: Lamports is now imported from 'gill'
+import { useSolanaClient } from 'gill-react';
 
-export function useGetBalance(address: string) {
-  const client = useSolanaClient()
+// --- Corrected Local Component Imports ---
+import AccountUI from './account-ui'; // FIX: Use default import for AccountUI
+import { AccountButtons } from './AccountButtons';
+import { AccountTransactions } from './AccountTransactions';
+import { AppAlert } from '../app-alert';
+import { Button } from '../ui/button';
+
+// --- Utility and Constant Imports ---
+import { ellipsify } from '@/lib/utils';
+import { LAMPORTS_PER_SOL } from '@solana/web3.js';
+
+// HOOK: For requesting an airdrop
+function useAirdropMutation(address: string) {
+  const client = useSolanaClient();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: ['airdrop', address],
+    mutationFn: async (amount: number = 1) => {
+      assertIsAddress(address);
+      try {
+        const lamportsToRequest = (amount * LAMPORTS_PER_SOL) as unknown as Lamports;
+        const signature = await client.rpc
+            .requestAirdrop(address, lamportsToRequest)
+            .send();
+
+        console.log(`Airdrop requested: ${signature}`);
+        return signature;
+      } catch (error) {
+        console.error('Airdrop failed', error);
+        throw new Error('Airdrop failed');
+      }
+    },
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ['balance', address] });
+    },
+  });
+}
+
+// HOOK: For getting the account balance
+function useGetBalance(address: string) {
+  const client = useSolanaClient();
 
   return useQuery({
     queryKey: ['balance', address],
     enabled: !!address,
     queryFn: async () => {
-      assertIsAddress(address)
-      const accountInfo = await client.rpc.getAccountInfo(address).send()
-      if (!accountInfo.value) throw new Error('Account not found')
-
-      // Ici lamportsRaw est défini et accessible
-      const lamportsRaw = accountInfo.value.lamports
-
-      let lamportsNum: number
-
-      if (typeof lamportsRaw === 'number') {
-        lamportsNum = lamportsRaw
-      } else if (typeof (lamportsRaw as any).toNumber === 'function') {
-        lamportsNum = (lamportsRaw as any).toNumber()
-      } else if (typeof lamportsRaw === 'bigint') {
-        lamportsNum = Number(lamportsRaw)
-      } else {
-        lamportsNum = Number(lamportsRaw) // fallback brutal
+      assertIsAddress(address);
+      const accountInfo = await client.rpc.getAccountInfo(address).send();
+      if (!accountInfo.value) {
+        throw new Error('Account not found');
       }
-
-      return lamportsNum / 1e9
+      return Number(accountInfo.value.lamports) / LAMPORTS_PER_SOL;
     },
-  })
+    retry: false,
+  });
 }
 
+// COMPONENT: Displays the balance using the hook
+const AccountBalance: React.FC<{ address: string }> = ({ address }) => {
+  const { data, isLoading } = useGetBalance(address);
+
+  if (isLoading) return <span className="text-muted">Loading Balance…</span>;
+  return <span>{(data ?? 0).toFixed(4)} SOL</span>;
+};
+
+// COMPONENT: Placeholder for token list
+const AccountTokens: React.FC<{ address: string }> = ({ address }) => {
+  return <div>Tokens for {ellipsify(address)}</div>;
+};
 
 
-
-export const AccountBalance: React.FC<{ address: string }> = ({ address }) => {
-  const { data, isLoading, error } = useGetBalance(address)
-
-  if (isLoading) return <span className="text-muted">Chargement…</span>
-  if (error) return <span className="text-red-600">Erreur chargement solde</span>
-  return <span>{(data ?? 0).toFixed(4)} SOL</span>
-}
-
-type Props = {
-  address: string
-}
-
-export const AccountTokens: React.FC<Props> = ({ address }) => {
-  return <div>Tokens of {address}</div>
-}
-
-export function ExplorerLink({ address, label, transaction }: { address: string, label?: string, transaction?: string }) {
-  return (
-    <a
-      href={`https://explorer.solana.com/address/${address}`}
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      {label ?? address}
-    </a>
-  )
-}
-
+// --- MAIN FEATURE COMPONENT ---
 export default function AccountDetailFeature() {
-  const params = useParams()
-  const address = useMemo(() => {
-    const addr = params.address
-    if (!addr || typeof addr !== 'string') return undefined
-    assertIsAddress(addr)
-    return addr
-  }, [params.address])
+  const params = useParams();
 
+  const address = useMemo(() => {
+    const addr = params.address;
+    if (!addr || typeof addr !== 'string') return undefined;
+    try {
+      assertIsAddress(addr);
+      return addr;
+    } catch (e) {
+      return undefined;
+    }
+  }, [params.address]);
+
+  const balanceQuery = useGetBalance(address || '');
+  const airdropMutation = useAirdropMutation(address || '');
+
+  // 1. Handle case where an address is invalid or not provided in URL
   if (!address) {
-    return <div className="text-red-600">Error loading account</div>
+    return (
+        <div className="container py-10">
+          <AppAlert action={null}>
+            <p className="text-center">Invalid address provided in the URL.</p>
+          </AppAlert>
+        </div>
+    );
   }
 
-  return (
-    <div>
-      <AppHero
-        title={<AccountBalance address={address} />}
-        subtitle={
-          <div className="my-4">
-            <ExplorerLink address={address} label={ellipsify(address)} />
-          </div>
-        }
-      >
-        <div className="my-4">
-          <AccountButtons address={address} />
-        </div>
-      </AppHero>
+  // 2. Handle loading state
+  if (balanceQuery.isLoading) {
+    return <div className="p-10 text-center">Loading account details...</div>;
+  }
 
-      <div className="space-y-8">
-        <AccountTokens address={address} />
-        <AccountTransactions address={address} />
-      </div>
-    </div>
-  )
+  // 3. Handle error state (account not found) by showing the airdrop UI
+  if (balanceQuery.isError) {
+    return (
+        <div className="container py-10">
+          <AppAlert
+              action={
+                <Button
+                    variant="outline"
+                    onClick={() => airdropMutation.mutate(1)}
+                    disabled={airdropMutation.isPending}
+                >
+                  {airdropMutation.isPending ? 'Requesting...' : 'Request 1 SOL Airdrop'}
+                </Button>
+              }
+          >
+            <div className="space-y-2 text-center">
+              <h3 className="font-bold text-lg">Account Not Found</h3>
+              <p>The account {ellipsify(address)} does not exist on this network.</p>
+            </div>
+          </AppAlert>
+        </div>
+    );
+  }
+
+  // 4. Handle success state: Render the full AccountUI
+  return (
+      <AccountUI
+          address={address}
+          label="Account Details"
+          balance={<AccountBalance address={address} />}
+          actions={<AccountButtons address={address} />}
+      >
+        <div className="space-y-8">
+          <AccountTokens address={address} />
+          <AccountTransactions address={address} />
+        </div>
+      </AccountUI>
+  );
 }

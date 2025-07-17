@@ -1,8 +1,7 @@
 /*
  * ===================================================================
  *  1. TAILWIND & LIBRARY IMPORTS
- *  This is the standard, correct order for Tailwind directives.
- *  It replaces the old, conflicting @import rules.
+ *  Using your project's specified import structure.
  * ===================================================================
  */
 @import "tw-animate-css";
@@ -11,10 +10,11 @@
 
 @tailwind utilities;
 
+
 /*
  * ===================================================================
  *  2. THEME & CSS VARIABLE DEFINITIONS
- *  Your custom variables are preserved here. This part was correct.
+ *  Your complete theme definition, preserved as is.
  * ===================================================================
  */
 @theme inline {
@@ -91,7 +91,6 @@
 }
 
 .dark {
-
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.205 0 0);
@@ -125,11 +124,11 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+
 /*
  * ===================================================================
  *  3. BASE & GLOBAL STYLES
- *  Styling for base HTML elements. Redundant resets are removed
- *  as `@tailwind base` (Preflight) now handles them.
+ *  Correctly defined base styles.
  * ===================================================================
  */
 @layer base {
@@ -142,16 +141,11 @@
   }
 }
 
-.wallet-adapter-button-trigger {
-  height: auto;
-  @apply border bg-background shadow-xs hover:bg-accent text-accent-foreground hover:text-accent-foreground dark:bg-input/30 border-input/10 dark:border-input dark:hover:bg-input/50;
-  @apply px-4 py-2 rounded-md text-sm font-semibold shadow-sm transition-all;
-}
 
 /*
  * ===================================================================
  *  4. CUSTOM COMPONENT STYLES
- *  Your custom classes and animations.
+ *  Your custom classes and animations, preserved as is.
  * ===================================================================
  */
 .animate-fade-in {
@@ -170,16 +164,106 @@ section.module {
   @apply backdrop-blur-md bg-white/10 dark:bg-black/20 border border-white/20 dark:border-white/10 rounded-lg p-6 shadow-lg hover:shadow-2xl transition;
 }
 
+
 /*
  * ===================================================================
- *  FIXED: WALLET ADAPTER BUTTON
- *  Removed all `!` characters (`!important`). This allows the
- *  button's essential styles to work, while your theme is
- *  applied as an override. This is the key fix.
+ *  5. **HEADER NAVIGATION MENU FIX**
+ *  THIS IS THE CRITICAL FIX for the "white on white" header menu links.
  * ===================================================================
  */
+header nav a,
+header div[class*="md:hidden"] a {
+  /* Use the main foreground text color, which adapts to the theme. */
+  @apply text-foreground;
+  /* Add a smooth transition for color changes */
+  @apply transition-colors;
+}
+
+header nav a:hover,
+header div[class*="md:hidden"] a:hover {
+  /* Use the accent color for a clear hover state */
+  @apply text-accent-foreground;
+}
+
+header nav a.font-semibold,
+header div[class*="md:hidden"] a.font-semibold {
+  /* Style for the active link, making it more prominent */
+  @apply text-primary dark:text-primary-foreground;
+}
+
+
+/*
+ * ===================================================================
+ *  6. CONSOLIDATED WALLET BUTTON & DROPDOWN STYLES
+ *  All duplicated styles are removed. This is the single source of truth.
+ * ===================================================================
+ */
+
+/* The main connect/disconnect button in the header */
 .wallet-adapter-button-trigger {
-  height: auto;
-  @apply border bg-background shadow-xs hover:bg-accent text-accent-foreground hover:text-accent-foreground dark:bg-input/30 border-input/10 dark:border-input dark:hover:bg-input/50;
   @apply px-4 py-2 rounded-md text-sm font-semibold shadow-sm transition-all;
+
+  /* These rules ensure it is visible and styled correctly in both themes */
+  @apply bg-transparent border border-border text-foreground;
+  @apply hover:bg-accent hover:text-accent-foreground;
+}
+
+/* The dropdown menu that appears after clicking the wallet button */
+.wallet-adapter-dropdown-list {
+  @apply bg-muted text-muted-foreground;
+  @apply border border-border rounded-md shadow-lg;
+}
+
+/* Individual items within the dropdown menu */
+.wallet-adapter-dropdown-list-item {
+  @apply hover:bg-accent hover:text-accent-foreground;
+}
+
+/* Ensures buttons inside the list items don't obscure the hover effect */
+.wallet-adapter-dropdown-list-item button {
+  @apply bg-transparent;
+}
+
+/* Special styling for the 'Disconnect' button's hover state */
+.wallet-adapter-dropdown-disconnect-button {
+  @apply hover:bg-destructive hover:text-destructive-foreground;
+}
+
+/* Ensures wallet icons inherit the correct color */
+.wallet-adapter-button-icon svg {
+  @apply fill-current;
+}
+/* ===================================================================
+ *  MOBILE HEADER MENU LINK FIX (FINAL, HIGHLY SPECIFIC)
+ *  This targets ONLY the links (<a>) inside the slide-out mobile menu
+ *  to fix the "white on white" text issue.
+ *
+ *  This will NOT affect the wallet button or the desktop navigation.
+ * ===================================================================
+ */
+
+/*
+ * This selector is very specific: it targets any link (<a>) that is a descendant
+ * of the <div> that is BOTH the mobile menu (`.md:hidden`) and a `fixed` panel.
+ * This ensures we are only styling the links in that exact pop-out menu.
+ */
+div.md\\:hidden.fixed a {
+  /*
+   * Use your theme's main text color. This variable ensures the text is
+   * black/dark-grey in light mode and white in dark mode.
+   */
+  @apply text-foreground;
+  @apply transition-colors duration-200;
+}
+
+/* Adds a hover effect for better UX on the mobile menu links */
+div.md\\:hidden.fixed a:hover {
+  /* Uses your theme's primary color for the hover state */
+  @apply text-primary;
+}
+
+/* Styles the currently active page link in the mobile menu */
+div.md\\:hidden.fixed a.font-semibold {
+  /* Uses your theme's primary color to make the active link stand out */
+  @apply text-primary;
 }

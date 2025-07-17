@@ -1,47 +1,35 @@
-// File: src/components/app-header.tsx
+'use client';
 
-'use client'
+import React, { useState } from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { Button } from '@/components/ui/button';
+import { Menu, X } from 'lucide-react';
+import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 
-import React, { useState } from 'react'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { Button } from '@/components/ui/button'
-import { Menu, X } from 'lucide-react'
-import { WalletUiDropdown } from '@/components/solana/solana-provider'
-import { WalletMultiButton } from '@solana/wallet-adapter-react-ui'
-
-export function WalletButton() {
-  return <WalletMultiButton />
-}
-
-interface AppHeaderProps {
-  links: { label: string; path: string }[]
-  WalletButton: React.ComponentType
-  WalletUiDropdown: React.ComponentType
-}
-
-export function AppHeader({ links, WalletButton, WalletUiDropdown }: AppHeaderProps) {
-  const pathname = usePathname()
-  const [showMenu, setShowMenu] = useState(false)
+export function AppHeader({ links = [] }: { links: { label: string; path: string }[] }) {
+  const pathname = usePathname();
+  const [showMenu, setShowMenu] = useState(false);
 
   function isActive(path: string) {
-    return path === '/' ? pathname === '/' : pathname.startsWith(path)
+    return path === '/' ? pathname === '/' : pathname.startsWith(path);
   }
 
+  // This component's dark: classes will now be activated by the layout change.
   return (
-      <header className="relative z-50 px-4 py-2 bg-neutral-100 dark:bg-neutral-900 dark:text-neutral-400">
+      <header className="relative z-50 px-4 py-2 bg-neutral-100 dark:bg-neutral-900">
         <div className="mx-auto flex justify-between items-center">
           <div className="flex items-baseline gap-4">
-            <Link className="text-xl font-bold hover:text-neutral-500 dark:hover:text-white" href="/">
-              <span>Scaffold</span>
+            <Link className="text-xl font-bold text-neutral-900 dark:text-neutral-100" href="/">
+              <span>Anaheim</span>
             </Link>
             <nav className="hidden md:flex items-center">
               <ul className="flex gap-4 flex-nowrap items-center">
                 {links.map(({ label, path }) => (
                     <li key={path}>
                       <Link
-                          className={`hover:text-neutral-500 dark:hover:text-white ${
-                              isActive(path) ? 'text-neutral-500 dark:text-white font-semibold' : ''
+                          className={`text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white ${
+                              isActive(path) ? 'font-semibold text-neutral-900 dark:text-white' : ''
                           }`}
                           href={path}
                       >
@@ -58,8 +46,7 @@ export function AppHeader({ links, WalletButton, WalletUiDropdown }: AppHeaderPr
           </Button>
 
           <div className="hidden md:flex items-center gap-4">
-            <WalletButton />
-            <WalletUiDropdown />
+            <WalletMultiButton />
           </div>
 
           {showMenu && (
@@ -69,8 +56,8 @@ export function AppHeader({ links, WalletButton, WalletUiDropdown }: AppHeaderPr
                     {links.map(({ label, path }) => (
                         <li key={path}>
                           <Link
-                              className={`hover:text-neutral-500 dark:hover:text-white block text-lg py-2 ${
-                                  isActive(path) ? 'text-neutral-500 dark:text-white font-semibold' : ''
+                              className={`block text-lg py-2 text-neutral-900 dark:text-neutral-100 hover:text-neutral-500 dark:hover:text-white ${
+                                  isActive(path) ? 'font-semibold' : ''
                               }`}
                               href={path}
                               onClick={() => setShowMenu(false)}
@@ -81,13 +68,12 @@ export function AppHeader({ links, WalletButton, WalletUiDropdown }: AppHeaderPr
                     ))}
                   </ul>
                   <div className="flex flex-col gap-4 mt-4">
-                    <WalletButton />
-                    <WalletUiDropdown />
+                    <WalletMultiButton />
                   </div>
                 </div>
               </div>
           )}
         </div>
       </header>
-  )
+  );
 }

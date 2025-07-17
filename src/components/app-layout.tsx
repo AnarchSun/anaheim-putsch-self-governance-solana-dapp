@@ -1,37 +1,27 @@
-// File: src/components/app-layout.tsx
-'use client'
+// FILE: src/components/app-layout.tsx
+'use client';
 
-import React from 'react'
-import { Toaster } from './ui/sonner'
-import { AppHeader } from '@/components/app-header'
-import { AppFooter } from '@/components/app-footer'
-import { AccountChecker } from '@/components/account/account-ui'
-import { WalletButton } from '@/components/wallet/wallet-button'
-import WalletUiDropdown from '@/components/wallet/ui/wallet-ui-dropdown'
-import {ThemeProvider} from "next-themes";
+import React, { ReactNode } from 'react';
+import { AppHeader } from './app-header';
+import { AppFooter } from './app-footer';
 
-export function AppLayout({
-                              children,
-                              links,
-                          }: {
-    children: React.ReactNode
-    links: { label: string; path: string }[]
-}) {
+interface AppLayoutProps {
+    children: ReactNode;
+    links: { label: string; path: string }[];
+}
+
+export function AppLayout({ children, links }: AppLayoutProps) {
     return (
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-            <div className="flex flex-col min-h-screen">
-                <AppHeader
-                    links={links}
-                    WalletButton={WalletButton}
-                    WalletUiDropdown={WalletUiDropdown}
-                />
-                <main className="flex-grow container mx-auto p-4">
-                        <AccountChecker />
-                    {children}
-                </main>
-                <AppFooter />
-            </div>
-            <Toaster />
-        </ThemeProvider>
-    )
+        <div className="flex min-h-screen flex-col">
+            {/* FIX: The call to AppHeader is now simple and correct.
+          No more WalletButton={undefined} or WalletUiDropdown={undefined}. */}
+            <AppHeader links={links} />
+
+            <main className="flex-grow">
+                {children}
+            </main>
+
+            <AppFooter />
+        </div>
+    );
 }

@@ -1,10 +1,10 @@
-// File: src/components/solana/solana-provider.tsx
+// src/providers/solana-provider.tsx
 'use client'
 
 import dynamic from 'next/dynamic'
 import React, { ReactNode } from 'react'
 import type { WalletUiDropdownProps } from '@wallet-ui/react'
-import { WalletButton } from './WalletButton'
+
 
 export function SolanaProvider({ children }: { children: ReactNode }) {
     return <>{children}</>
