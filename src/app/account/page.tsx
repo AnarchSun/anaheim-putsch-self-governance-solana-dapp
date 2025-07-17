@@ -5,7 +5,7 @@ import { PublicKey } from '@solana/web3.js'
 import AccountListFeature from '@/components/account/account-list-feature'
 import { CreateTransaction } from '@/components/account/createTransaction'
 import { AccountUI } from '@/components/account/account-ui'
-import { WalletInfo } from '@/components/WalletInfo'
+import { WalletInfo } from '@/components/wallet/WalletInfo'
 import { StakeStatus } from '@/components/stake/StakeStatus'
 import { Rapper } from '@/components/rapper'
 

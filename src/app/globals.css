@@ -1,12 +1,22 @@
-@import 'tailwindcss';
-@import 'tw-animate-css';
+/*
+ * ===================================================================
+ *  1. TAILWIND & LIBRARY IMPORTS
+ *  This is the standard, correct order for Tailwind directives.
+ *  It replaces the old, conflicting @import rules.
+ * ===================================================================
+ */
+@import "tw-animate-css";
+@import "tailwindcss";
 @import "tailwindcss/preflight";
 
 @tailwind utilities;
 
-
-@custom-variant dark (&:is(.dark *));
-
+/*
+ * ===================================================================
+ *  2. THEME & CSS VARIABLE DEFINITIONS
+ *  Your custom variables are preserved here. This part was correct.
+ * ===================================================================
+ */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -81,6 +91,7 @@
 }
 
 .dark {
+
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.205 0 0);
@@ -113,49 +124,62 @@
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
 }
+
+/*
+ * ===================================================================
+ *  3. BASE & GLOBAL STYLES
+ *  Styling for base HTML elements. Redundant resets are removed
+ *  as `@tailwind base` (Preflight) now handles them.
+ * ===================================================================
+ */
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    overflow-x: hidden;
+  }
+}
+
+.wallet-adapter-button-trigger {
+  height: auto;
+  @apply border bg-background shadow-xs hover:bg-accent text-accent-foreground hover:text-accent-foreground dark:bg-input/30 border-input/10 dark:border-input dark:hover:bg-input/50;
+  @apply px-4 py-2 rounded-md text-sm font-semibold shadow-sm transition-all;
+}
+
+/*
+ * ===================================================================
+ *  4. CUSTOM COMPONENT STYLES
+ *  Your custom classes and animations.
+ * ===================================================================
+ */
 .animate-fade-in {
   animation: fadeIn 1s ease-in-out;
 }
 
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-
-  body {
-    @apply bg-background text-foreground;
-      background: black;
-      color: white;
-  }
-
-  section.module {
-    @apply rounded-2xl border border-border bg-card text-card-foreground shadow-xl p-6 transition duration-300 hover:shadow-2xl hover:ring-2 hover:ring-accent/50;
-  }
-
-  .card-shiny {
-    @apply bg-gradient-to-br from-primary to-accent text-primary-foreground rounded-xl shadow-lg p-4 ring-1 ring-border/10 hover:shadow-2xl hover:ring-accent;
-  }
-
-  .glass-box {
-    @apply backdrop-blur-md bg-white/10 dark:bg-black/20 border border-white/20 dark:border-white/10 rounded-lg p-6 shadow-lg hover:shadow-2xl transition;
-  }
+section.module {
+  @apply rounded-2xl border border-border bg-card text-card-foreground shadow-xl p-6 transition duration-300 hover:shadow-2xl hover:ring-2 hover:ring-accent/50;
 }
 
-*, *::before, *::after {
-  box-sizing: inherit;
+.card-shiny {
+  @apply bg-gradient-to-br from-primary to-accent text-primary-foreground rounded-xl shadow-lg p-4 ring-1 ring-border/10 hover:shadow-2xl hover:ring-accent;
 }
 
-html, body {
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
-  background-color: black;
+.glass-box {
+  @apply backdrop-blur-md bg-white/10 dark:bg-black/20 border border-white/20 dark:border-white/10 rounded-lg p-6 shadow-lg hover:shadow-2xl transition;
 }
 
+/*
+ * ===================================================================
+ *  FIXED: WALLET ADAPTER BUTTON
+ *  Removed all `!` characters (`!important`). This allows the
+ *  button's essential styles to work, while your theme is
+ *  applied as an override. This is the key fix.
+ * ===================================================================
+ */
 .wallet-adapter-button-trigger {
-  height: auto !important;
-  @apply !border !bg-background !shadow-xs hover:!bg-accent !text-accent-foreground hover:!text-accent-foreground dark:!bg-input/30 !border-input/10 dark:!border-input dark:hover:!bg-input/50;
-  @apply !px-2 !py-[6px] !rounded-md !text-sm !font-semibold !shadow-sm !transition-all;
+  height: auto;
+  @apply border bg-background shadow-xs hover:bg-accent text-accent-foreground hover:text-accent-foreground dark:bg-input/30 border-input/10 dark:border-input dark:hover:bg-input/50;
+  @apply px-4 py-2 rounded-md text-sm font-semibold shadow-sm transition-all;
 }

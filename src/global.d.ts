@@ -1,9 +1,17 @@
-import type { Program } from '@coral-xyz/anchor'
-import type { Anaheim } from './anchor/target/@types/anaheim'
+// FILE: src/global.d.ts
 
+/**
+ * This file is for global TypeScript declarations.
+ * TypeScript automatically includes any `.d.ts` files in its compilation.
+ */
 declare global {
-  var anchor: typeof import('@coral-xyz/anchor')
-  var program: Program<Anaheim>
+  interface BigInt {
+    /**
+     * Enables BigInt to be serialized by JSON.stringify()
+     */
+    toJSON(): string;
+  }
 }
 
-export {}
+// This empty export statement turns the file into a module.
+export {};

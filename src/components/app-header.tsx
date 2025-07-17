@@ -8,6 +8,11 @@ import { usePathname } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Menu, X } from 'lucide-react'
 import { WalletUiDropdown } from '@/components/solana/solana-provider'
+import { WalletMultiButton } from '@solana/wallet-adapter-react-ui'
+
+export function WalletButton() {
+  return <WalletMultiButton />
+}
 
 interface AppHeaderProps {
   links: { label: string; path: string }[]
