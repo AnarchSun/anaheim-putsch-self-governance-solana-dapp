@@ -6,24 +6,23 @@ import { useParams } from 'next/navigation';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 // --- Corrected Library Imports ---
-import { assertIsAddress } from '@solana/addresses';
-import { Lamports } from 'gill'; // FIX: Lamports is now imported from 'gill'
-import { useSolanaClient } from 'gill-react';
+import { assertIsAddress, Lamports } from 'gill';
+// FIX: Import the standard 'useConnection' hook and 'PublicKey' class.
+import { useConnection } from '@solana/wallet-adapter-react';
+import { PublicKey, LAMPORTS_PER_SOL } from '@solana/web3.js';
 
-// --- Corrected Local Component Imports ---
-import AccountUI from './account-ui'; // FIX: Use default import for AccountUI
+// --- Local Component Imports ---
+import AccountUI from './account-ui';
 import { AccountButtons } from './AccountButtons';
 import { AccountTransactions } from './AccountTransactions';
 import { AppAlert } from '../app-alert';
 import { Button } from '../ui/button';
-
-// --- Utility and Constant Imports ---
 import { ellipsify } from '@/lib/utils';
-import { LAMPORTS_PER_SOL } from '@solana/web3.js';
 
-// HOOK: For requesting an airdrop
+// HOOK: For requesting an airdrop (now uses standard 'useConnection')
 function useAirdropMutation(address: string) {
-  const client = useSolanaClient();
+  // FIX: Get the raw connection object directly.
+  const { connection } = useConnection();
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -32,11 +31,10 @@ function useAirdropMutation(address: string) {
       assertIsAddress(address);
       try {
         const lamportsToRequest = (amount * LAMPORTS_PER_SOL) as unknown as Lamports;
-        const signature = await client.rpc
-            .requestAirdrop(address, lamportsToRequest)
-            .send();
-
-        console.log(`Airdrop requested: ${signature}`);
+        // FIX: Use the standard 'requestAirdrop' method from the connection object.
+        const signature = await connection.requestAirdrop(new PublicKey(address), lamportsToRequest);
+        await connection.confirmTransaction(signature, 'confirmed'); // Wait for confirmation
+        console.log(`Airdrop confirmed: ${signature}`);
         return signature;
       } catch (error) {
         console.error('Airdrop failed', error);
@@ -49,29 +47,32 @@ function useAirdropMutation(address: string) {
   });
 }
 
-// HOOK: For getting the account balance
+// HOOK: For getting the account balance (now uses standard 'useConnection')
 function useGetBalance(address: string) {
-  const client = useSolanaClient();
+  // FIX: Get the raw connection object directly.
+  const { connection } = useConnection();
 
   return useQuery({
     queryKey: ['balance', address],
     enabled: !!address,
     queryFn: async () => {
       assertIsAddress(address);
-      const accountInfo = await client.rpc.getAccountInfo(address).send();
-      if (!accountInfo.value) {
+      // FIX: Use the standard 'getAccountInfo' method from the connection object.
+      const accountInfo = await connection.getAccountInfo(new PublicKey(address));
+      if (!accountInfo) {
         throw new Error('Account not found');
       }
-      return Number(accountInfo.value.lamports) / LAMPORTS_PER_SOL;
+      return accountInfo.lamports / LAMPORTS_PER_SOL;
     },
     retry: false,
   });
 }
 
+// (The rest of the file remains the same)
+
 // COMPONENT: Displays the balance using the hook
 const AccountBalance: React.FC<{ address: string }> = ({ address }) => {
   const { data, isLoading } = useGetBalance(address);
-
   if (isLoading) return <span className="text-muted">Loading Balance…</span>;
   return <span>{(data ?? 0).toFixed(4)} SOL</span>;
 };
@@ -81,52 +82,36 @@ const AccountTokens: React.FC<{ address: string }> = ({ address }) => {
   return <div>Tokens for {ellipsify(address)}</div>;
 };
 
-
 // --- MAIN FEATURE COMPONENT ---
 export default function AccountDetailFeature() {
   const params = useParams();
-
   const address = useMemo(() => {
     const addr = params.address;
     if (!addr || typeof addr !== 'string') return undefined;
-    try {
-      assertIsAddress(addr);
-      return addr;
-    } catch (e) {
-      return undefined;
-    }
+    try { assertIsAddress(addr); return addr; } catch (e) { return undefined; }
   }, [params.address]);
 
   const balanceQuery = useGetBalance(address || '');
   const airdropMutation = useAirdropMutation(address || '');
 
-  // 1. Handle case where an address is invalid or not provided in URL
   if (!address) {
     return (
         <div className="container py-10">
-          <AppAlert action={null}>
-            <p className="text-center">Invalid address provided in the URL.</p>
-          </AppAlert>
+          <AppAlert action={null}><p className="text-center">Invalid address provided in the URL.</p></AppAlert>
         </div>
     );
   }
 
-  // 2. Handle loading state
   if (balanceQuery.isLoading) {
     return <div className="p-10 text-center">Loading account details...</div>;
   }
 
-  // 3. Handle error state (account not found) by showing the airdrop UI
   if (balanceQuery.isError) {
     return (
         <div className="container py-10">
           <AppAlert
               action={
-                <Button
-                    variant="outline"
-                    onClick={() => airdropMutation.mutate(1)}
-                    disabled={airdropMutation.isPending}
-                >
+                <Button variant="outline" onClick={() => airdropMutation.mutate(1)} disabled={airdropMutation.isPending}>
                   {airdropMutation.isPending ? 'Requesting...' : 'Request 1 SOL Airdrop'}
                 </Button>
               }
@@ -140,7 +125,6 @@ export default function AccountDetailFeature() {
     );
   }
 
-  // 4. Handle success state: Render the full AccountUI
   return (
       <AccountUI
           address={address}

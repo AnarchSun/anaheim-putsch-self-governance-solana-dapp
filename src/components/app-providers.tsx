@@ -1,52 +1,37 @@
 // FILE: src/components/app-providers.tsx
 'use client';
 
-import React, { useMemo } from 'react';
+import React, { ReactNode, useMemo } from 'react';
+
+// --- Imports for Solana Wallet Adapter ---
 import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react';
 import { WalletModalProvider } from '@solana/wallet-adapter-react-ui';
-import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
-import { clusterApiUrl } from '@solana/web3.js';
 import { PhantomWalletAdapter, SolflareWalletAdapter } from '@solana/wallet-adapter-wallets';
+import { clusterApiUrl } from '@solana/web3.js';
 
-// There is NO import from '@wallet-ui/react' here.
+// --- Imports for TanStack Query ---
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
+// Require the wallet adapter's base styles.
 require('@solana/wallet-adapter-react-ui/styles.css');
 
-if (typeof window !== 'undefined') {
-    (BigInt.prototype as any).toJSON = function () {
-        return this.toString();
-    };
-}
+// Create a single instance of the QueryClient.
+const queryClient = new QueryClient();
 
-export function AppProviders({ children }: { children: React.ReactNode }) {
-    const network = WalletAdapterNetwork.Devnet;
-    const endpoint = useMemo(() => clusterApiUrl(network), [network]);
-
+export function AppProviders({ children }: { children: ReactNode }) {
+    const endpoint = clusterApiUrl('devnet');
     const wallets = useMemo(
-        () => [
-            new PhantomWalletAdapter(),
-            new SolflareWalletAdapter(),
-        ],
-        [network]
+        () => [new PhantomWalletAdapter(), new SolflareWalletAdapter()],
+        []
     );
 
-    // --- DEBUGGING STEP ---
-    // This will confirm in your browser's console that the wallet array is valid.
-    // If this logs an empty array or undefined, that's the root cause.
-    console.log('Wallets passed to WalletProvider:', wallets);
-
     return (
-        <ConnectionProvider endpoint={endpoint}>
-            <WalletProvider wallets={wallets} autoConnect>
-                {/*
-          FIX: The structure is simplified back to the standard.
-          There is no WalletUiProvider wrapper.
-          The context from WalletProvider is used directly by all child components.
-        */}
-                <WalletModalProvider>
-                    {children}
-                </WalletModalProvider>
-            </WalletProvider>
-        </ConnectionProvider>
+        <QueryClientProvider client={queryClient}>
+            <ConnectionProvider endpoint={endpoint}>
+                <WalletProvider wallets={wallets} autoConnect>
+                    <WalletModalProvider>{children}</WalletModalProvider>
+                </WalletProvider>
+            </ConnectionProvider>
+        </QueryClientProvider>
     );
 }

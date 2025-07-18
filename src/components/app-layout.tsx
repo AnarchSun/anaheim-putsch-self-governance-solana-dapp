@@ -13,11 +13,16 @@ interface AppLayoutProps {
 export function AppLayout({ children, links }: AppLayoutProps) {
     return (
         <div className="flex min-h-screen flex-col">
-            {/* FIX: The call to AppHeader is now simple and correct.
-          No more WalletButton={undefined} or WalletUiDropdown={undefined}. */}
             <AppHeader links={links} />
 
-            <main className="flex-grow">
+            {/*
+        FIX: Add styling to the <main> element.
+        - 'flex-grow': Ensures the main content area expands to fill available space, pushing the footer down.
+        - 'container': This is a common Tailwind pattern to center content and give it a max-width.
+        - 'mx-auto': Horizontally centers the container.
+        - 'p-6' or 'py-10': Adds padding so content isn't stuck to the edges of the screen.
+      */}
+            <main className="flex-grow container mx-auto p-6 lg:p-10">
                 {children}
             </main>
 

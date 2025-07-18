@@ -1,3 +1,4 @@
+// FILE: src/components/app-header.tsx
 'use client';
 
 import React, { useState } from 'react';
@@ -5,7 +6,9 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Menu, X } from 'lucide-react';
-import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
+
+// FIX: Import your new, client-side-only button wrapper.
+import ClientWalletMultiButton from './wallet/ClientWalletMultiButton';
 
 export function AppHeader({ links = [] }: { links: { label: string; path: string }[] }) {
   const pathname = usePathname();
@@ -15,7 +18,6 @@ export function AppHeader({ links = [] }: { links: { label: string; path: string
     return path === '/' ? pathname === '/' : pathname.startsWith(path);
   }
 
-  // This component's dark: classes will now be activated by the layout change.
   return (
       <header className="relative z-50 px-4 py-2 bg-neutral-100 dark:bg-neutral-900">
         <div className="mx-auto flex justify-between items-center">
@@ -46,7 +48,8 @@ export function AppHeader({ links = [] }: { links: { label: string; path: string
           </Button>
 
           <div className="hidden md:flex items-center gap-4">
-            <WalletMultiButton />
+            {/* FIX: Use the new safe component. */}
+            <ClientWalletMultiButton />
           </div>
 
           {showMenu && (
@@ -68,7 +71,8 @@ export function AppHeader({ links = [] }: { links: { label: string; path: string
                     ))}
                   </ul>
                   <div className="flex flex-col gap-4 mt-4">
-                    <WalletMultiButton />
+                    {/* FIX: Use the new safe component in the mobile menu as well. */}
+                    <ClientWalletMultiButton />
                   </div>
                 </div>
               </div>
