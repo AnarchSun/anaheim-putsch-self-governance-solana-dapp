@@ -18,7 +18,7 @@ import { AppAlert } from '@/components/app-alert';
 /**
  * Renders the results of the stake activation query.
  */
-function StakeResult({ data }: { data: any }) { // TODO: Replace 'any' with the actual type
+function StakeResult({ data }: { data: any }) { // TODO: Replace 'any' with a proper type
     return (
         <div className="mt-4 space-y-2 rounded-lg border bg-card p-4 text-left">
             <h3 className="text-lg font-bold">Stake Account Details</h3>
@@ -37,24 +37,15 @@ export default function StakePage() {
     const [stakeAddress, setStakeAddress] = useState<string>('');
     const [addressToQuery, setAddressToQuery] = useState<string>('');
 
-    // Use TanStack Query to manage the data fetching lifecycle.
     const { data, error, isLoading, isError } = useQuery({
         queryKey: ['stakeActivation', addressToQuery],
-
-        // ===================================================================
-        // FIX #1: The queryFn now correctly calls fetchStakeState.
-        // It passes a single object with the required properties, resolving TS2554.
-        // ===================================================================
         queryFn: async () => {
             assertIsAddress(addressToQuery);
-            // This assumes fetchStakeState expects an object like { connection, address }.
-            // Adjust the property names if your function expects something different.
             return fetchStakeState({
                 connection,
                 address: new PublicKey(addressToQuery)
             });
         },
-
         enabled: !!addressToQuery,
         retry: 1,
     });
@@ -68,8 +59,12 @@ export default function StakePage() {
         }
     };
 
+    // ===================================================================
+    // THIS IS THE FIX.
+    // The outer div no longer has conflicting layout classes like 'container' or 'mx-auto'.
+    // It will now fit perfectly inside the .content-box provided by app-layout.tsx.
+    // ===================================================================
     return (
-        // The container and mx-auto classes have been removed to prevent layout conflicts.
         <div className="space-y-6">
             <div className="text-center">
                 <h1 className="text-3xl font-bold">Stake Account Inspector</h1>
@@ -94,12 +89,6 @@ export default function StakePage() {
             <div className="mt-6">
                 {isLoading && <p className="text-center">Fetching account details...</p>}
 
-                {/*
-                  ===================================================================
-                  FIX #2: The 'error' variable is now used to display a message.
-                  This resolves the TS6133 "unused variable" warning.
-                  ===================================================================
-                */}
                 {isError && (
                     <AppAlert>
                         <div className="text-center font-semibold text-red-500">

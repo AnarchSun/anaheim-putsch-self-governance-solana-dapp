@@ -1,37 +1,30 @@
 // FILE: src/components/app-providers.tsx
 'use client';
 
-import React, { ReactNode, useMemo } from 'react';
-
-// --- Imports for Solana Wallet Adapter ---
 import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react';
 import { WalletModalProvider } from '@solana/wallet-adapter-react-ui';
-import { PhantomWalletAdapter, SolflareWalletAdapter } from '@solana/wallet-adapter-wallets';
-import { clusterApiUrl } from '@solana/web3.js';
-
-// --- Imports for TanStack Query ---
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import React, { ReactNode, useMemo } from 'react';
 
-// Require the wallet adapter's base styles.
+// This line is essential for the wallet dropdown to be styled correctly.
 require('@solana/wallet-adapter-react-ui/styles.css');
 
-// Create a single instance of the QueryClient.
-const queryClient = new QueryClient();
-
 export function AppProviders({ children }: { children: ReactNode }) {
-    const endpoint = clusterApiUrl('devnet');
-    const wallets = useMemo(
-        () => [new PhantomWalletAdapter(), new SolflareWalletAdapter()],
-        []
-    );
+    const [queryClient] = React.useState(() => new QueryClient());
+    const wallets = useMemo(() => [], []);
+    const endpoint = process.env.NEXT_PUBLIC_SOLANA_RPC_HOST || 'https://api.devnet.solana.com';
 
     return (
-        <QueryClientProvider client={queryClient}>
-            <ConnectionProvider endpoint={endpoint}>
-                <WalletProvider wallets={wallets} autoConnect>
-                    <WalletModalProvider>{children}</WalletModalProvider>
-                </WalletProvider>
-            </ConnectionProvider>
-        </QueryClientProvider>
+        <ConnectionProvider endpoint={endpoint}>
+            <WalletProvider wallets={wallets} autoConnect>
+                <WalletModalProvider>
+                    <QueryClientProvider client={queryClient}>
+                        {children}
+                        <ReactQueryDevtools initialIsOpen={false} />
+                    </QueryClientProvider>
+                </WalletModalProvider>
+            </WalletProvider>
+        </ConnectionProvider>
     );
 }
