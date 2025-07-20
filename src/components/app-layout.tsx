@@ -1,32 +1,39 @@
 // FILE: src/components/app-layout.tsx
-'use client';
+'use client'
 
-import React, { ReactNode } from 'react';
-import { AppHeader } from './app-header';
-import { AppFooter } from './app-footer';
+import { ThemeProvider } from './theme-provider'
+import { Toaster } from './ui/sonner'
+import { AppHeader } from '@/components/app-header'
+import React from 'react'
+import { AppFooter } from '@/components/app-footer'
 
-interface AppLayoutProps {
-    children: ReactNode;
-    links: { label: string; path: string }[];
-}
-
-export function AppLayout({ children, links }: AppLayoutProps) {
+export function AppLayout({
+                              children,
+                              links,
+                          }: {
+    children: React.ReactNode
+    links: { label: string; path: string }[]
+}) {
     return (
-        <div className="flex min-h-screen flex-col">
-            <AppHeader links={links} />
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+            <div className="flex flex-col min-h-screen">
+                <AppHeader links={links} />
 
-            {/*
-        FIX: Add styling to the <main> element.
-        - 'flex-grow': Ensures the main content area expands to fill available space, pushing the footer down.
-        - 'container': This is a common Tailwind pattern to center content and give it a max-width.
-        - 'mx-auto': Horizontally centers the container.
-        - 'p-6' or 'py-10': Adds padding so content isn't stuck to the edges of the screen.
-      */}
-            <main className="flex-grow container mx-auto p-6 lg:p-10">
-                {children}
-            </main>
+                {/*
+          This main area now only has padding.
+          The pages will handle the centering and max-width.
+          This gives us page-by-page layout control.
+        */}
+                <main className="flex-grow p-4 sm:p-8">
 
-            <AppFooter />
-        </div>
-    );
+                    {/* We now directly render the children. */}
+                    {/* The pages themselves will decide if they need a box. */}
+                    {children}
+
+                </main>
+                <AppFooter />
+            </div>
+            <Toaster />
+        </ThemeProvider>
+    )
 }

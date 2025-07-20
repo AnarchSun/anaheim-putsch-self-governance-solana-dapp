@@ -1,4 +1,4 @@
-// src/components/dashboard/dashboard-feature.tsx
+// FILE: src/components/dashboard/dashboard-feature.tsx
 
 import { AppHero } from '@/components/app-hero'
 
@@ -12,9 +12,11 @@ const links: { label: string; href: string }[] = [
 
 export function DashboardFeature() {
     return (
-        <div>
+        // The outer div no longer has any layout classes.
+        // It will now fit perfectly inside the .content-box from app-layout.
+        <div className="text-center">
             <AppHero title="gm" subtitle="Say hi to your new Solana app." />
-            <div className="max-w-xl mx-auto py-6 sm:px-6 lg:px-8 text-center">
+            <div className="py-6">
                 <div className="space-y-2">
                     <p>Here are some helpful links to get you started.</p>
                     {links.map((link, index) => (

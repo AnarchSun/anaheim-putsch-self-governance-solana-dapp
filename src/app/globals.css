@@ -10,6 +10,8 @@
 
 @tailwind utilities;
 
+@custom-variant dark (&:is(.dark *));
+body { border: 10px solid red !important; }
 
 /*
  * ===================================================================
@@ -132,16 +134,10 @@
  * ===================================================================
  */
 @layer base {
-  * {
-    @apply border-border;
-  }
   body {
     @apply bg-background text-foreground;
-    overflow-x: hidden;
   }
 }
-
-
 /*
  * ===================================================================
  *  4. CUSTOM COMPONENT STYLES
@@ -164,33 +160,18 @@ section.module {
   @apply backdrop-blur-md bg-white/10 dark:bg-black/20 border border-white/20 dark:border-white/10 rounded-lg p-6 shadow-lg hover:shadow-2xl transition;
 }
 
-
-/*
- * ===================================================================
- *  5. **HEADER NAVIGATION MENU FIX**
- *  THIS IS THE CRITICAL FIX for the "white on white" header menu links.
- * ===================================================================
- */
-header nav a,
-header div[class*="md:hidden"] a {
-  /* Use the main foreground text color, which adapts to the theme. */
-  @apply text-foreground;
-  /* Add a smooth transition for color changes */
-  @apply transition-colors;
+.content-box {
+  --tw-bg-opacity: 1;
+  background-color: oklch(0.205 0 0 / var(--tw-bg-opacity));
+  padding: 1.5rem; /* or 2rem */
+  border-radius: 0.75rem;
+  border-width: 2px;
+  border-color: #d946ef;
 }
 
-header nav a:hover,
-header div[class*="md:hidden"] a:hover {
-  /* Use the accent color for a clear hover state */
-  @apply text-accent-foreground;
+.max-w-5xl {
+  max-width: 64rem;
 }
-
-header nav a.font-semibold,
-header div[class*="md:hidden"] a.font-semibold {
-  /* Style for the active link, making it more prominent */
-  @apply text-primary dark:text-primary-foreground;
-}
-
 
 /*
  * ===================================================================
@@ -241,29 +222,11 @@ header div[class*="md:hidden"] a.font-semibold {
  *  This will NOT affect the wallet button or the desktop navigation.
  * ===================================================================
  */
-
-/*
- * This selector is very specific: it targets any link (<a>) that is a descendant
- * of the <div> that is BOTH the mobile menu (`.md:hidden`) and a `fixed` panel.
- * This ensures we are only styling the links in that exact pop-out menu.
- */
-div.md\\:hidden.fixed a {
-  /*
-   * Use your theme's main text color. This variable ensures the text is
-   * black/dark-grey in light mode and white in dark mode.
-   */
-  @apply text-foreground;
-  @apply transition-colors duration-200;
+.animate-fade-in {
+  animation: fadeIn 1s ease-in-out;
 }
-
-/* Adds a hover effect for better UX on the mobile menu links */
-div.md\\:hidden.fixed a:hover {
-  /* Uses your theme's primary color for the hover state */
-  @apply text-primary;
-}
-
-/* Styles the currently active page link in the mobile menu */
-div.md\\:hidden.fixed a.font-semibold {
-  /* Uses your theme's primary color to make the active link stand out */
-  @apply text-primary;
+@layer components {
+  .content-box {
+    @apply bg-card p-6 md:p-8 rounded-xl border-2 border-fuchsia-500;
+  }
 }

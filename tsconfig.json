@@ -1,5 +1,10 @@
+// FILE: tsconfig.json
+
 {
   "compilerOptions": {
+    // ==================================================================
+    // Your existing settings are preserved below.
+    // ==================================================================
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
@@ -12,7 +17,18 @@
     "noImplicitReturns": true,
     "strictFunctionTypes": true,
     "module": "ESNext",
-    "moduleResolution": "Node",
+
+    // ==================================================================
+    // THIS IS THE ONLY CHANGE.
+    // Changing "Node" to "bundler" allows TypeScript to find modern
+    // library type definitions, like those used by Tailwind CSS.
+    // This will resolve the TS2307 error.
+    // ==================================================================
+    "moduleResolution": "bundler",
+
+    // ==================================================================
+    // The rest of your settings are preserved.
+    // ==================================================================
     "target": "ESNext",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
@@ -30,6 +46,7 @@
     },
     "plugins": [{ "name": "next" }]
   },
+  // Your "include" and "exclude" arrays are preserved exactly as they were.
   "include": [
     "next-env.d.ts",
     "**/*.ts",

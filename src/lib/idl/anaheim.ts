@@ -1,0 +1,32 @@
+// FILE: src/lib/idl/anaheim.ts
+import type { Idl } from '@coral-xyz/anchor';
+
+// This is your complete, authoritative IDL from anaheim.json.
+// By typing it as `Idl` from the Anchor library, we ensure it meets Anchor's structural requirements.
+export const IDL: Idl = {
+    "address": "8RmTVazK1G3ZJ7EqYZC9FYJejFge98Vyz7T4zVdY8okX",
+    "metadata": { "name": "anaheim", "version": "0.1.0", "spec": "0.1.0", "description": "Created with Anchor" },
+    "instructions": [
+        { "name": "close", "discriminator": [98, 165, 201, 177, 108, 65, 206, 96], "accounts": [{"name": "anaheim", "writable": true}, {"name": "payer", "writable": true, "signer": true}], "args": []},
+        { "name": "create_post", "discriminator": [123, 92, 184, 29, 231, 24, 15, 202], "accounts": [{"name": "post_account", "writable": true, "signer": true}, {"name": "user", "writable": true, "signer": true}, {"name": "system_program", "address": "11111111111111111111111111111111"}], "args": [{"name": "content", "type": "string"}]},
+        { "name": "create_user", "discriminator": [108, 227, 130, 130, 252, 109, 75, 218], "accounts": [{"name": "user_account", "writable": true, "signer": true}, {"name": "authority", "writable": true, "signer": true}, {"name": "system_program", "address": "11111111111111111111111111111111"}], "args": [{"name": "username", "type": "string"}]},
+        { "name": "decrement", "discriminator": [106, 227, 168, 59, 248, 27, 150, 101], "accounts": [{"name": "anaheim", "writable": true}], "args": []},
+        { "name": "increment", "discriminator": [11, 18, 104, 9, 104, 174, 59, 33], "accounts": [{"name": "anaheim", "writable": true}], "args": []},
+        { "name": "initialize", "discriminator": [175, 175, 109, 31, 13, 152, 155, 237], "accounts": [{"name": "anaheim", "writable": true, "signer": true}, {"name": "payer", "writable": true, "signer": true}, {"name": "system_program", "address": "11111111111111111111111111111111"}], "args": []},
+        { "name": "set", "discriminator": [198, 51, 53, 241, 116, 29, 126, 194], "accounts": [{"name": "anaheim", "writable": true}], "args": [{"name": "value", "type": "u64"}]}
+    ],
+    "accounts": [
+        { "name": "AnaheimAccount", "discriminator": [26, 253, 236, 239, 22, 181, 47, 158]},
+        { "name": "PostAccount", "discriminator": [85, 236, 139, 84, 240, 243, 196, 23]},
+        { "name": "UserAccount", "discriminator": [211, 33, 136, 16, 186, 110, 242, 127]}
+    ],
+    "types": [
+        { "name": "AnaheimAccount", "type": { "kind": "struct", "fields": [{"name": "authority", "type": "pubkey"}, {"name": "count", "type": "u64"}, {"name": "value", "type": "u8"}]}},
+        { "name": "PostAccount", "type": { "kind": "struct", "fields": [{"name": "content", "type": "string"}, {"name": "author", "type": "pubkey"}, {"name": "timestamp", "type": "i64"}]}},
+        { "name": "UserAccount", "docs": ["─── COMPTES STRUCTURÉS ─────────────────────────────────────────────────────"], "type": { "kind": "struct", "fields": [{"name": "name", "type": "string"}, {"name": "user_authority", "type": "pubkey"}]}}
+    ],
+    "errors": [],
+};
+
+// This creates the specific TypeScript type for YOUR program from the generic Idl type.
+export type Anaheim = typeof IDL;
