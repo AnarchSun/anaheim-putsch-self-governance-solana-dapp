@@ -1,9 +1,9 @@
 import { useStakeActivationStatus } from '@/hooks/stake/useStakeActivationStatus'
-import { useSolanaClient } from '@/hooks/solana/useSolanaClient'
 import { PublicKey } from '@solana/web3.js'
+import {useSolanaClient} from "gill-react";
 
 export function StakeStatus({ address }: { address: string }) {
-  const connection = useSolanaClient('devnet')
+  const connection = useSolanaClient()
   const pubkey = new PublicKey(address)
   const { status, error } = useStakeActivationStatus(pubkey, connection)
 

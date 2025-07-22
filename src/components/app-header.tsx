@@ -4,7 +4,7 @@
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { ThemeSelect } from '@/components/theme-select';
-import { ClientWalletMultiButton } from '@/components/wallet/ClientWalletMultiButton';
+import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 
 export function AppHeader({ links = [] }: { links: { label: string; path: string }[] }) {
   const pathname = usePathname();
@@ -39,7 +39,7 @@ export function AppHeader({ links = [] }: { links: { label: string; path: string
 
           {/* Right Side: Wallet Button and Theme Selector */}
           <div className="flex items-center gap-x-4">
-            <ClientWalletMultiButton />
+            <WalletMultiButton />
             <ThemeSelect />
           </div>
         </div>

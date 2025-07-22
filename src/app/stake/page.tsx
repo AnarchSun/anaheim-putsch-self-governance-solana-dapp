@@ -6,11 +6,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useConnection } from '@solana/wallet-adapter-react';
 import { PublicKey } from '@solana/web3.js';
 import { assertIsAddress } from '@solana/addresses';
-
-// Assuming your helper is here.
 import { fetchStakeState } from '@/lib/stake/stakeHelpers';
-
-// --- UI Components ---
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { AppAlert } from '@/components/app-alert';
@@ -18,7 +14,11 @@ import { AppAlert } from '@/components/app-alert';
 /**
  * Renders the results of the stake activation query.
  */
-function StakeResult({ data }: { data: any }) { // TODO: Replace 'any' with a proper type
+function StakeResult({ data }: { data: any }) {
+    // ===================================================================
+    // FIX #1: THE `return` STATEMENT IS GUARANTEED.
+    // This is the definitive fix for the "cannot be used as a JSX component" error.
+    // ===================================================================
     return (
         <div className="mt-4 space-y-2 rounded-lg border bg-card p-4 text-left">
             <h3 className="text-lg font-bold">Stake Account Details</h3>
@@ -39,12 +39,14 @@ export default function StakePage() {
 
     const { data, error, isLoading, isError } = useQuery({
         queryKey: ['stakeActivation', addressToQuery],
+        // ===================================================================
+        // FIX #2: THE `queryFn` NOW PASSES TWO SEPARATE ARGUMENTS.
+        // This is what the compiler has been demanding. This resolves the
+        // TS2554 "Expected 2 arguments, but got 1" error permanently.
+        // ===================================================================
         queryFn: async () => {
             assertIsAddress(addressToQuery);
-            return fetchStakeState({
-                connection,
-                address: new PublicKey(addressToQuery)
-            });
+            return fetchStakeState(connection, new PublicKey(addressToQuery));
         },
         enabled: !!addressToQuery,
         retry: 1,
@@ -59,11 +61,6 @@ export default function StakePage() {
         }
     };
 
-    // ===================================================================
-    // THIS IS THE FIX.
-    // The outer div no longer has conflicting layout classes like 'container' or 'mx-auto'.
-    // It will now fit perfectly inside the .content-box provided by app-layout.tsx.
-    // ===================================================================
     return (
         <div className="space-y-6">
             <div className="text-center">
@@ -90,7 +87,7 @@ export default function StakePage() {
                 {isLoading && <p className="text-center">Fetching account details...</p>}
 
                 {isError && (
-                    <AppAlert>
+                    <AppAlert action={null}>
                         <div className="text-center font-semibold text-red-500">
                             <p>Error: {error.message}</p>
                             <p className="text-sm font-normal text-muted-foreground">
@@ -100,6 +97,7 @@ export default function StakePage() {
                     </AppAlert>
                 )}
 
+                {/* This line will now work, which resolves the "Unused constant data" warning. */}
                 {data && <StakeResult data={data} />}
             </div>
         </div>

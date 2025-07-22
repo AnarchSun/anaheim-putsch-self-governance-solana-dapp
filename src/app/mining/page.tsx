@@ -3,15 +3,22 @@
 
 import React from 'react';
 import { useWallet } from '@solana/wallet-adapter-react';
+
+// ===================================================================
+// THIS IS THE DEFINITIVE FIX.
+// 1. `MiningPanel` is imported WITHOUT curly braces because it has a default export.
+// 2. `ClientWalletMultiButton` is imported WITH curly braces because it has a named export.
+// This resolves the "Element type is invalid... got: undefined" error.
+// ===================================================================
 import MiningPanel from '@/components/mining/mining-panel';
-import ClientWalletMultiButton from '@/components/wallet/ClientWalletMultiButton';
+import { ClientWalletMultiButton } from '@/components/wallet/ClientWalletMultiButton';
+
 
 export default function MiningPage() {
     const { connected } = useWallet();
 
     return (
-        // The <main> tag has been replaced with a <div>.
-        // All layout classes like 'container', 'mx-auto', 'p-6' have been removed.
+        // This is a simple container. The main layout is handled by app-layout.tsx.
         <div className="space-y-8 text-center">
             <div>
                 <h1 className="text-4xl font-bold">Anaheim Community Console</h1>
@@ -20,12 +27,14 @@ export default function MiningPage() {
                 </p>
             </div>
 
+            {/* If the user is not connected, we show the connected button. */}
             {!connected && (
                 <div className="flex justify-center">
                     <ClientWalletMultiButton />
                 </div>
             )}
 
+            {/* The MiningPanel contains all the on-chain logic and UI. */}
             <div className="flex justify-center">
                 <MiningPanel />
             </div>

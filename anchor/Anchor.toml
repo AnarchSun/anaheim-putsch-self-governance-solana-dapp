@@ -5,32 +5,19 @@ anchor_version = "0.31.1"
 resolution = true
 skip-lint = false
 
-[programs.localnet]
-anaheim = "8RmTVazK1G3ZJ7EqYZC9FYJejFge98Vyz7T4zVdY8okX"
-journal = "3EqwhRqpPezsiVTSBcbbTdSJNsJs8ufN2m2EBCqCVmXC"
-
 [programs.devnet]
-anaheim = "4tHvPpUkEcF4US6pW5xWJAHnUg7kpeAKNNcGBrw1PTyH"
-journal = "3EqwhRqpPezsiVTSBcbbTdSJNsJs8ufN2m2EBCqCVmXC"
+anaheim = "EEHDBR5yh1exjcMuZC9FyuBnfiAdESQ5xNtsFE1YoeCF"
+journal = "CbfLcrxboYSixdH2Jk3PccUaPhSmRjmjLUx54ED2VYYe"
 
 [registry]
 url = "https://api.apr.dev"
 
 [provider]
-cluster = "devnet"
+cluster = "Devnet"
 wallet = "~/.config/solana/id.json"
 
+[workspace]
+members = ["programs/anaheim", "programs/journal"]
+
 [scripts]
-build = "bash -c 'echo test && echo ok done'"
-test_jest = "../node_modules/.bin/jest --preset ts-jest"
-test_mocha = "mocha -t 1000000 tests/"
-
-[test]
-startup_wait = 5000
-shutdown_wait = 2000
-upgradeable = false
-
-[test.validator]
-bind_address = "127.0.0.1"
-ledger = ".anchor/test-ledger"
-rpc_port = 8899
+initialize = "pnpm run initialize"

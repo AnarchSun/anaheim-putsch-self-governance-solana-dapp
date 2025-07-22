@@ -5,13 +5,16 @@
  * IDL can be found at `target/idl/anaheim.json`.
  */
 export type Anaheim = {
-  "address": "B4wa4mhhsxJ3Z7FYd8y1qx9XQCVBTpyLkBTzm1h9PaNC",
+  "address": "EEHDBR5yh1exjcMuZC9FyuBnfiAdESQ5xNtsFE1YoeCF",
   "metadata": {
     "name": "anaheim",
     "version": "0.1.0",
     "spec": "0.1.0",
-    "description": "Solan Governance Dapp and social media for powerr to the people nextjs, react, typescript and anchor used"
+    "description": "Created with Anchor"
   },
+  "docs": [
+    "─── PROGRAMME PRINCIPAL ────────────────────────────────────────────────────"
+  ],
   "instructions": [
     {
       "name": "close",
@@ -89,36 +92,16 @@ export type Anaheim = {
         {
           "name": "userAccount",
           "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  117,
-                  115,
-                  101,
-                  114
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "user"
-              }
-            ]
-          }
+          "signer": true
         },
         {
-          "name": "user",
+          "name": "authority",
           "writable": true,
           "signer": true
         },
         {
           "name": "systemProgram",
           "address": "11111111111111111111111111111111"
-        },
-        {
-          "name": "rent",
-          "address": "SysvarRent111111111111111111111111111111111"
         }
       ],
       "args": [
@@ -315,6 +298,11 @@ export type Anaheim = {
       "code": 6009,
       "name": "unauthorized",
       "msg": "Unauthorized action."
+    },
+    {
+      "code": 6010,
+      "name": "invalidAuthority",
+      "msg": "Invalid authority on post."
     }
   ],
   "types": [
@@ -346,35 +334,33 @@ export type Anaheim = {
           {
             "name": "content",
             "type": "string"
+          },
+          {
+            "name": "author",
+            "type": "pubkey"
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
           }
         ]
       }
     },
     {
       "name": "userAccount",
+      "docs": [
+        "─── COMPTES STRUCTURÉS ─────────────────────────────────────────────────────"
+      ],
       "type": {
         "kind": "struct",
         "fields": [
           {
-            "name": "username",
-            "type": {
-              "array": [
-                "u8",
-                32
-              ]
-            }
+            "name": "name",
+            "type": "string"
           },
           {
-            "name": "authority",
+            "name": "userAuthority",
             "type": "pubkey"
-          },
-          {
-            "name": "timestamp",
-            "type": "i64"
-          },
-          {
-            "name": "bump",
-            "type": "u8"
           }
         ]
       }

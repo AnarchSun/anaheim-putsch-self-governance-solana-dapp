@@ -37,7 +37,9 @@
     "scaffold:fetch": "ts-node ./scripts/fetch-templates.ts",
     "putsch:sync": "pnpm anchor:build && pnpm build && pnpm lint",
     "putsch:dev": "pnpm airdrop && pnpm loot && pnpm dev",
-    "putsch:deploy": "pnpm anchor:deploy && echo 'Deployed on devnet!"
+    "putsch:deploy": "pnpm anchor:deploy && echo 'Deployed on devnet!",
+    "anchor:initialize": "tsx ./anchor/scripts/initialize.ts",
+    "sync-idl": "mkdir -p src/lib/idl && cp anchor/target/idl/*.json src/lib/idl/"
   },
   "dependencies": {
     "@anza-xyz/solana-rpc-get-stake-activation": "^1.0.1",
@@ -76,7 +78,7 @@
     "@vitest/coverage-v8": "3.2.3",
     "@wallet-ui/react": "1.1.0-canary-20250614160139",
     "@wallet-ui/tailwind": "1.1.0-canary-20250614160139",
-    "@zag-js/utils": "^1.18.3",
+    "@zag-js/utils": "^1.19.0",
     "bs58": "^6.0.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -118,10 +120,10 @@
     "@coral-xyz/anchor": "^0.31.1",
     "@tanstack/react-query-devtools": "^5.83.0",
     "@types/mocha": "^10.0.10",
-    "@types/node": "^24.0.14",
+    "@types/node": "^24.0.15",
     "brace-expansion": "4.0.1",
     "eslint": "^9.31.0",
-    "eslint-config-next": "^15.4.1",
+    "eslint-config-next": "^15.4.2",
     "pino-pretty": "^13.0.0",
     "solana": "link:@/types/solana",
     "ts-node": "^10.9.2",

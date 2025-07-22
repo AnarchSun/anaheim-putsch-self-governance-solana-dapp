@@ -3,30 +3,29 @@ import { BorshAccountsCoder } from '@coral-xyz/anchor';
 import { Connection, PublicKey } from '@solana/web3.js';
 import { IDL } from './idl/anaheim';
 
-// This is correct, it's the address of your deployed program.
-export const ANAHEIM_PROGRAM_ID = new PublicKey('FV9aAVcF157mf2mKn9BiU9LDCkxuTwsD9wU6BdcDRv6R');
+// This is the address of your deployed program.
+export const ANAHEIM_PROGRAM_ID = new PublicKey('5ZZyxrMsJppuWipeEncWFZoz6W6Zkow5U8y8MaMA5p5A');
 
-// ===================================================================
-// PASTE THE NEW ADDRESS FROM YOUR TERMINAL OUTPUT HERE.
-// This is the address of the data account you just created.
-// ===================================================================
-export const ANAHEIM_ACCOUNT_PUBKEY = new PublicKey('PASTE_YOUR_NEW_KEY_HERE');
+const accountPubKeyString = process.env.NEXT_PUBLIC_ANAHEIM_ACCOUNT_PUBKEY;
+export const ANAHEIM_ACCOUNT_PUBKEY = accountPubKeyString ? new PublicKey(accountPubKeyString) : null;
 
-/**
- * Fetches and decodes the global Anaheim state account.
- */
+// The rest of this file is correct and does not need to be changed.
 export async function getAnaheimAccount(connection: Connection) {
+    if (!ANAHEIM_ACCOUNT_PUBKEY) {
+        throw new Error("FATAL: Anaheim account public key is not set in .env.local.");
+    }
+
     IDL.address = ANAHEIM_PROGRAM_ID.toBase58();
     try {
         const accountInfo = await connection.getAccountInfo(ANAHEIM_ACCOUNT_PUBKEY);
         if (accountInfo === null) {
-            console.error(`Account not found at ${ANAHEIM_ACCOUNT_PUBKEY.toBase58()}. Make sure you have run 'anchor run initialize'.`);
+            console.error(`Account not found at address ${ANAHEIM_ACCOUNT_PUBKEY.toBase58()}.`);
             return null;
         }
         const coder = new BorshAccountsCoder(IDL);
         return coder.decode('anaheimAccount', accountInfo.data);
     } catch (error) {
-        console.error(`Failed to fetch or decode the Anaheim account`, error);
+        console.error(`Failed to decode the Anaheim account`, error);
         return null;
     }
 }

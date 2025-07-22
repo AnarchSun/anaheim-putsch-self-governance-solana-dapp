@@ -2,6 +2,7 @@
 import { Connection, PublicKey } from '@solana/web3.js'
 import { useMemo } from 'react'
 import { getStakeActivation } from '@anza-xyz/solana-rpc-get-stake-activation'
+import {getPublicSolanaRpcUrl} from "@/lib/solana/solanaKitShim";
 
 
 // Type pour le parsing manuel des données d’un compte stake
@@ -60,4 +61,8 @@ export async function getStakeActivationSafe(connection: Connection, pubkey: Pub
     console.warn('Vendor getStakeActivation failed, falling back manually', err)
     return await getStakeActivationManual(connection, pubkey)
   }
+}
+
+export class useSolanaClient {
+  rpcEndpoint: getPublicSolanaRpcUrl | undefined;
 }

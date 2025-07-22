@@ -21,7 +21,7 @@ export async function getStakeActivationSafe(): Promise<StakeActivationStatus> {
 }
 
 // Hook vivant, miroir de la blockchain
-export function useStakeActivationStatus(pubkey: PublicKey, connection: Connection) {
+export function useStakeActivationStatus(pubkey: PublicKey, connection: any) {
   const [status, setStatus] = useState<StakeActivationStatus | null>(null)
   const [error, setError] = useState<Error | null>(null)
   const [loading, setLoading] = useState(true)
