@@ -5,7 +5,7 @@
  * IDL can be found at `target/idl/anaheim.json`.
  */
 export type Anaheim = {
-  "address": "EEHDBR5yh1exjcMuZC9FyuBnfiAdESQ5xNtsFE1YoeCF",
+  "address": "EeNEqVbvtz18ReWmC3WZ2UQTpoGqb2AgzTN7ETYtyBnK",
   "metadata": {
     "name": "anaheim",
     "version": "0.1.0",

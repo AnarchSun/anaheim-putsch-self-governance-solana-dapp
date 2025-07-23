@@ -1,3 +1,4 @@
+// anchor/programs/anaheim/src/lib.rs
 #![allow(deprecated)]
 #![allow(unexpected_cfgs)]
 
@@ -22,7 +23,7 @@ pub use utils::validation::string_utils::str_to_fixed_array;
 pub use instructions::create_user;
 use crate::program::Anaheim;
 
-declare_id!("EEHDBR5yh1exjcMuZC9FyuBnfiAdESQ5xNtsFE1YoeCF");
+declare_id!("EeNEqVbvtz18ReWmC3WZ2UQTpoGqb2AgzTN7ETYtyBnK");
 
 pub const ANAHEIM_IDL_ID: Pubkey = Pubkey::new_from_array([
   132, 157, 218, 39, 146, 184, 154, 229, 157, 208, 222, 217, 179, 105, 214, 114,
