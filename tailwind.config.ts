@@ -1,25 +1,14 @@
 // FILE: tailwind.config.ts
-
 import type { Config } from "tailwindcss";
 
-const config = {
-  // ==================================================================
-  // THIS IS THE CRITICAL FIX for the TS2322 error.
-  // The correct syntax for the standard class-based dark mode strategy
-  // is the simple string 'class', not an array.
-  // ==================================================================
+const config: Config = {
   darkMode: "class",
-
-  // This content array must be correct to ensure Tailwind scans your files.
   content: [
     './pages/**/*.{ts,tsx}',
     './components/**/*.{ts,tsx}',
     './app/**/*.{ts,tsx}',
     './src/**/*.{ts,tsx}',
   ],
-
-  // The rest of your theme configuration remains the same.
-  prefix: "",
   theme: {
     container: {
       center: true,
@@ -86,6 +75,6 @@ const config = {
     },
   },
   plugins: [require("tailwindcss-animate")],
-} satisfies Config
+}
 
-export default config
+export default config;
