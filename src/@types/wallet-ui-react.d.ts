@@ -14,6 +14,8 @@ declare module '@wallet-ui/react' {
   }
 
   export function useWalletUi(): {
+    cluster: any;
+    client: string;
     account?: UiWalletAccount
   }
 
@@ -33,6 +35,9 @@ declare module '@wallet-ui/react' {
     address: string
 
     // Optionnel, si tu veux l'utiliser dans ton UI comme un PublicKey
+      undefined: string;
+      signTransactionMessage: any;
+    signTransaction: (tx) => Promise<void>;
     toBase58(): string {
       return this.address
     }

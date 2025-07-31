@@ -16,6 +16,7 @@ catalogs:
 
 onlyBuiltDependencies:
   - '@tailwindcss/oxide'
+  - bigint-buffer
   - blake-hash
   - buffer utils
   - bufferutil

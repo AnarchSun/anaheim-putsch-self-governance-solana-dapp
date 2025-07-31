@@ -1,14 +1,22 @@
-// src/lib/solanaClient.ts
+// src/lib/solana/solanaClient.ts
+import { Connection, clusterApiUrl, Cluster, Commitment } from '@solana/web3.js';
 
+export class SolanaClient {
+    connection: Connection;
+    cluster: string;
+    commitment: Commitment;
 
-export * from '@solana/web3.js'
+    constructor(cluster: Cluster = 'mainnet-beta', commitment: Commitment = 'confirmed') {
+        this.cluster = cluster;
+        this.commitment = commitment;
+        this.connection = new Connection(clusterApiUrl(cluster), commitment);
+    }
 
-// Cette constante n’est pas utilisée, on la supprime
-// const defaultConnection = new Connection (clusterApiUrl('mainnet-beta'))
+    get rpc(): Connection {
+        return this.connection;
+    }
+}
 
-// Suppression aussi de la fonction getConnection si inutilisés exports
-//  function getConnection(): Connection {
-//   return defaultConnection
-//}
-
-export * from '@solana/web3.js'
+export const cluster: Cluster = 'mainnet-beta';
+export const solanaClient = new SolanaClient(cluster);
+export const client = solanaClient.rpc;

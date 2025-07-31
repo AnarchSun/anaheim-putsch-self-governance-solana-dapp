@@ -33,7 +33,7 @@ const provider = new AnchorProvider(connection, wallet, {
     commitment: "confirmed",
 });
 
-// Declare program properly AFTER idl/provider exists
+// Declare the program properly AFTER idl/provider exists
 const program = new Program<Anaheim>(idl as any, idl.metadata.address); // 🧙 Remplace idl.metadata.address par ton vrai programId si absent
 
 async function main() {
@@ -52,7 +52,7 @@ async function main() {
     const tx = await program.methods
         .initialize(bump)          // bump passé à initialize
         .accounts({
-            anaheim: anaheimPda,
+            anaheim: anaheimPda,   // doit correspondre exactement au nom dans #[account]
             payer,
             systemProgram: web3.SystemProgram.programId,
         })

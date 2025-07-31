@@ -7,9 +7,9 @@ pub struct Initialize<'info> {
     #[account(
         init,
         payer = payer,
-        space = 8 + AnaheimAccount::SIZE,
         seeds = [b"anaheim", payer.key().as_ref()],
-        bump
+        bump,
+        space = 8 + std::mem::size_of::<AnaheimAccount>()
     )]
     pub anaheim: Account<'info, AnaheimAccount>,
 
@@ -18,4 +18,3 @@ pub struct Initialize<'info> {
 
     pub system_program: Program<'info, System>,
 }
-

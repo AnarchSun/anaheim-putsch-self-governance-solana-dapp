@@ -83,63 +83,18 @@
   "errors": [
     {
       "code": 6000,
-      "name": "AlreadyVoted",
-      "msg": "User has already voted."
+      "name": "ContentTooLong",
+      "msg": "Content exceeds max allowable length."
     },
     {
       "code": 6001,
-      "name": "InvalidContent",
-      "msg": "Invalid content."
+      "name": "UsernameTooLong",
+      "msg": "Username exceeds max allowable length."
     },
     {
       "code": 6002,
-      "name": "ContentTooLong",
-      "msg": "Content too long."
-    },
-    {
-      "code": 6003,
-      "name": "UsernameTooLong",
-      "msg": "Username too long."
-    },
-    {
-      "code": 6004,
-      "name": "InvalidUsername",
-      "msg": "Invalid username."
-    },
-    {
-      "code": 6005,
-      "name": "UsernameTooShort",
-      "msg": "Username too short dude!"
-    },
-    {
-      "code": 6006,
-      "name": "Overflow",
-      "msg": "Overflow occurred."
-    },
-    {
-      "code": 6007,
-      "name": "Underflow",
-      "msg": "Underflow occurred."
-    },
-    {
-      "code": 6008,
-      "name": "UsernameExists",
-      "msg": "Username already exists."
-    },
-    {
-      "code": 6009,
-      "name": "Unauthorized",
-      "msg": "Unauthorized action."
-    },
-    {
-      "code": 6010,
-      "name": "InvalidAuthority",
-      "msg": "Invalid authority on post."
-    },
-    {
-      "code": 6011,
-      "name": "MissingBump",
-      "msg": "Bump not found in context."
+      "name": "InvalidContent",
+      "msg": "Content is invalid (empty or whitespace only)."
     }
   ],
   "types": [

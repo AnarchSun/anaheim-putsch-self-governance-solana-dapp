@@ -1,55 +1,65 @@
 // FILE: src/components/mining/MiningPanel.tsx
-import React, { useEffect, useState } from "react";
-import { useAnaheimProgram } from '@/hooks/useAnaheimProgram';
-import {ANAHEIM_ACCOUNT_PUBKEY} from "@/lib/anaheim-program";
-import {useMutation, useQueryClient} from "@tanstack/react-query";
-import {useWallet} from "@solana/wallet-adapter-react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useAnaheimProgram } from "@/hooks/useAnaheimProgram";
+import { useWallet } from "@solana/wallet-adapter-react";
+import { SystemProgram, PublicKey } from "@solana/web3.js";
+import { Program } from "@coral-xyz/anchor";
+import { Anaheim as AnaheimType } from "../../../anchor/target/types/anaheim";
+import { useEffect, useState } from "react";
 
-function useIncrement() {
+export function useInitialize() {
     const { program, provider } = useAnaheimProgram();
     const wallet = useWallet();
     const queryClient = useQueryClient();
 
     return useMutation({
         mutationFn: async () => {
-            if (!provider || !program || !wallet.connected) throw new Error();
-            const sig = await program.methods.increment()
-                .accounts({ anaheim: ANAHEIM_ACCOUNT_PUBKEY! })
+            if (!provider || !program || !wallet.publicKey) {
+                throw new Error("Missing provider or wallet");
+            }
+
+            const typedProgram = program as Program<AnaheimType>;
+
+            const [anaheimPda, bump] = PublicKey.findProgramAddressSync(
+                [Buffer.from("anaheim"), wallet.publicKey.toBuffer()],
+                program.programId
+            );
+
+            await (typedProgram.methods.initialize(bump) as any)
+                .accounts({
+                    payer: wallet.publicKey,
+                    systemProgram: SystemProgram.programId,
+                    anaheim: anaheimPda,
+                })
                 .rpc();
-            const hb = await provider.connection.getLatestBlockhash();
-            await provider.connection.confirmTransaction({ signature: sig, ...hb }, 'confirmed');
-            return sig;
         },
-        onSuccess: () => queryClient.invalidateQueries(['anaheim-account'])
+
+        onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: ["anaheim-account"]}).then(_r => useQueryClient());
+        },
     });
 }
 
 export default function MiningPanel() {
     const { program, provider } = useAnaheimProgram();
     const [status, setStatus] = useState<string>("Idle");
+    const initializeMutation = useInitialize();
+
+    const handleMine = async () => {
+        if (!provider?.wallet?.publicKey) return;
+        setStatus("Mining...");
+
+        try {
+            await initializeMutation.mutateAsync();
+            setStatus("Success!");
+        } catch (err) {
+            console.error("Mining error:", err);
+            setStatus("Error");
+        }
+    };
 
     useEffect(() => {
-        const mine = async () => {
-            if (!provider?.wallet?.publicKey) return;
-            setStatus("Mining...");
-
-            try {
-                const tx = await program.methods
-                    .mine()
-                    .accounts({
-                        user: provider.wallet.publicKey,
-                    })
-                    .rpc();
-
-                console.log("Transaction:", tx);
-                setStatus("Success!");
-            } catch (err) {
-                console.error(err);
-                setStatus("Error");
-            }
-        };
-
-        mine();
+        handleMine().then(_r =>(useQueryClient() as any).invalidateQueries() );
     }, [program, provider]);
 
     return (

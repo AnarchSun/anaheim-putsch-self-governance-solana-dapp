@@ -89,63 +89,18 @@ export type Anaheim = {
   "errors": [
     {
       "code": 6000,
-      "name": "alreadyVoted",
-      "msg": "User has already voted."
+      "name": "contentTooLong",
+      "msg": "Content exceeds max allowable length."
     },
     {
       "code": 6001,
-      "name": "invalidContent",
-      "msg": "Invalid content."
+      "name": "usernameTooLong",
+      "msg": "Username exceeds max allowable length."
     },
     {
       "code": 6002,
-      "name": "contentTooLong",
-      "msg": "Content too long."
-    },
-    {
-      "code": 6003,
-      "name": "usernameTooLong",
-      "msg": "Username too long."
-    },
-    {
-      "code": 6004,
-      "name": "invalidUsername",
-      "msg": "Invalid username."
-    },
-    {
-      "code": 6005,
-      "name": "usernameTooShort",
-      "msg": "Username too short dude!"
-    },
-    {
-      "code": 6006,
-      "name": "overflow",
-      "msg": "Overflow occurred."
-    },
-    {
-      "code": 6007,
-      "name": "underflow",
-      "msg": "Underflow occurred."
-    },
-    {
-      "code": 6008,
-      "name": "usernameExists",
-      "msg": "Username already exists."
-    },
-    {
-      "code": 6009,
-      "name": "unauthorized",
-      "msg": "Unauthorized action."
-    },
-    {
-      "code": 6010,
-      "name": "invalidAuthority",
-      "msg": "Invalid authority on post."
-    },
-    {
-      "code": 6011,
-      "name": "missingBump",
-      "msg": "Bump not found in context."
+      "name": "invalidContent",
+      "msg": "Content is invalid (empty or whitespace only)."
     }
   ],
   "types": [

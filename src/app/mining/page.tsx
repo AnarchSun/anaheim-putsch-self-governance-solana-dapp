@@ -29,6 +29,7 @@ export default function MiningPage() {
             {connected && (
                 <div className="flex justify-center">
                     <MiningClient />
+
                 </div>
             )}
         </div>
