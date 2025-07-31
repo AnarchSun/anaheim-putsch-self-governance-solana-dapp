@@ -12,11 +12,5 @@ pub struct AnaheimAccount {
 }
 
 impl AnaheimAccount {
-  pub const SIZE: usize = 32  // authority
-      + 8   // count
-      + 1   // value
-      + 8   // timestamp
-      + 8   // vote_count
-      + 1;  // bump
+  pub const SIZE: usize = 32 + 8 + 1 + 8 + 8 + 1;
 }
-

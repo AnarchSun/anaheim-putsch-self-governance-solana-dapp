@@ -5,7 +5,7 @@
  * IDL can be found at `target/idl/journal.json`.
  */
 export type Journal = {
-  "address": "6bkfHQA2EJpakfQtHZMfdm4Mb7HEaXJpk5WX2EzghvaR",
+  "address": "2cdgezCtQvwn6RQ9XasUrctoN71wwkuG7Lc5nQtPw7PV",
   "metadata": {
     "name": "journal",
     "version": "0.1.0",

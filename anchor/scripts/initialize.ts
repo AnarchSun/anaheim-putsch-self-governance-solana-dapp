@@ -1,40 +1,41 @@
 // FILE: anchor/scripts/initialize.ts
-import { AnchorProvider, Program, Wallet, web3 } from "@coral-xyz/anchor";
-import { Anaheim } from "../target/types/anaheim";
-import { resolve, dirname } from "path";
+import { AnchorProvider, Program, Wallet } from "@coral-xyz/anchor";
+import { PublicKey, Connection, Keypair, SystemProgram } from "@solana/web3.js";
 import { readFileSync } from "fs";
 import os from "os";
+import {existsSync} from "node:fs";
 import { fileURLToPath } from "url";
-import { PublicKey, Connection, clusterApiUrl } from "@solana/web3.js";
+import { dirname, resolve } from "path";
 
-// __dirname fix
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-// Helpers
-function loadJson(jsonPath: string): any {
-    return JSON.parse(readFileSync(jsonPath, "utf-8"));
-}
-
-function loadKeypair(keypairPath: string): web3.Keypair {
-    const keypairData = loadJson(keypairPath);
-    return web3.Keypair.fromSecretKey(new Uint8Array(keypairData));
-}
-
-// Constants
 const IDL_PATH = resolve(__dirname, "../target/idl/anaheim.json");
+if (!existsSync(IDL_PATH)) {
+    throw new Error(`❌ IDL file not found at ${IDL_PATH}. Make sure you've run 'anchor build' and that the path is correct.`);
+}
+
 const WALLET_KEYPATH = resolve(os.homedir(), ".config/solana/id.json");
+// Cette version part du dossier du projet exécuté (safe & stable)
 
-const idl = loadJson(IDL_PATH);
-const walletKeypair = loadKeypair(WALLET_KEYPATH);
-const wallet = new Wallet(walletKeypair);
-const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
-const provider = new AnchorProvider(connection, wallet, {
-    commitment: "confirmed",
-});
+const keypair = Keypair.fromSecretKey(
+    Uint8Array.from(JSON.parse(readFileSync(WALLET_KEYPATH, "utf-8")))
+);
+const wallet = new Wallet(keypair);
 
-// Declare the program properly AFTER idl/provider exists
-const program = new Program<Anaheim>(idl as any, idl.metadata.address); // 🧙 Remplace idl.metadata.address par ton vrai programId si absent
+const connection = new Connection("https://api.devnet.solana.com", "confirmed");
+const provider = new AnchorProvider(connection, wallet, { commitment: "confirmed" });
+
+const idl = JSON.parse(readFileSync(IDL_PATH, "utf-8"));
+if (!idl.metadata?.address) throw new Error("IDL metadata.address missing");
+const programIdRaw = idl.metadata?.address ?? "ANAHEiM1111111111111111111111111111111111";
+const programId = new PublicKey("EMKno4tmR5KgB9L1QqFwfARkjksgdUoFrPDAaCFBCmXa");
+
+console.log("programId:", programId.toBase58());
+console.log("provider instanceof AnchorProvider?", true);
+console.log("programId:", programId.toBase58());
+
+const program = new Program(idl, provider);
 
 async function main() {
     const payer = wallet.publicKey;
@@ -43,26 +44,23 @@ async function main() {
         program.programId
     );
 
-    const accountInfo = await connection.getAccountInfo(anaheimPda);
-    if (accountInfo !== null) {
-        console.log("PDA exists. No action needed.");
+    const existingAccount = await connection.getAccountInfo(anaheimPda);
+    if (existingAccount) {
+        console.log("Anaheim PDA exists, skipping.");
         return;
     }
 
-    const tx = await program.methods
-        .initialize(bump)          // bump passé à initialize
+    const txSig = await program.methods
+        .initialize(bump)
         .accounts({
-            anaheim: anaheimPda,   // doit correspondre exactement au nom dans #[account]
+            anaheim: anaheimPda,
             payer,
-            systemProgram: web3.SystemProgram.programId,
+            systemProgram: SystemProgram.programId,
         })
-        .signers([walletKeypair])
+        .signers([keypair])
         .rpc();
 
-    console.log("Transaction signature:", tx);
+    console.log("Transaction sent:", txSig);
 }
 
-main().catch((e) => {
-    console.error("Script failed:", e);
-    process.exit(1);
-});
+main().catch(console.error);

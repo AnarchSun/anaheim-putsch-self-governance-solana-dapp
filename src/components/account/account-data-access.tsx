@@ -1,37 +1,39 @@
-// src/components/account/account-data-access.tsx
-import { TOKEN_2022_PROGRAM_ADDRESS, TOKEN_PROGRAM_ADDRESS } from 'gill/programs/token'
-import { getTransferSolInstruction } from 'gill/programs'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { useWalletUi } from '@wallet-ui/react'
+// FILE: src/components/account/account-data-access.tsx
+
 import {
-  type Address,
+  TOKEN_2022_PROGRAM_ADDRESS,
+  TOKEN_PROGRAM_ADDRESS,
+  getTransferSolInstruction,
+} from 'gill/programs'
+import {
   airdropFactory,
   createTransaction,
   getBase58Decoder,
-  GetSignatureStatusesApi,
-  lamports, RequestAirdropApi,
   signAndSendTransactionMessageWithSigners,
   type SolanaClient,
+  type Address,
 } from 'gill'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useWalletUi } from '@wallet-ui/react'
 import { toast } from 'sonner'
+import { toastTx } from '@/components/use-transaction-toast'
+import { useAirdropMutation } from '@/hooks/solana/useAirdropMutation'
 
+export const useRequestAirdropMutation = useAirdropMutation
 
 function useGetBalanceQueryKey({ address }: { address: Address }) {
   const { cluster } = useWalletUi()
-
   return ['get-balance', { cluster, address }]
 }
 
 function useInvalidateGetBalanceQuery({ address }: { address: Address }) {
   const queryClient = useQueryClient()
   const queryKey = useGetBalanceQueryKey({ address })
-  return async () => {
-    await queryClient.invalidateQueries({ queryKey })
-  }
+  return async () => queryClient.invalidateQueries({ queryKey })
 }
 
 export function useGetBalanceQuery({ address }: { address: Address }) {
-  const { client } = useWalletUi()
+  const { client } = useWalletUi() as { client: SolanaClient }
 
   return useQuery({
     retry: false,
@@ -42,88 +44,76 @@ export function useGetBalanceQuery({ address }: { address: Address }) {
 
 function useGetSignaturesQueryKey({ address }: { address: Address }) {
   const { cluster } = useWalletUi()
-
   return ['get-signatures', { cluster, address }]
 }
 
 function useInvalidateGetSignaturesQuery({ address }: { address: Address }) {
   const queryClient = useQueryClient()
   const queryKey = useGetSignaturesQueryKey({ address })
-  return async () => {
-    await queryClient.invalidateQueries({ queryKey })
-  }
+  return async () => queryClient.invalidateQueries({ queryKey })
 }
 
 export function useGetSignaturesQuery({ address }: { address: Address }) {
-  const { client } = useWalletUi()
+  const { client } = useWalletUi() as { client: SolanaClient }
 
   return useQuery({
+    retry: false,
     queryKey: useGetSignaturesQueryKey({ address }),
-    queryFn: () => client.getSignaturesForAddress(address).send(),
+    queryFn: () => client.rpc.getSignaturesForAddress(address).send(),
   })
 }
 
-async function getTokenAccountsByOwner(
+async function fetchTokenAccounts(
     rpc: SolanaClient['rpc'],
-    { address, programId }: { address: Address; programId: Address },
+    { address, programId }: { address: Address; programId: Address }
 ) {
-  return await rpc
+  return rpc
       .getTokenAccountsByOwner(address, { programId }, { commitment: 'confirmed', encoding: 'jsonParsed' })
       .send()
       .then((res) => res.value ?? [])
 }
 
 export function useGetTokenAccountsQuery({ address }: { address: Address }) {
-  const { client, cluster } = useWalletUi()
+  const { client, cluster } = useWalletUi() as { client: SolanaClient; cluster: string }
 
   return useQuery({
     queryKey: ['get-token-accounts', { cluster, address }],
     queryFn: async () =>
         Promise.all([
-          getTokenAccountsByOwner(client["rpc"], { address, programId: TOKEN_PROGRAM_ADDRESS }),
-          getTokenAccountsByOwner(client["rpc"], { address, programId: TOKEN_2022_PROGRAM_ADDRESS }),
+          fetchTokenAccounts(client.rpc, { address, programId: TOKEN_PROGRAM_ADDRESS }),
+          fetchTokenAccounts(client.rpc, { address, programId: TOKEN_2022_PROGRAM_ADDRESS }),
         ]).then(([tokenAccounts, token2022Accounts]) => [...tokenAccounts, ...token2022Accounts]),
   })
 }
 
-function useWalletUiSigner() {
-  // TODO ORION
-}
-
 export function useTransferSolMutation({ address }: { address: Address }) {
-  const { client } = useWalletUi()
-  const signer = useWalletUiSigner()
+  const { client, account } = useWalletUi() as { client: SolanaClient; account?: { publicKey: Address } }
+
   const invalidateBalanceQuery = useInvalidateGetBalanceQuery({ address })
   const invalidateSignaturesQuery = useInvalidateGetSignaturesQuery({ address })
 
   return useMutation({
-    mutationFn: async (input: { destination: Address; amount: number }) => {
-      try {
-        const { value: latestBlockhash } = await client["rpc"].getLatestBlockhash({ commitment: 'confirmed' }).send()
+    mutationFn: async ({ destination, amount }: { destination: Address; amount: number }) => {
+      if (!account?.publicKey) throw new Error('Wallet not connected')
+      const feePayer = account.publicKey
 
-        const transaction = createTransaction({
-          feePayer: signer,
-          version: 0,
-          latestBlockhash,
-          instructions: [
-            getTransferSolInstruction({
-              amount: input.amount,
-              destination: input.destination,
-              source: signer,
-            }),
-          ],
-        })
+      const { value: latestBlockhash } = await client.rpc.getLatestBlockhash({ commitment: 'confirmed' }).send()
 
-        const signatureBytes = await signAndSendTransactionMessageWithSigners(transaction)
-        const signature = getBase58Decoder().decode(signatureBytes)
+      const transaction = createTransaction({
+        feePayer,
+        version: 0,
+        latestBlockhash,
+        instructions: [
+          getTransferSolInstruction({
+            source: feePayer,
+            destination,
+            amount,
+          }),
+        ],
+      })
 
-        console.log(signature)
-        return signature
-      } catch (error: unknown) {
-        console.log('error', `Transaction failed! ${error}`)
-
-        return
-      }
+      const signatureBytes = await signAndSendTransactionMessageWithSigners(transaction, [])
+      return getBase58Decoder().decode(signatureBytes)
     },
     onSuccess: async (tx) => {
       toastTx(tx)
@@ -135,23 +125,16 @@ export function useTransferSolMutation({ address }: { address: Address }) {
   })
 }
 
-export function useRequestAirdropMutation({address}: { address: Address }, rpcSubscriptions, Rpc) {
-  const { client } = useWalletUi()
-  const invalidateBalanceQuery = useInvalidateGetBalanceQuery({ address })
-  const invalidateSignaturesQuery = useInvalidateGetSignaturesQuery({ address })
-  const airdrop = airdropFactory( {rpc: Rpc<GetSignatureStatusesApi & RequestAirdropApi> & {"~cluster"?: "devnet"}}
-): AirdropFunction
+export function useRequestAirdropMutation({ address }: { address: Address }) {
+  const {client} = useWalletUi() as { client: SolanaClient }
 
-  return useMutation({
-    mutationFn: async (amount: number = 1) =>
-        airdrop({
-          commitment: 'confirmed',
-          recipientAddress: address,
-          lamports: lamports(BigInt(Math.round(amount * 1_000_000_000))),
-        }),
-    onSuccess: async (tx) => {
-      toastTx(tx)
-      await Promise.all([invalidateBalanceQuery(), invalidateSignaturesQuery()])
-    },
+  const invalidateBalanceQuery = useInvalidateGetBalanceQuery({address})
+  const invalidateSignaturesQuery = useInvalidateGetSignaturesQuery({address})
+
+  const airdrop = airdropFactory({
+    rpc: client.rpc,
+    rpcSubscriptions: client.rpcSubscriptions,
   })
 }
+
+

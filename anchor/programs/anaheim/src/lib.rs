@@ -24,7 +24,7 @@ pub use utils::validation::string_utils::str_to_fixed_array;
 pub use instructions::create_user;
 use crate::program::Anaheim;
 
-declare_id!("8bCmQr6a5Fr3S3CRbXyzBKXBNnRaTLDeArfYSWevJdfA");
+declare_id!("EMKno4tmR5KgB9L1QqFwfARkjksgdUoFrPDAaCFBCmXa");
 
 pub const ANAHEIM_IDL_ID: Pubkey = Pubkey::new_from_array([
   132, 157, 218, 39, 146, 184, 154, 229, 157, 208, 222, 217, 179, 105, 214, 114,

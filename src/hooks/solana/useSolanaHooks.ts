@@ -8,7 +8,6 @@ import {
     createTransaction,
     getBase58Decoder,
     GetSignatureStatusesApi,
-    lamports,
     RequestAirdropApi,
     type Rpc,
     signAndSendTransactionMessageWithSigners,
@@ -22,6 +21,10 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toastTx } from '@/components/use-transaction-toast';
 import { toast } from 'sonner';
 import { TOKEN_2022_PROGRAM_ADDRESS, TOKEN_PROGRAM_ADDRESS } from 'gill/programs/token';
+import { useAirdropMutation } from '@/hooks/solana/useAirdropMutation'
+
+// et l'utiliser comme :
+const { mutateAsync } = useAirdropMutation({ address })
 
 const RPC_URL = 'https://api.devnet.solana.com';
 const rpc = createRpc({ api: {} as any, transport: {} as any });
@@ -178,19 +181,4 @@ export function useRequestAirdropMutation(
         rpcSubscriptions: {} as any,
     });
 
-    return useMutation({
-        mutationFn: async (amount: number = 1) =>
-            airdrop({
-                commitment: 'confirmed',
-                recipientAddress: address,
-                lamports: lamports(BigInt(Math.round(amount * 1_000_000_000))),
-            }),
-        onSuccess: async (tx) => {
-            toastTx(tx);
-            await Promise.all([invalidateBalanceQuery(), invalidateSignaturesQuery()]);
-        },
-        onError: (error) => {
-            toast.error(`Airdrop failed! ${error}`);
-        },
-    });
 }

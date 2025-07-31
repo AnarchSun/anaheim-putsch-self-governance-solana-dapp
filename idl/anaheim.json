@@ -1,11 +1,10 @@
 {
-  "address": "EMKno4tmR5KgB9L1QqFwfARkjksgdUoFrPDAaCFBCmXa",
+  "address": "9y9QTvrCesZnUw7EwxAWDKU5mSdYWXr24i4Fk16P9DZ6",
   "metadata": {
     "name": "anaheim",
     "version": "0.1.0",
     "spec": "0.1.0",
-    "description": "Created with Anchor",
-    "address": "EMKno4tmR5KgB9L1QqFwfARkjksgdUoFrPDAaCFBCmXa"
+    "description": "Created with Anchor"
   },
   "docs": [
     "─── PROGRAMME PRINCIPAL ────────────────────────────────────────────────────"
