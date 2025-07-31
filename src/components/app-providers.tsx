@@ -1,53 +1,35 @@
-// src/components/app-providers.tsx
-'use client'
+// FILE: src/components/app-providers.tsx
+'use client';
 
-import React, { ReactNode } from 'react'
-import { ThemeProvider } from 'next-themes'
-import { QueryClientProvider, QueryClient } from '@tanstack/react-query'
-import { SolanaProvider as GillSolanaProvider } from 'gill-react'
-import { createSolanaClient } from 'gill'
-import WalletContextProvider from '@/components/wallet/WalletContextProvider'
+import React, { ReactNode, useMemo } from 'react';
+import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react';
+import { WalletModalProvider } from '@solana/wallet-adapter-react-ui';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { ThemeProvider } from './theme-provider';
+import { PhantomWalletAdapter } from '@solana/wallet-adapter-wallets';
 
-import { WalletProvider, ConnectionProvider } from '@solana/wallet-adapter-react'
-import { PhantomWalletAdapter } from '@solana/wallet-adapter-wallets'
-import { clusterApiUrl } from '@solana/web3.js'
-import { WalletAdapterNetwork } from '@solana/wallet-adapter-base'
-
-const network = WalletAdapterNetwork.Devnet
-const endpoint = clusterApiUrl(network)
-const solanaClient = createSolanaClient({ urlOrMoniker: 'devnet' })
-
-const queryClient = new QueryClient({
-    defaultOptions: {
-        queries: {
-            queryFn: async ({ queryKey }: { queryKey: readonly unknown[] }) => {
-                const url = queryKey[0]
-                if (typeof url !== 'string') throw new Error('queryKey[0] doit être une URL string')
-                const res = await fetch(url)
-                if (!res.ok) throw new Error('Erreur fetch ' + url)
-                return res.json()
-            },
-            retry: false,
-        },
-    },
-})
+// This is the standard wallet adapter CSS.
+require('@solana/wallet-adapter-react-ui/styles.css');
 
 export function AppProviders({ children }: { children: ReactNode }) {
-    const wallets = React.useMemo(() => [new PhantomWalletAdapter()], [])
+    const [queryClient] = React.useState(() => new QueryClient());
+    const endpoint = process.env.NEXT_PUBLIC_SOLANA_RPC_HOST || 'https://api.devnet.solana.com';
+    const wallets = useMemo(() => [new PhantomWalletAdapter()], []);
 
     return (
-        <QueryClientProvider client={queryClient}>
-            <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-                <ConnectionProvider endpoint={endpoint}>
-                    <WalletProvider wallets={wallets} autoConnect>
-                        <WalletContextProvider>
-                            <GillSolanaProvider client={solanaClient} queryClient={queryClient}>
-                                {children}
-                            </GillSolanaProvider>
-                        </WalletContextProvider>
-                    </WalletProvider>
-                </ConnectionProvider>
-            </ThemeProvider>
-        </QueryClientProvider>
-    )
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+            <ConnectionProvider endpoint={endpoint}>
+                <WalletProvider wallets={wallets} autoConnect>
+                    <WalletModalProvider>
+                        <QueryClientProvider client={queryClient}>
+                            {/* This is the key: it ONLY renders the children passed to it. */}
+                            {children}
+                            <ReactQueryDevtools initialIsOpen={false} />
+                        </QueryClientProvider>
+                    </WalletModalProvider>
+                </WalletProvider>
+            </ConnectionProvider>
+        </ThemeProvider>
+    );
 }

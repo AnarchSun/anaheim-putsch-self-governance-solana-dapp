@@ -1,13 +1,5 @@
 {
-  "/favicon.ico/route": "app/favicon.ico/route.js",
-<<<<<<< HEAD
-  "/account/[address]/page": "app/account/[address]/page.js",
-  "/account/page": "app/account/page.js",
-  "/mining/page": "app/mining/page.js",
   "/page": "app/page.js",
-  "/rpc-test/page": "app/rpc-test/page.js",
-  "/stake/page": "app/stake/page.js"
-=======
-  "/page": "app/page.js"
->>>>>>> yew
+  "/account/page": "app/account/page.js",
+  "/account/[address]/page": "app/account/[address]/page.js"
 }

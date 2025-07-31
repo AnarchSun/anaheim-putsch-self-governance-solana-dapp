@@ -1,5 +1,3 @@
-// src/components/theme-provider.ts
-// src/components/theme-provider.ts
 'use client'
 
 import * as React from 'react'

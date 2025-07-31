@@ -1,12 +1,23 @@
+/* FILE: src/app/globals.css */
+
+/*
+ * ===================================================================
+ *  1. IMPORTS
+ *  Your project's correct import structure is preserved.
+ * ===================================================================
+ */
 @import 'tailwindcss';
 @import 'tw-animate-css';
-@import "tailwindcss/preflight";
-
-@tailwind utilities;
-
 
 @custom-variant dark (&:is(.dark *));
 
+/*
+ * ===================================================================
+ *  2. THEME DEFINITION
+ *  Your original three-part theme structure (@theme, :root, .dark)
+ *  is RESTORED and syntactically corrected.
+ * ===================================================================
+ */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -45,6 +56,7 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
+/* YOUR :ROOT BLOCK IS RESTORED */
 :root {
   --radius: 0.625rem;
   --background: oklch(1 0 0);
@@ -80,6 +92,7 @@
   --sidebar-ring: oklch(0.708 0 0);
 }
 
+/* YOUR .dark BLOCK IS RESTORED */
 .dark {
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
@@ -113,49 +126,35 @@
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
 }
-.animate-fade-in {
-  animation: fadeIn 1s ease-in-out;
-}
 
+/*
+ * ===================================================================
+ *  3. BASE & COMPONENT LAYERS
+ * ===================================================================
+ */
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
-
   body {
     @apply bg-background text-foreground;
-      background: black;
-      color: white;
   }
-
-  section.module {
-    @apply rounded-2xl border border-border bg-card text-card-foreground shadow-xl p-6 transition duration-300 hover:shadow-2xl hover:ring-2 hover:ring-accent/50;
-  }
-
-  .card-shiny {
-    @apply bg-gradient-to-br from-primary to-accent text-primary-foreground rounded-xl shadow-lg p-4 ring-1 ring-border/10 hover:shadow-2xl hover:ring-accent;
-  }
-
-  .glass-box {
-    @apply backdrop-blur-md bg-white/10 dark:bg-black/20 border border-white/20 dark:border-white/10 rounded-lg p-6 shadow-lg hover:shadow-2xl transition;
+  button:not(:disabled),
+  [role='button']:not(:disabled) {
+    cursor: pointer;
   }
 }
 
-*, *::before, *::after {
-  box-sizing: inherit;
-}
+@layer components {
+  /* This is the class for our main content container. */
+  .content-box {
+    @apply bg-card p-6 md:p-8 rounded-xl border-2 border-fuchsia-500;
+  }
 
-html, body {
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
-  background-color: black;
-}
-
-.wallet-adapter-button-trigger {
-  height: auto !important;
-  @apply !border !bg-background !shadow-xs hover:!bg-accent !text-accent-foreground hover:!text-accent-foreground dark:!bg-input/30 !border-input/10 dark:!border-input dark:hover:!bg-input/50;
-  @apply !px-2 !py-[6px] !rounded-md !text-sm !font-semibold !shadow-sm !transition-all;
+  /* Your existing wallet adapter button styles are preserved here. */
+  .wallet-adapter-button-trigger {
+    height: auto !important;
+    @apply !border !bg-background !shadow-xs hover:!bg-accent !text-accent-foreground hover:!text-accent-foreground dark:!bg-input/30 !border-input/10 dark:!border-input dark:hover:!bg-input/50;
+    @apply !px-2 !py-[6px] !rounded-md !text-sm !font-semibold !shadow-sm !transition-all;
+  }
 }

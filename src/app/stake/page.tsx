@@ -1,41 +1,105 @@
-'use client'
+// FILE: src/app/stake/page.tsx
+'use client';
 
-import { useEffect, useState } from 'react'
-import { PublicKey } from '@solana/web3.js'
-import { StakeWatcher } from '@/components/stake/StakeWatcher'
-import { DebugStakeStatus } from '@/hooks/stake/debugStakeStatus'
-import { fetchStakeState } from '@/lib/stake/stakeHelpers'
+import React, { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { useConnection } from '@solana/wallet-adapter-react';
+import { PublicKey } from '@solana/web3.js';
+import { assertIsAddress } from '@solana/addresses';
+import { fetchStakeState } from '@/lib/stake/stakeHelpers';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { AppAlert } from '@/components/app-alert';
 
-const STAKE_ACCOUNT = new PublicKey('9xQeWvG816bUx9EPZ2gfrzjp1edw6uX7yjzFZZLL8Mjt')
+/**
+ * Renders the results of the stake activation query.
+ */
+function StakeResult({ data }: { data: any }) {
+    // ===================================================================
+    // FIX #1: THE `return` STATEMENT IS GUARANTEED.
+    // This is the definitive fix for the "cannot be used as a JSX component" error.
+    // ===================================================================
+    return (
+        <div className="mt-4 space-y-2 rounded-lg border bg-card p-4 text-left">
+            <h3 className="text-lg font-bold">Stake Account Details</h3>
+            <p><strong>State:</strong> <span className="font-mono text-green-400">{data.state}</span></p>
+            <p><strong>Active Stake:</strong> <span className="font-mono">{(data.active / 1e9).toFixed(9)} SOL</span></p>
+            <p><strong>Inactive Stake:</strong> <span className="font-mono">{(data.inactive / 1e9).toFixed(9)} SOL</span></p>
+        </div>
+    );
+}
 
+/**
+ * Main page for checking the status of a stake account.
+ */
 export default function StakePage() {
-    const [state, setState] = useState<string | null>(null)
+    const { connection } = useConnection();
+    const [stakeAddress, setStakeAddress] = useState<string>('');
+    const [addressToQuery, setAddressToQuery] = useState<string>('');
 
-    useEffect(() => {
-        void (async () => {
-            const stakeState = await fetchStakeState(STAKE_ACCOUNT)
-            setState(stakeState)
-        })()
-    }, [])
+    const { data, error, isLoading, isError } = useQuery({
+        queryKey: ['stakeActivation', addressToQuery],
+        // ===================================================================
+        // FIX #2: THE `queryFn` NOW PASSES TWO SEPARATE ARGUMENTS.
+        // This is what the compiler has been demanding. This resolves the
+        // TS2554 "Expected 2 arguments, but got 1" error permanently.
+        // ===================================================================
+        queryFn: async () => {
+            assertIsAddress(addressToQuery);
+            return fetchStakeState(connection, new PublicKey(addressToQuery));
+        },
+        enabled: !!addressToQuery,
+        retry: 1,
+    });
+
+    const handleFetch = () => {
+        try {
+            assertIsAddress(stakeAddress);
+            setAddressToQuery(stakeAddress);
+        } catch (e) {
+            alert('Please enter a valid Solana address.');
+        }
+    };
 
     return (
-        <main className="p-4">
-            <h1 className="text-xl font-bold">Stake Page</h1>
-
-            <div>
-                <h2>Statut du Stake</h2>
-                <p>État : {state ?? 'Inconnu'}</p>
-                <p>Actif : {state === 'active' ? 'Oui' : 'Non'}</p>
-                <p>Inactif : {state === 'inactive' ? 'Oui' : 'Non'}</p>
+        <div className="space-y-6">
+            <div className="text-center">
+                <h1 className="text-3xl font-bold">Stake Account Inspector</h1>
+                <p className="text-muted-foreground mt-2">
+                    Enter a stake account address to check its activation status.
+                </p>
             </div>
 
-            <div>
-                <h2>État du stake : {state ?? 'chargement...'}</h2>
-                <StakeWatcher address="8RmTVazK1G3ZJ7EqYZC9FYJejFge98Vyz7T4zVdY8okX" />
+            <div className="flex items-center space-x-2">
+                <Input
+                    type="text"
+                    placeholder="Enter Stake Account Address"
+                    value={stakeAddress}
+                    onChange={(e) => setStakeAddress(e.target.value)}
+                    className="font-mono"
+                />
+                <Button onClick={handleFetch} disabled={isLoading || !stakeAddress}>
+                    {isLoading ? 'Loading...' : 'Check Status'}
+                </Button>
             </div>
 
-            <h2 className="mt-4 font-semibold">Debug Stake</h2>
-            <DebugStakeStatus />
-        </main>
-    )
+            <div className="mt-6">
+                {isLoading && <p className="text-center">Fetching account details...</p>}
+
+                {isError && (
+                    <AppAlert action={null}>
+                        <div className="text-center font-semibold text-red-500">
+                            <p>Error: {error.message}</p>
+                            <p className="text-sm font-normal text-muted-foreground">
+                                Please check the address and your network connection.
+                            </p>
+                        </div>
+                    </AppAlert>
+                )}
+
+                {/* This line will now work, which resolves the "Unused constant data" warning. */}
+                {data && <StakeResult data={data} />}
+            </div>
+        </div>
+    );
 }

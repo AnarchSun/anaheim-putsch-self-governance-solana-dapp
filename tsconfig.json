@@ -1,22 +1,25 @@
+// FILE: tsconfig.json
+
 {
   "compilerOptions": {
-    "target": "ESNext",
     "lib": ["dom", "dom.iterable", "esnext"],
-    "module": "ESNext",
-    "moduleResolution": "node",
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
     "noEmit": true,
     "isolatedModules": true,
-    "esModuleInterop": true,
-    "resolveJsonModule": true,
     "incremental": true,
     "jsx": "preserve",
-    "allowSyntheticDefaultImports": true,
     "noImplicitAny": true,
     "noImplicitReturns": true,
     "strictFunctionTypes": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "target": "ESNext",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "allowArbitraryExtensions": true,
     "types": ["vitest/globals", "node"],
     "baseUrl": ".",
     "paths": {
@@ -30,6 +33,7 @@
     },
     "plugins": [{ "name": "next" }]
   },
+  // Your "include" and "exclude" arrays are preserved exactly as they were.
   "include": [
     "next-env.d.ts",
     "**/*.ts",

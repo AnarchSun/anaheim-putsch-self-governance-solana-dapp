@@ -1,10 +1,18 @@
-// src/components/ClientOnly.tsx
-'use client'
+// FILE: src/components/ClientOnly.tsx
+'use client';
 
-import React, { useEffect, useState } from 'react'
+import React, { useState, useEffect, ReactNode } from 'react';
 
-export function ClientOnly({ children }: { children: React.ReactNode }) {
-  const [mounted, setMounted] = useState(false)
-  useEffect(() => setMounted(true), [])
-  return mounted ? <>{children}</> : null
+export function ClientOnly({ children }: { children: ReactNode }) {
+  const [hasMounted, setHasMounted] = useState(false);
+
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
+
+  if (!hasMounted) {
+    return null; // Return nothing on the server and during the initial client render.
+  }
+
+  return <>{children}</>;
 }

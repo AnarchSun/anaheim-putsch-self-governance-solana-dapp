@@ -23,7 +23,7 @@ export async function getStakeActivationSafe(
 }
 
 
-export async function fetchStakeState(pubkey: PublicKey): Promise<StakeState | null> {
+export async function fetchStakeState(connection: Connection, pubkey: PublicKey): Promise<StakeState | null> {
   try {
     const connection = new Connection('https://api.devnet.solana.com')
 

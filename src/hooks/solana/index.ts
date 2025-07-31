@@ -1,6 +1,5 @@
 // src/hooks/solana/index.ts
 
-export { useClusterEndpoint } from '../cluster/useClusterEndpoint'
 export { useConnection } from './useConnection'
 export { useGetBalance } from './useGetBalance'
 export { useGetSignatures } from '../useGetSignatures'
@@ -9,7 +8,6 @@ export { useRequestAirdrop } from './useRequestAirdrop'
 export { useTransferSol } from './useTransferSol'
 export { useWrappedConnection } from './useWrappedConnection'
 export { useSolanaClient } from './useSolanaClient'
-export { useSolanaConnectionAndCluster } from './useSolanaConnectionAndCluster'
 
 // export const useSolanaWalletAddress = () => {
 //  const { publicKey } = useWallet();

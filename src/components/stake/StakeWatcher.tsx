@@ -13,7 +13,7 @@ export function StakeWatcher({ address }: StakeWatcherProps) {
   const pubkey = React.useMemo(() => new PublicKey(address), [address])
   const stakeActivationStatus = useStakeActivationStatus(pubkey, connection)
 
-  if (stakeActivationStatus.loading) return <p>🔄 Chargement...</p>
+    if (stakeActivationStatus.loading) return <p>🔄 Chargement...</p>
   if (stakeActivationStatus.error) return <p>⚠️ Erreur : {stakeActivationStatus.error.message}</p>
 
   return (

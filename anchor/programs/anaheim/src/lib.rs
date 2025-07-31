@@ -1,3 +1,4 @@
+// anchor/programs/anaheim/src/lib.rs
 #![allow(deprecated)]
 #![allow(unexpected_cfgs)]
 
@@ -17,12 +18,13 @@ pub use close::close_post;
 use crate::close::CloseAccount;
 pub use close::close_post::ClosePost;
 pub use handlers::handle_create_user;
+pub use contexts::initialize::*;
 pub use contexts::create_user::CreateUser as CreateUserContext;
 pub use utils::validation::string_utils::str_to_fixed_array;
 pub use instructions::create_user;
 use crate::program::Anaheim;
 
-declare_id!("8RmTVazK1G3ZJ7EqYZC9FYJejFge98Vyz7T4zVdY8okX");
+declare_id!("8bCmQr6a5Fr3S3CRbXyzBKXBNnRaTLDeArfYSWevJdfA");
 
 pub const ANAHEIM_IDL_ID: Pubkey = Pubkey::new_from_array([
   132, 157, 218, 39, 146, 184, 154, 229, 157, 208, 222, 217, 179, 105, 214, 114,
@@ -75,6 +77,7 @@ impl AnaheimAccount {
 }
 
 /// ─── CONTEXTES D'INSTRUCTIONS ───────────────────────────────────────────────
+
 #[derive(Accounts)]
 pub struct CreateUser<'info> {
   #[account(init, payer = authority, space = UserAccount::SIZE)]
@@ -93,14 +96,6 @@ pub struct CreatePost<'info> {
   pub system_program: Program<'info, System>,
 }
 
-#[derive(Accounts)]
-pub struct Initialize<'info> {
-  #[account(init, payer = payer, space = AnaheimAccount::SIZE)]
-  pub anaheim: Account<'info, AnaheimAccount>,
-  #[account(mut)]
-  pub payer: Signer<'info>,
-  pub system_program: Program<'info, System>,
-}
 
 #[derive(Accounts)]
 pub struct UseAnaheim<'info> {
@@ -129,6 +124,15 @@ impl IdlInstruction for Anaheim {
 pub mod anaheim {
   use super::*;
 
+  pub fn initialize(ctx: Context<Initialize>, bump: u8) -> Result<()> {
+    let anaheim_account = &mut ctx.accounts.anaheim;
+    anaheim_account.bump = bump;
+    anaheim_account.authority = *ctx.accounts.payer.key;
+    anaheim_account.count = 0;
+    anaheim_account.value = 0;
+    Ok(())
+  }
+}
   pub fn create_user(ctx: Context<CreateUser>, username: String) -> Result<()> {
     let trimmed = username.trim();
     if trimmed.is_empty() {
@@ -168,13 +172,6 @@ pub mod anaheim {
     Ok(())
   }
 
-  pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
-    let account = &mut ctx.accounts.anaheim;
-    account.authority = *ctx.accounts.payer.key;
-    account.count = 0;
-    account.value = 0;
-    Ok(())
-  }
 
   pub fn increment(ctx: Context<UseAnaheim>) -> Result<()> {
     ctx.accounts.anaheim.count += 1;
@@ -194,7 +191,7 @@ pub mod anaheim {
   pub fn close(_ctx: Context<CloseAnaheim>) -> Result<()> {
     Ok(())
   }
-}
+
 pub fn close_post_account(_ctx: Context<CloseAccount>) -> Result<()> {
   msg!("Account will be closed!");
   Ok(())

@@ -1,23 +1,17 @@
 // src/components/wallet/wallet-button.tsx
-'use client'
+'use client'; // <-- MUST BE THE FIRST LINE
 
-import { WalletButton } from '@/components/solana/solana-provider'
-import { redirect } from 'next/navigation'
-import { useWalletUi } from '@wallet-ui/react'
+import { useWallet } from '@solana/wallet-adapter-react';
+import { WalletDisconnectButton, WalletModalButton } from '@solana/wallet-adapter-react-ui';
+import React from 'react';
 
-export default function AccountListFeature() {
-  const walletUi = useWalletUi()  // 👈 pas de `new`, c’est un hook
-  const account = walletUi.account
+export const WalletButton = () => {
+    const { connected } = useWallet();
 
-  if (account) {
-    return redirect(`/account/${account.address.toString()}`)
-  }
-
-  return (
-    <div className="hero py-[64px]">
-      <div className="hero-content text-center">
-        <WalletButton />
-      </div>
-    </div>
-  )
-}
+    return (
+        <div>
+            {/* Ces boutons nécessitent du JS côté client pour fonctionner */}
+            {connected ? <WalletDisconnectButton /> : <WalletModalButton />}
+        </div>
+    );
+};

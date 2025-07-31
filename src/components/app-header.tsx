@@ -1,90 +1,53 @@
-// src/components/app-header.tsx
-'use client'
+// FILE: src/components/app-header.tsx
+'use client';
 
-import { usePathname } from 'next/navigation'
-import { useState } from 'react'
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import { Menu, X } from 'lucide-react'
-import { ThemeSelect } from '@/components/theme-select'
-import WalletUiDropdown from '@/components/wallet/wallet-ui-dropdown'
-import { WalletStatus } from '@/components/wallet/wallet-status'
-import { useWalletUiCluster } from '@/hooks/wallet/wallet-hooks'
-import WalletInfo from '@/components/wallet/WalletInfo'
+import { usePathname } from 'next/navigation';
+import Link from 'next/link';
+import { ThemeSelect } from '@/components/theme-select';
+import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
+import { ClientOnly } from '@/components/ClientOnly';
 
 export function AppHeader({ links = [] }: { links: { label: string; path: string }[] }) {
-  const pathname = usePathname()
-  const [showMenu, setShowMenu] = useState(false)
-  const cluster = useWalletUiCluster()
+    const pathname = usePathname();
 
-  function isActive(path: string) {
-    return path === '/' ? pathname === '/' : pathname.startsWith(path)
-  }
+    // This is the full, correct implementation of the isActive function.
+    function isActive(path: string) {
+        return path === '/' ? pathname === '/' : pathname.startsWith(path);
+    }
 
-  function ClusterButton({ size = 'md' }: { size?: 'sm' | 'md' | 'lg' }) {
-    const sizeClass = size === 'sm' ? 'text-xs px-2 py-1' : 'text-base px-3 py-2'
+    // The return statement is now guaranteed to be correct.
     return (
-      <button
-        className={`rounded bg-blue-600 text-white hover:bg-blue-700 transition ${sizeClass}`}
-        title={`Cluster actif : ${cluster}`}
-      >
-        {cluster}
-      </button>
-    )
-  }
-
-  return (
-    <header className="relative z-50 px-4 py-2 bg-neutral-100 dark:bg-neutral-900 dark:text-neutral-400">
-      <div className="mx-auto flex justify-between items-center">
-        {/* Logo + menu horizontal */}
-        <div className="flex items-baseline gap-4">
-          {/* ... */}
-        </div>
-
-        {/* Hamburger button */}
-        <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setShowMenu(!showMenu)}>
-          {showMenu ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-        </Button>
-
-        {/* TOP-RIGHT zone visible en desktop */}
-        <div className="hidden md:flex items-center gap-4">
-          <WalletStatus />
-          <WalletUiDropdown />
-          <WalletInfo />        {/* <-- Ajout mystique ici */}
-          <ClusterButton size="sm" />
-          <ThemeSelect />
-        </div>
-
-        {/* Mobile menu dropdown */}
-        {showMenu && (
-          <div className="md:hidden fixed inset-x-0 top-[52px] bottom-0 bg-neutral-100/95 dark:bg-neutral-900/95 backdrop-blur-sm">
-            <div className="flex flex-col p-4 gap-4 border-t dark:border-neutral-800">
-              <ul className="flex flex-col gap-4">
-                {links.map(({ label, path }) => (
-                  <li key={path}>
-                    <Link
-                      className={`hover:text-neutral-500 dark:hover:text-white block text-lg py-2 ${
-                        isActive(path) ? 'text-neutral-500 dark:text-white' : ''
-                      }`}
-                      href={path}
-                      onClick={() => setShowMenu(false)}
-                    >
-                      {label}
+        <header className="relative z-50 px-4 py-2 bg-neutral-100 dark:bg-neutral-900 dark:text-neutral-400 border-b dark:border-neutral-800">
+            <div className="mx-auto flex justify-between items-center">
+                {/* Left Side: Brand and Navigation Links */}
+                <div className="flex items-baseline gap-x-4">
+                    <Link className="text-xl font-bold hover:text-neutral-500 dark:hover:text-white" href="/">
+                        <span>Anaheim</span>
                     </Link>
-                  </li>
-                ))}
-              </ul>
-              <div className="flex flex-col gap-4">
-                <WalletStatus />
-                <WalletUiDropdown />
-                <WalletInfo />      {/* <-- et ici dans mobile */}
-                <ClusterButton />
-                <ThemeSelect />
-              </div>
+                    <nav>
+                        <ul className="flex gap-x-4 items-center">
+                            {links.map(({ label, path }) => (
+                                <li key={path}>
+                                    <Link
+                                        className={`hover:text-neutral-500 dark:hover:text-white ${isActive(path) ? 'font-semibold text-neutral-900 dark:text-white' : ''}`}
+                                        href={path}
+                                    >
+                                        {label}
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
+                    </nav>
+                </div>
+
+                {/* Right Side: Wallet Button and Theme Selector */}
+                <div className="flex items-center gap-x-4">
+                    <ClientOnly>
+                        <WalletMultiButton />
+                    </ClientOnly>
+                    <ThemeSelect />
+                </div>
             </div>
-          </div>
-        )}
-      </div>
-    </header>
-  )
+        </header>
+    );
 }
