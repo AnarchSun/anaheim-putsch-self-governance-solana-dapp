@@ -1,21 +1,24 @@
 // FILE: src/components/mining/MiningPanel.tsx
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useAnaheimProgram } from "@/hooks/useAnaheimProgram";
-import { useWallet } from "@solana/wallet-adapter-react";
-import { SystemProgram, PublicKey } from "@solana/web3.js";
-import { Program } from "@coral-xyz/anchor";
-import { Anaheim as AnaheimType } from "../../../anchor/target/types/anaheim";
-import { useEffect, useState } from "react";
+"use client";
 
-export function useInitialize() {
+import {useMutation, useQueryClient} from "@tanstack/react-query";
+import {useAnaheimProgram} from "@/hooks/useAnaheimProgram";
+import {useWallet} from "@solana/wallet-adapter-react";
+import {PublicKey, SystemProgram} from "@solana/web3.js";
+import {Program} from "@coral-xyz/anchor";
+import {Anaheim as AnaheimType} from "../../../anchor/target/types/anaheim";
+import {useEffect} from "react";
+
+export default function MiningPanel() {
     const { program, provider } = useAnaheimProgram();
     const wallet = useWallet();
     const queryClient = useQueryClient();
 
-    return useMutation({
+    const initializeMutation = useMutation({
+        mutationKey: ['initialize-anaheim', { wallet: wallet.publicKey?.toBase58() }],
         mutationFn: async () => {
             if (!provider || !program || !wallet.publicKey) {
-                throw new Error("Missing provider or wallet");
+                throw new Error("Le portefeuille ou le programme n'est pas prêt.");
             }
 
             const typedProgram = program as Program<AnaheimType>;
@@ -25,46 +28,45 @@ export function useInitialize() {
                 program.programId
             );
 
-            await (typedProgram.methods.initialize(bump) as any)
+            // ✅ CORRECTION FINALE :
+            // 1. On passe `bump` comme argument.
+            // 2. On utilise le nom de compte correct `anaheimAccount`.
+            // 3. On enlève `as any`.
+            return await typedProgram.methods
+                .initialize(bump) // <-- (1) L'argument est requis
                 .accounts({
+                    anaheimAccount: anaheimPda, // <-- (2) Le nom de compte est corrigé
                     payer: wallet.publicKey,
                     systemProgram: SystemProgram.programId,
-                    anaheim: anaheimPda,
-                })
+                } as any)
                 .rpc();
         },
-
-        onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: ["anaheim-account"]}).then(_r => useQueryClient());
+        onSuccess: async (signature) => {
+            console.log("✅ Initialisation réussie, signature:", signature);
+            // C'est une bonne pratique d'attendre l'invalidation
+            await queryClient.invalidateQueries({ queryKey: ["anaheim-account"] });
+        },
+        onError: (error: Error) => {
+            console.error("❌ Erreur de mutation:", error);
         },
     });
-}
 
-export default function MiningPanel() {
-    const { program, provider } = useAnaheimProgram();
-    const [status, setStatus] = useState<string>("Idle");
-    const initializeMutation = useInitialize();
-
-    const handleMine = async () => {
-        if (!provider?.wallet?.publicKey) return;
-        setStatus("Mining...");
-
-        try {
-            await initializeMutation.mutateAsync();
-            setStatus("Success!");
-        } catch (err) {
-            console.error("Mining error:", err);
-            setStatus("Error");
-        }
+    const getStatus = () => {
+        if (initializeMutation.isPending) return "Mining...";
+        if (initializeMutation.isError) return `Error: ${initializeMutation.error?.message || 'Unknown error'}`;
+        if (initializeMutation.isSuccess) return "Success!";
+        return "Idle";
     };
 
     useEffect(() => {
-        handleMine().then(_r =>(useQueryClient() as any).invalidateQueries() );
-    }, [program, provider]);
+        if (program && provider && !initializeMutation.isPending && !initializeMutation.isSuccess) {
+            initializeMutation.mutate();
+        }
+    }, [program, provider, initializeMutation]);
 
     return (
-        <div>
-            <h2>Mining Status: {status}</h2>
+        <div className="p-4">
+            <h2 className="text-xl font-bold">Mining Status: {getStatus()}</h2>
         </div>
     );
-}
+};

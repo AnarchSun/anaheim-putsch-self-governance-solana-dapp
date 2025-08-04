@@ -3,11 +3,10 @@
 import { AppHero } from '@/components/app-hero'
 
 const links: { label: string; href: string }[] = [
-    { label: 'Solana Docs', href: 'https://docs.solana.com/' },
-    { label: 'Solana Faucet', href: 'https://faucet.solana.com/' },
-    { label: 'Solana Cookbook', href: 'https://solana.com/developers/cookbook/' },
-    { label: 'Solana Stack Overflow', href: 'https://solana.stackexchange.com/' },
-    { label: 'Solana Developers GitHub', href: 'https://github.com/solana-developers/' },
+    { label: 'Raydium r=3.57/USDT Liquidity Pool', href: 'https://raydium.io/liquidity-pools/?token=GETtSamgoHWLdrQv7nEzWrtPXNQxvbtPjv8eABZgHNTU' },
+    { label: 'r=3.57 Putsch Token on Solscan', href: 'https://solscan.io/token/GETtSamgoHWLdrQv7nEzWrtPXNQxvbtPjv8eABZgHNTU' },
+    { label: 'Chaotic Fractal AttraKThor Governance DAO', href: 'https://v2.realms.today/dao/DAnNQ7S9ofKG9LnYVnUEL6rZtM92TacwMEPxpXroAX7K/proposals' },
+    { label: 'anaheim-putsch-self-governance-solana-dapp GitHub', href: 'https://github.com/RastaDjuss/anaheim-putsch-self-governance-solana-dapp.git' },
 ]
 
 export function DashboardFeature() {

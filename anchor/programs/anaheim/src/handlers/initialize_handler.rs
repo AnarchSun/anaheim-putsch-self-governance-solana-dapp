@@ -2,11 +2,8 @@
 use anchor_lang::prelude::*;
 use crate::contexts::initialize::Initialize;
 
-pub fn initialize_handler(ctx: Context<Initialize>) -> Result<()> {
-  let bump = ctx.bumps.anaheim; // ✅ Fix ici
-
+pub fn initialize_handler(ctx: Context<Initialize>, bump: u8) -> Result<()> {
   let account = &mut ctx.accounts.anaheim;
   account.bump = bump;
-
   Ok(())
 }

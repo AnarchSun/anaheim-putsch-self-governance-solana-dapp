@@ -1,7 +1,7 @@
 // src/components/use-transaction-toast.tsx
 import { toast } from 'sonner'
 import { ExplorerLink } from "@/components/explorer-link"
-import {SignatureBytes} from "gill";
+import {Signature, SignatureBytes} from "gill";
 
 export function useTransactionToast() {
   return (signature: string) => {
@@ -12,7 +12,7 @@ export function useTransactionToast() {
 }
 
 // ➕ ajout d’une export direct
-export const toastTx = (signature: Promise<SignatureBytes>) => {
+export const toastTx = (signature: xdr.Signer) => {
   toast('Transaction sent', {
     description: <ExplorerLink transaction={signature} label="View Transaction" address={''} path={''} />,
   })

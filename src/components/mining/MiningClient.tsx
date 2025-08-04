@@ -2,42 +2,66 @@
 'use client';
 
 import React from 'react';
-import { useConnection, useWallet } from '@solana/wallet-adapter-react';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import {
-    ANAHEIM_ACCOUNT_PUBKEY,
-    createAnaheimProgram,
-    getAnaheimAccount
-} from '@/lib/anaheim-program';
-import { Button } from '@/components/ui/button';
-import { AppAlert } from '../app-alert';
+import { useConnection, useWallet, WalletContextState} from '@solana/wallet-adapter-react';
+import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
+import {getAnaheimAccount} from '@/lib/anaheim-program';
+import {Button} from '@/components/ui/button';
+import {AppAlert} from '../app-alert';
+import {Connection, PublicKey} from '@solana/web3.js';
+import IDL from '@/../anchor/target/idl/anaheim.json';
+import {Program, AnchorProvider} from '@coral-xyz/anchor';
+import {Wallet} from '@coral-xyz/anchor/dist/cjs/provider';
+
+export function createAnaheimProgram(connection: Connection, wallet: Wallet | WalletContextState) {
+    const provider = new AnchorProvider(connection, wallet as Wallet, AnchorProvider.defaultOptions());
+    const programId = new PublicKey("EMKno4tmR5KgB9L1QqFwfARkjksgdUoFrPDAaCFBCmXa");
+    return new Program(IDL as any, provider);
+}
 
 // --- HOOKS ---
-
 function useAnaheimAccountQuery() {
     const { connection } = useConnection();
+    const wallet = useWallet();
+
     return useQuery({
-        queryKey: ['anaheim-account'],
-        queryFn: () => getAnaheimAccount(connection),
+        queryKey: ['anaheim-account', wallet.publicKey?.toBase58()],
+        enabled: !!wallet.publicKey,
+        queryFn: () => {
+            if (!wallet.publicKey) return null;
+            return getAnaheimAccount(connection, wallet.publicKey);
+        },
     });
 }
 
-function useIncrementMutation() {
+function useIncrementMutation(anaheimAccountPubkey: PublicKey | null) {
     const { connection } = useConnection();
     const wallet = useWallet();
     const queryClient = useQueryClient();
 
     return useMutation({
         mutationFn: async () => {
-            if (!wallet.connected || !wallet.publicKey) { throw new Error('Wallet not connected'); }
+            if (!wallet.connected || !wallet.publicKey || !anaheimAccountPubkey) {
+                throw new Error('Wallet or Anaheim account not available');
+            }
+
             const program = createAnaheimProgram(connection, wallet);
+
             const signature = await program.methods
                 .increment()
-                .accounts({ anaheim: ANAHEIM_ACCOUNT_PUBKEY! })
+                .accounts({
+                    anaheimAccount: anaheimAccountPubkey,
+                    authority: wallet.publicKey,
+                })
                 .rpc();
+
             const latestBlockhash = await connection.getLatestBlockhash();
-            await connection.confirmTransaction({ signature, ...latestBlockhash });
-            return signature;
+            await connection.confirmTransaction(
+                {
+                    signature,
+                    ...latestBlockhash,
+                },
+                'finalized'
+            );
         },
         onSuccess: () => {
             return queryClient.invalidateQueries({ queryKey: ['anaheim-account'] });
@@ -46,23 +70,20 @@ function useIncrementMutation() {
     });
 }
 
-// ===================================================================
-// THIS IS THE DEFINITIVE FIX.
-// The broken `useInitializeMutation` hook has been completely REMOVED.
-// The frontend UI should NEVER be responsible for initialization.
-// ===================================================================
-
 // --- MAIN COMPONENT ---
 export default function MiningClient() {
     const { data: anaheimAccount, isLoading } = useAnaheimAccountQuery();
-    const incrementMutation = useIncrementMutation();
+    const incrementMutation = useIncrementMutation(
+        anaheimAccount ? new PublicKey(anaheimAccount.publicKey) : null
+    );
+
+    const wallet = useWallet(); // We need this in the component scope for console.log
+    console.log("Frontend wallet pubkey:", wallet.publicKey?.toBase58());
 
     if (isLoading) {
         return <p className="text-center">Loading on-chain data...</p>;
     }
 
-    // If the account is not found, we now show a simple, informative error message
-    // for the DEVELOPER (you), telling them what command to run.
     if (!anaheimAccount) {
         return (
             <AppAlert action={null}>

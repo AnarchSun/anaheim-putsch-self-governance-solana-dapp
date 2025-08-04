@@ -1,3 +1,4 @@
+// anchor/programs/anaheim/src/instructions/update.rs
 use anchor_lang::prelude::*;
 
 use crate::close::close_anaheim::CloseAnaheim;
@@ -19,10 +20,9 @@ pub fn increment(ctx: Context<UpdatePost>) -> Result<()> {
   Ok(())
 }
 
-pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
-  initialize_handler(ctx)
+pub fn initialize(ctx: Context<Initialize>, bump: u8) -> Result<()> {
+  initialize_handler(ctx, bump)
 }
-
 pub fn set(ctx: Context<UpdatePost>, value: u8) -> Result<()> {
   ctx.accounts.anaheim.count = value as u64;
   Ok(())

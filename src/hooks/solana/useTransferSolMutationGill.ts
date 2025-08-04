@@ -1,13 +1,12 @@
 // FILE: src/hooks/solana/useTransferSolMutation.ts
-// VERSION FINALE ET DÉFINITIVE
 
 import {
-    type Address,
+    Address,
     createTransaction,
-    getBase58Decoder,
     signAndSendTransactionMessageWithSigners,
     TransactionSigner,
-    signature, // Important pour le typage dans onSuccess
+    signature,
+    getBase58Decoder,
 } from 'gill';
 import { getTransferSolInstruction } from 'gill/programs';
 import { Connection } from '@solana/web3.js';
@@ -21,56 +20,49 @@ export function useTransferSolMutation({ address }: { address: Address }) {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: async (input: { destination: Address; amount: number }) => {
-            if (!account || !client) {
-                throw new Error("Le portefeuille n'est pas connecté.");
-            }
+        mutationFn: async ({ destination, amount }: { destination: Address; amount: number }) => {
+            if (!account || !client) throw new Error("Le portefeuille n'est pas connecté.");
 
             const signer: TransactionSigner = {
                 address: account.address as Address,
-                async signAndSendTransactions(transactions) {
-                    throw new Error("La logique de signature du portefeuille n'est pas encore implémentée !");
+                async signAndSendTransactions(_) {
+                    throw new Error("La logique de signature n'est pas encore définie.");
                 },
             };
 
             const connection = new Connection(client.toString(), "confirmed");
             const latestBlockhash = await connection.getLatestBlockhash("confirmed");
 
-            // ÉTAPE 1: Crée la transaction de base.
-            const baseTransaction = createTransaction({
+            const transaction = createTransaction({
                 feePayer: signer,
                 version: 0,
                 instructions: [
                     getTransferSolInstruction({
-                        amount: input.amount,
-                        destination: input.destination,
+                        amount,
+                        destination,
                         source: signer,
                     }),
                 ],
-            });
-
-            // ÉTAPE 2: On crée l'objet final que la fonction de signature attend à l'exécution.
-            const transactionToSign = {
-                ...baseTransaction,
-                lifetimeConstraint: {
+                latestBlockhash: {
                     blockhash: latestBlockhash.blockhash,
                     lastValidBlockHeight: BigInt(latestBlockhash.lastValidBlockHeight),
                 },
-            };
+            }as any);
 
-            // ✅ SOLUTION FINALE : On passe l'objet final, en utilisant `as any`
-            // pour contourner le bug de typage de la librairie.
-            const signatureBytes = await signAndSendTransactionMessageWithSigners(
-                transactionToSign as any
-            );
+            const signatureBytes = await signAndSendTransactionMessageWithSigners({
+                message: transaction,
+                signers: [signer],
+            }as any);
 
             return getBase58Decoder().decode(signatureBytes);
         },
+
         onSuccess: async (rawSignature: string) => {
             toastTx(signature(rawSignature));
             await queryClient.invalidateQueries({ queryKey: ['get-balance', { address }] });
             await queryClient.invalidateQueries({ queryKey: ['get-signatures', { address }] });
         },
+
         onError: (error: Error) => {
             toast.error(`La transaction a échoué: ${error.message}`);
         },

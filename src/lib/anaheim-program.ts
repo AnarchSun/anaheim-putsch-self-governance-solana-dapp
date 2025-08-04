@@ -1,9 +1,10 @@
 // FILE: src/lib/anaheim-program.ts
-import { BorshAccountsCoder, Program, AnchorProvider } from '@coral-xyz/anchor';
-import { Connection, PublicKey } from '@solana/web3.js';
-import { WalletContextState } from '@solana/wallet-adapter-react';
-import { Anaheim } from '../../anchor/target/types/anaheim';
+import {AnchorProvider, BorshAccountsCoder, Program} from '@coral-xyz/anchor';
+import {Connection, PublicKey} from '@solana/web3.js';
+import {WalletContextState} from '@solana/wallet-adapter-react';
+import {Anaheim} from '../../anchor/target/types/anaheim';
 import IDL from '../../anchor/target/idl/anaheim.json';
+import {useSolanaWalletAddressHook} from "@/hooks/solana/index";
 
 const programIdString = process.env.NEXT_PUBLIC_ANAHEIM_PROGRAM_ID;
 if (!programIdString) { throw new Error("FATAL ERROR: Program ID not in .env"); }
@@ -16,15 +17,21 @@ export function createAnaheimProgram(connection: Connection, wallet: WalletConte
     if (!wallet.publicKey) { throw new Error("Wallet not connected"); }
     const provider = new AnchorProvider(connection, wallet as any, AnchorProvider.defaultOptions());
     const idl = { ...IDL, address: ANAHEIM_PROGRAM_ID.toBase58() };
-    const program = new Program<Anaheim>(idl as any, provider);
-    return program;
+    return new Program<Anaheim>(idl as any, provider);
 }
 
-export async function getAnaheimAccount(connection: Connection) {
-    if (!ANAHEIM_ACCOUNT_PUBKEY) { return null; }
+export const getAnaheimAccount = async (connection: useSolanaWalletAddressHook, walletPubkey: PublicKey, programId: PublicKey = ANAHEIM_PROGRAM_ID) => {
+    const addressSync = PublicKey.findProgramAddressSync(
+        [Buffer.from("anaheim"), walletPubkey.toBuffer()],
+        programId
+    );
+    const accountInfo = await connection.getAccountInfo(addressSync[0]);
+    if (!accountInfo) return null;
     try {
-        const accountInfo = await connection.getAccountInfo(ANAHEIM_ACCOUNT_PUBKEY);
-        if (accountInfo === null) { return null; }
+        if (ANAHEIM_ACCOUNT_PUBKEY instanceof PublicKey) {
+            const accountInfo = await connection.getAccountInfo(ANAHEIM_ACCOUNT_PUBKEY);
+        }
+
         const coder = new BorshAccountsCoder(IDL as any);
         return coder.decode('anaheimAccount', accountInfo.data);
     } catch (error) {

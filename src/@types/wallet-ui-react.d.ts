@@ -1,3 +1,7 @@
+export function useWalletUiAccount() {
+  //
+}
+
 // src/@types/wallet-ui-react.d.ts
 declare module '@wallet-ui/react' {
   WalletButton = undefined;
@@ -14,6 +18,7 @@ declare module '@wallet-ui/react' {
   }
 
   export function useWalletUi(): {
+    signer: any;
     cluster: any;
     client: string;
     account?: UiWalletAccount

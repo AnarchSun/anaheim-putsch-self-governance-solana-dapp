@@ -6,6 +6,7 @@ import os from "os";
 import {existsSync} from "node:fs";
 import { fileURLToPath } from "url";
 import { dirname, resolve } from "path";
+import {any} from "zod";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -27,20 +28,21 @@ const connection = new Connection("https://api.devnet.solana.com", "confirmed");
 const provider = new AnchorProvider(connection, wallet, { commitment: "confirmed" });
 
 const idl = JSON.parse(readFileSync(IDL_PATH, "utf-8"));
-if (!idl.metadata?.address) throw new Error("IDL metadata.address missing");
-const programIdRaw = idl.metadata?.address ?? "ANAHEiM1111111111111111111111111111111111";
 const programId = new PublicKey("EMKno4tmR5KgB9L1QqFwfARkjksgdUoFrPDAaCFBCmXa");
 
 console.log("programId:", programId.toBase58());
 console.log("provider instanceof AnchorProvider?", true);
-console.log("programId:", programId.toBase58());
 
 const program = new Program(idl, provider);
 
-async function main() {
+interface MainParams {
+    txSig1?: any;
+}
+
+async function main(p0: {}) {
     const payer = wallet.publicKey;
     const [anaheimPda, bump] = PublicKey.findProgramAddressSync(
-        [Buffer.from("anaheim"), payer.toBuffer()],
+        [Buffer.from("anaheim"), wallet.publicKey.toBuffer()],
         program.programId
     );
 
@@ -50,6 +52,23 @@ async function main() {
         return;
     }
 
+    const account = await connection.getAccountInfo(anaheimPda);
+    const programId = new PublicKey(idl.metadata.address);
+
+    function setIsInitialized(b: boolean) {
+        // TODO ORION
+    }
+
+    try {
+
+        // ...
+    } catch (err) {
+        console.warn("Anaheim program not initialized:", err);
+        setIsInitialized(false);
+    }
+
+    console.log("exists?", !!account);
+    // Capture la signature ici
     const txSig = await program.methods
         .initialize(bump)
         .accounts({
@@ -57,10 +76,35 @@ async function main() {
             payer,
             systemProgram: SystemProgram.programId,
         })
-        .signers([keypair])
         .rpc();
 
     console.log("Transaction sent:", txSig);
 }
 
-main().catch(console.error);
+let walletPubkey: undefined | PublicKey = undefined;
+
+function toBuffer(): any {
+    return any;
+}
+
+const [anaheimPda] = PublicKey.findProgramAddressSync(
+    [Buffer.from("anaheim"), wallet.publicKey.toBuffer()],
+    programId
+);
+
+function setIsInitialized(b: boolean) {
+
+}
+console.log("anaheim:", programId.toBase58());
+try {
+    let anaheim: any;
+    anaheim = program.account.isPrototypeOf(anaheimPda);
+} catch (err) {
+    console.warn("Anaheim program not initialized:", err);
+    setIsInitialized(false);
+}
+
+console.log("ANAHEIM PDA:", anaheimPda.toBase58());
+
+
+main({}).catch(console.error);
