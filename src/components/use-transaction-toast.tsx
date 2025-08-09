@@ -11,7 +11,7 @@ export function useTransactionToast() {
   }
 }
 
-// ➕ ajout d’une export direct
+// ➕ ajout d’un export direct
 export const toastTx = (signature: xdr.Signer) => {
   toast('Transaction sent', {
     description: <ExplorerLink transaction={signature} label="View Transaction" address={''} path={''} />,

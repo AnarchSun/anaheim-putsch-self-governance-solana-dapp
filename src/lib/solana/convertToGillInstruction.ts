@@ -9,7 +9,7 @@ function toSDKAddress(s: string) {
     return undefined;
 }
 
-export function convertToGillInstruction(ix: TransactionInstruction): IInstruction {
+export function convertToGillInstruction(ix: "undefined" | "object" | "boolean" | "number" | "string" | "function" | "symbol" | "bigint"): IInstruction {
     return {
         programAddress: toSDKAddress(ix.programId.toBase58()) as SDKAddress<string>,
         data: ix.data,

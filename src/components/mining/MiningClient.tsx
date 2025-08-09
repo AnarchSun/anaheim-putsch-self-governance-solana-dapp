@@ -43,7 +43,7 @@ function useIncrementMutation() {
                 .accounts({
                     anaheimAccount: anaheimAccountPubkey,
                     authority: publicKey, // ✅ On passe 'publicKey'
-                })
+                }as any)
                 .rpc();
         },
         onSuccess: () => {

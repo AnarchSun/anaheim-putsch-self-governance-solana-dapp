@@ -7,7 +7,7 @@ interface TransferSolInput {
     amount: number; // en SOL
 }
 
-export function useTransferSolMutation() {
+export function useTransferSolMutation(p0: { address: string | null; }) {
     const queryClient = useQueryClient();
     const { publicKey, sendTransaction } = useWallet();
     const { connection } = useConnection();

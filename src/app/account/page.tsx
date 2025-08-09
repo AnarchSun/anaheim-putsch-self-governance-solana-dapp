@@ -26,8 +26,10 @@ export default function AccountDashboardPage() {
         useTransferSolMutation({ address })
 
     useEffect(() => {
-        if (isSuccess && data?.signature) {
-            toast.success(`✅ Transaction réussie ! Signature: ${data.signature}`)
+        // Si la mutation a réussi et que `data` (la signature string) existe
+        if (isSuccess && data) {
+            // `data` EST la signature. On l'utilise directement.
+            toast.success(`✅ Transaction réussie ! Signature: ${data}`)
         }
 
         if (isError) {
