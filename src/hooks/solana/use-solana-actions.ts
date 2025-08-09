@@ -2,91 +2,65 @@
 // VERSION FINALE ET DÉFINITIVE
 'use client';
 
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
     type Address,
-    airdropFactory,
+    // Import blockhash factory
     createTransaction,
-    getBase58Decoder,
-    lamports,
+    // Use encoder to get string for toast
     signAndSendTransactionMessageWithSigners,
     signature,
-
+    Transaction as GillTransaction,
+    TransactionMessageBytes,
+    getBase58Decoder,
 } from 'gill';
 import { getTransferSolInstruction } from 'gill/programs';
 import { useWalletUi } from '@wallet-ui/react';
-import { clusterApiUrl, Connection, PublicKey } from '@solana/web3.js';
+import { clusterApiUrl, Connection, PublicKey, Transaction as Web3Transaction } from '@solana/web3.js';
 import { toast } from 'sonner';
 import { toastTx } from '@/components/use-transaction-toast';
-import { useWalletUiSigner } from '@/components/solana/use-wallet-ui-signer';
+import {useWalletUiSigner} from "@/components/solana/use-wallet-ui-signer";
 
-// ... (les hooks useGetBalanceQuery et useRequestAirdropMutation restent les mêmes)
+// --- HELPER FUNCTIONS ---
 
-export function useGetBalanceQuery({ address }: { address: Address }) {
-    const { cluster } = useWalletUi();
-    const connection = new Connection(clusterApiUrl(cluster));
-
-    return useQuery({
-        queryKey: ['get-balance', { cluster, address }],
-        queryFn: () => {
-            if (!address) return null;
-            return connection.getBalance(new PublicKey(address));
-        },
-        enabled: !!address,
-    });
+function messageBytesToUint8Array(messageBytes: TransactionMessageBytes): Uint8Array {
+    return Uint8Array.from(messageBytes as unknown as Iterable<number>);
 }
 
-export function useRequestAirdropMutation({ address }: { address: Address }) {
-    const { cluster } = useWalletUi();
-    const connection = new Connection(clusterApiUrl(cluster));
-    const queryClient = useQueryClient();
+function toWeb3Transaction(tx: GillTransaction): Web3Transaction {
+    const rawMsg = messageBytesToUint8Array(tx.messageBytes);
+    const web3Tx = Web3Transaction.from(rawMsg);
 
-    return useMutation({
-        mutationFn: (amount: number = 1) => {
-            if (!address) throw new Error("L'adresse est requise pour l'airdrop.");
-            const airdrop = airdropFactory({ rpc: connection } as any);
-            return airdrop({
-                commitment: 'confirmed',
-                recipientAddress: address,
-                lamports: lamports(BigInt(Math.round(amount * 1_000_000_000))),
-            });
-        },
-        onSuccess: async (tx) => {
-            toastTx(tx);
-            await queryClient.invalidateQueries({ queryKey: ['get-balance', { address }] });
-        },
-        onError: (error: Error) => {
-            toast.error(`Airdrop a échoué ! ${error.message}`);
-        },
-    });
+    for (const [pubkeyStr, sig] of Object.entries(tx.signatures)) {
+        if (!sig) continue;  // ignore null signatures
+        web3Tx.addSignature(new PublicKey(pubkeyStr), Buffer.from(sig));
+    }
+    return web3Tx;
 }
-
-// --- HOOK useTransferSolMutation CORRIGÉ ---
 
 export function useTransferSolMutation({ address }: { address: Address }) {
-    const signer = useWalletUiSigner(); // Ce hook peut retourner `undefined`
     const { cluster } = useWalletUi();
-    const connection = new Connection(clusterApiUrl(cluster), 'confirmed');
+    const rpcUrl = clusterApiUrl(cluster);
+    const signer = useWalletUiSigner(rpcUrl);
+
+    const connection = new Connection(rpcUrl, 'confirmed');
     const queryClient = useQueryClient();
 
     return useMutation({
         mutationFn: async (input: { destination: Address; amount: number }) => {
-            // ✅ SOLUTION : On vérifie si l'objet 'signer' existe AVANT de lire ses propriétés.
-            if (!signer) {
-                throw new Error("Signer non disponible. Le portefeuille n'est probablement pas connecté.");
-            }
+            if (!signer) throw new Error('Signer non disponible. Portefeuille non connecté.');
 
             const latestBlockhash = await connection.getLatestBlockhash('confirmed');
 
             const baseTransaction = createTransaction({
-                feePayer: signer,
+                feePayer: signer.address,  // string brandée
                 version: 0,
                 instructions: [
                     getTransferSolInstruction({
                         amount: input.amount,
                         destination: input.destination,
-                        source: signer,
-                    }),
+                        source: signer.address,
+                    } as any),
                 ],
             });
 
@@ -95,12 +69,15 @@ export function useTransferSolMutation({ address }: { address: Address }) {
                 lifetimeConstraint: {
                     blockhash: latestBlockhash.blockhash,
                     lastValidBlockHeight: BigInt(latestBlockhash.lastValidBlockHeight),
-                }
+                },
             };
+
+            // NE PAS REDÉCLARER signer ici, on utilise celui du scope externe
 
             const signatureBytes = await signAndSendTransactionMessageWithSigners(transaction as any);
             return getBase58Decoder().decode(signatureBytes);
         },
+
         onSuccess: async (rawSignature: string) => {
             toastTx(signature(rawSignature));
             await queryClient.invalidateQueries({ queryKey: ['get-balance', { address }] });

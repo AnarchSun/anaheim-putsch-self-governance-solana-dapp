@@ -86,6 +86,9 @@ importers:
       '@solana/nominal-types':
         specifier: ^2.3.0
         version: 2.3.0(typescript@5.9.2)
+      '@solana/rpc-transport':
+        specifier: 0.0.0-experimental.0
+        version: 0.0.0-experimental.0
       '@solana/rpc-types':
         specifier: ^2.3.0
         version: 2.3.0(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.9.2)
@@ -305,6 +308,9 @@ importers:
       styles.css:
         specifier: link:@solana/wallet-adapter-react-ui/styles.css
         version: link:@solana/wallet-adapter-react-ui/styles.css
+      subscriptions:
+        specifier: link:@solana/rpc-transport/subscriptions
+        version: link:@solana/rpc-transport/subscriptions
       superstruct:
         specifier: ^2.0.2
         version: 2.0.2
@@ -1275,6 +1281,24 @@ packages:
 
   '@manypkg/get-packages@1.1.3':
     resolution: {integrity: sha512-fo+QhuU3qE/2TQMQmbVMqaQ6EWbMhi4ABWP+O4AM1NqPBuy0OrApV5LO6BrrgnhtAHS2NH6RrVk9OL181tTi8A==}
+
+  '@metaplex-foundation/umi-options@0.8.9':
+    resolution: {integrity: sha512-jSQ61sZMPSAk/TXn8v8fPqtz3x8d0/blVZXLLbpVbo2/T5XobiI6/MfmlUosAjAUaQl6bHRF8aIIqZEFkJiy4A==}
+
+  '@metaplex-foundation/umi-public-keys@0.8.9':
+    resolution: {integrity: sha512-CxMzN7dgVGOq9OcNCJe2casKUpJ3RmTVoOvDFyeoTQuK+vkZ1YSSahbqC1iGuHEtKTLSjtWjKvUU6O7zWFTw3Q==}
+
+  '@metaplex-foundation/umi-serializers-core@0.8.9':
+    resolution: {integrity: sha512-WT82tkiYJ0Qmscp7uTj1Hz6aWQPETwaKLAENAUN5DeWghkuBKtuxyBKVvEOuoXerJSdhiAk0e8DWA4cxcTTQ/w==}
+
+  '@metaplex-foundation/umi-serializers-encodings@0.8.9':
+    resolution: {integrity: sha512-N3VWLDTJ0bzzMKcJDL08U3FaqRmwlN79FyE4BHj6bbAaJ9LEHjDQ9RJijZyWqTm0jE7I750fU7Ow5EZL38Xi6Q==}
+
+  '@metaplex-foundation/umi-serializers-numbers@0.8.9':
+    resolution: {integrity: sha512-NtBf1fnVNQJHFQjLFzRu2i9GGnigb9hOm/Gfrk628d0q0tRJB7BOM3bs5C61VAs7kJs4yd+pDNVAERJkknQ7Lg==}
+
+  '@metaplex-foundation/umi-serializers@0.8.9':
+    resolution: {integrity: sha512-Sve8Etm3zqvLSUfza+MYRkjTnCpiaAFT7VWdqeHzA3n58P0AfT3p74RrZwVt/UFkxI+ln8BslwBDJmwzcPkuHw==}
 
   '@mobily/ts-belt@3.13.1':
     resolution: {integrity: sha512-K5KqIhPI/EoCTbA6CGbrenM9s41OouyK8A03fGJJcla/zKucsgLbz8HNbeseoLarRPgyWJsUyCYqFhI7t3Ra9Q==}
@@ -2250,6 +2274,10 @@ packages:
     peerDependencies:
       typescript: '>=5.3.3'
 
+  '@solana/keys@0.0.0-experimental.1':
+    resolution: {integrity: sha512-o/hCp8epGAlR6RxuPvMnBProQbLhNHDsqTu0IAVWh0kE3WkALqd6YiurgodgUoud+FRXwlYIyPMWT5YTyIw0OA==}
+    deprecated: This package was a test build
+
   '@solana/keys@2.1.1':
     resolution: {integrity: sha512-SXuhUz1c2mVnPnB+9Z9Yw6HPluIZbMlSByr+vPFLgaPYM356bRcNnu1pa28tONiQzRBFvl9qL08SL0OaYsmqPg==}
     engines: {node: '>=20.18.0'}
@@ -2321,6 +2349,9 @@ packages:
     peerDependencies:
       typescript: '>=5.3.3'
 
+  '@solana/rpc-core@0.0.0-experimental.df45965':
+    resolution: {integrity: sha512-/Jnp7OnZvz/IcAq/qET5nNfKlZ5pirMzgbCgv7F4HkDtrfzXI+3HIqa4nzE8a/IYjvZfO3MOLTzF/A5orWKBIQ==}
+
   '@solana/rpc-parsed-types@2.3.0':
     resolution: {integrity: sha512-B5pHzyEIbBJf9KHej+zdr5ZNAdSvu7WLU2lOUPh81KHdHQs6dEb310LGxcpCc7HVE8IEdO20AbckewDiAN6OCg==}
     engines: {node: '>=20.18.0'}
@@ -2375,6 +2406,9 @@ packages:
     engines: {node: '>=20.18.0'}
     peerDependencies:
       typescript: '>=5.3.3'
+
+  '@solana/rpc-transport@0.0.0-experimental.0':
+    resolution: {integrity: sha512-O/AIOcol0WdLn1AUU5PGhLONulV2XIXWW3VmvhODV0xOZrKt5ZhDspVMpAN0ydQEGK16Uh83lUkYrJTktpF/9Q==}
 
   '@solana/rpc-types@2.1.1':
     resolution: {integrity: sha512-IaQKiWyTVvDoD0/3IlUxRY3OADj3cEjfLFCp1JvEdl0ANGReHp4jtqUqrYEeAdN/tGmGoiHt3n4x61wR0zFoJA==}
@@ -9757,6 +9791,30 @@ snapshots:
       globby: 11.1.0
       read-yaml-file: 1.1.0
 
+  '@metaplex-foundation/umi-options@0.8.9': {}
+
+  '@metaplex-foundation/umi-public-keys@0.8.9':
+    dependencies:
+      '@metaplex-foundation/umi-serializers-encodings': 0.8.9
+
+  '@metaplex-foundation/umi-serializers-core@0.8.9': {}
+
+  '@metaplex-foundation/umi-serializers-encodings@0.8.9':
+    dependencies:
+      '@metaplex-foundation/umi-serializers-core': 0.8.9
+
+  '@metaplex-foundation/umi-serializers-numbers@0.8.9':
+    dependencies:
+      '@metaplex-foundation/umi-serializers-core': 0.8.9
+
+  '@metaplex-foundation/umi-serializers@0.8.9':
+    dependencies:
+      '@metaplex-foundation/umi-options': 0.8.9
+      '@metaplex-foundation/umi-public-keys': 0.8.9
+      '@metaplex-foundation/umi-serializers-core': 0.8.9
+      '@metaplex-foundation/umi-serializers-encodings': 0.8.9
+      '@metaplex-foundation/umi-serializers-numbers': 0.8.9
+
   '@mobily/ts-belt@3.13.1': {}
 
   '@nanostores/persistent@1.0.0(nanostores@1.0.1)':
@@ -10965,6 +11023,10 @@ snapshots:
       '@solana/errors': 2.3.0(typescript@5.9.2)
       typescript: 5.9.2
 
+  '@solana/keys@0.0.0-experimental.1':
+    dependencies:
+      bs58: 5.0.0
+
   '@solana/keys@2.1.1(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.9.2)':
     dependencies:
       '@solana/assertions': 2.1.1(typescript@5.9.2)
@@ -11093,6 +11155,10 @@ snapshots:
     transitivePeerDependencies:
       - fastestsmallesttextencoderdecoder
 
+  '@solana/rpc-core@0.0.0-experimental.df45965':
+    dependencies:
+      '@metaplex-foundation/umi-serializers': 0.8.9
+
   '@solana/rpc-parsed-types@2.3.0(typescript@5.9.2)':
     dependencies:
       typescript: 5.9.2
@@ -11173,6 +11239,14 @@ snapshots:
       '@solana/rpc-spec-types': 2.3.0(typescript@5.9.2)
       typescript: 5.9.2
       undici-types: 7.13.0
+
+  '@solana/rpc-transport@0.0.0-experimental.0':
+    dependencies:
+      '@solana/keys': 0.0.0-experimental.1
+      '@solana/rpc-core': 0.0.0-experimental.df45965
+      node-fetch: 2.7.0
+    transitivePeerDependencies:
+      - encoding
 
   '@solana/rpc-types@2.1.1(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.9.2)':
     dependencies:

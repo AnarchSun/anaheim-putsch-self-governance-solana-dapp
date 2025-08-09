@@ -1,19 +1,19 @@
 // FILE: anchor/programs/anaheim/src/state/user_account.rs
-// VERSION FINALE ET CORRECTE
-
 use anchor_lang::prelude::*;
-use crate::constants::MAX_USERNAME_LENGTH; // Assurez-vous d'avoir ce fichier
+use crate::constants::MAX_USERNAME_LENGTH;
 
 #[account]
+#[derive(Default)]
 pub struct UserAccount {
   pub authority: Pubkey,
-  pub username: [u8; MAX_USERNAME_LENGTH], // On utilise un tableau de taille fixe
-  pub username_len: u8,
   pub timestamp: i64,
+  pub username_len: u8,
+  pub username: [u8; MAX_USERNAME_LENGTH],
+  pub post_count: u64,
   pub bump: u8,
 }
 
 impl UserAccount {
-  // On calcule la taille totale: 8 (discriminator) + 32 (authority) + 32 (username) + 1 (len) + 8 (timestamp) + 1 (bump)
-  pub const SIZE: usize = 8 + 32 + MAX_USERNAME_LENGTH + 1 + 8 + 1;
+  // The total size needed for space allocation
+  pub const SIZE: usize = 32 + 8 + 1 + MAX_USERNAME_LENGTH + 8;
 }

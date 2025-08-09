@@ -1,27 +1,24 @@
 // FILE: anchor/programs/anaheim/src/contexts/initialize.rs
-// VERSION FINALE ET CORRECTE
-
 use anchor_lang::prelude::*;
-use crate::state::AnaheimAccount; // Assurez-vous que le chemin vers votre état est correct
+use crate::state::AnaheimAccount; // Import the state struct this context initializes
 
 #[derive(Accounts)]
 pub struct Initialize<'info> {
-    // 1. Le compte principal du programme à initialiser
+    // The main program account to be created
     #[account(
-        init, // Indique que nous créons ce compte
-        payer = payer, // 'payer` est celui qui paie les frais
-        space = AnaheimAccount::SIZE, // L'espace à allouer pour le compte
-        seeds = [b"anaheim", payer.key().as_ref()], // Les seeds pour le PDA
-        bump // Anchor va trouver et fournir la bump
+        init,
+        payer = user, // The 'user' (the signer) will pay for the account's creation
+        space = 8 + AnaheimAccount::SIZE, // 8 for discriminator + size of the state
+        seeds = [b"anaheim", user.key().as_ref()], // Unique PDA for the program's state
+        bump
     )]
     pub anaheim_account: Account<'info, AnaheimAccount>,
 
-    // 2. Le payeur (celui qui signe et paie les frais).
+    // The user who is initializing the program and paying the fees
     #[account(mut)]
-    pub payer: Signer<'info>,
+    // ✅ FIX: This field is named `user` to match `ctx.accounts.user` in the handler.
+    pub user: Signer<'info>,
 
-    // 3. Le programme système, requis pour créer un compte ('init`)
+    // The Solana System Program, required for account creation (`init`)
     pub system_program: Program<'info, System>,
-
-    // ✅ FIX : La ligne invalide "pub anaheim: place!(...)" a été complètement supprimée.
 }

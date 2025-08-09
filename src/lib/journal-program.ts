@@ -2,9 +2,10 @@
 
 import { BorshAccountsCoder } from '@coral-xyz/anchor';
 import { Connection, PublicKey } from '@solana/web3.js';
-import { IDL } from './idl/journal'; // Assuming IDL is exported from a generated file
+import  IDL from '../../anchor/target/idl/journal.json';
+import {address} from "gill"; // Assuming IDL is exported from a generated file
 
-// This is the correct Program ID for your journal program.
+// This is the correct Program ID for /your journal program.
 export const JOURNAL_PROGRAM_ID = new PublicKey('2G2EN3Jr2Ss3q3kYwCT1A6y6Rc5t2J6qCxE2fkYKv3pN');
 
 /**
@@ -32,7 +33,8 @@ export async function getJournalEntry(connection: Connection, owner: PublicKey, 
             return null;
         }
 
-        const coder = new BorshAccountsCoder(IDL);
+        let coder: BorshAccountsCoder<string>;
+        coder = new BorshAccountsCoder(IDL as any);
 
         // ===================================================================
         // THIS IS THE DEFINITIVE FIX.

@@ -23,12 +23,12 @@ export function useInitialize() {
             );
 
             await typedProgram.methods
-                .initialize(bump)
+                .initialize()
                 .accounts({
                     payer: wallet.publicKey,
-                    anaheim: anaheimPda, // 🔥 FIXED HERE
+                    anaheim: anaheimPda,
                     systemProgram: web3.SystemProgram.programId,
-                }as any)
+                } as any)
                 .rpc();
         },
         onSuccess: async () => {

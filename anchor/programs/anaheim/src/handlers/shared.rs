@@ -2,15 +2,14 @@
 // VERSION FINALE ET CORRIGÉE
 
 use anchor_lang::prelude::*;
-
-// Imports des contextes nécessaires par les handlers de ce fichier
+pub use crate::state::post::Post;
+// Imports des contextes nécessaires par les handlers de ce
 use crate::contexts::{CreateUser, CreatePost, UpdatePost};
 use crate::error::ErrorCode;
 use crate::constants::{MAX_USERNAME_LENGTH, MAX_CONTENT_LENGTH};
 
 
 // --- HANDLERS D'INSTRUCTIONS
-
 pub fn create_user(ctx: Context<CreateUser>, username: String) -> Result<()> {
   let user_account = &mut ctx.accounts.user_account;
 
@@ -32,7 +31,7 @@ pub fn create_user(ctx: Context<CreateUser>, username: String) -> Result<()> {
 }
 
 pub fn create_post(ctx: Context<CreatePost>, content: String) -> Result<()> {
-  let post_account = &mut ctx.accounts.post_account;
+  let post_account = &mut ctx.accounts.post;
 
   // ✅ FIX : Le contexte `CreatePost` a un champ `user` (le Signer), pas `author`.
   post_account.author = ctx.accounts.user.key();

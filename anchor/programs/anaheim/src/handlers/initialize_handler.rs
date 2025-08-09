@@ -4,10 +4,17 @@
 use anchor_lang::prelude::*;
 use crate::contexts::Initialize;
 
+// In your `initialize_handler` function:
 pub fn initialize_handler(ctx: Context<Initialize>) -> Result<()> {
-  let account = &mut ctx.accounts.anaheim_account;
-  account.count = 0;
-  // Ceci va maintenant compiler, car `value` est un champ
-  account.value = 0;
+  let anaheim_account = &mut ctx.accounts.anaheim_account;
+
+  // ✅ IMPORTANT: When initializing the account, set its authority
+  // to the public key of the user who is creating it (the payer/signer).
+  anaheim_account.authority = ctx.accounts.user.key();
+
+  // Initialize other fields
+  anaheim_account.count = 0;
+  anaheim_account.value = 0;
+
   Ok(())
 }

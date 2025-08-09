@@ -5,13 +5,25 @@ use crate::constants::MAX_CONTENT_LENGTH;
 #[account]
 pub struct PostAccount {
   pub author: Pubkey,
-  pub content: [u8; MAX_CONTENT_LENGTH],
-  pub content_len: u16,
   pub timestamp: i64,
-  pub vote_count: u64, // ✅ 1. Ajoutez le nouveau champ ici
+  pub content_len: u16,
+  pub content: [u8; MAX_CONTENT_LENGTH],
+  pub vote_count: i64,
+}
+
+impl Default for PostAccount {
+ fn default() -> Self {
+    Self {
+      author: Pubkey::default(),
+      timestamp: 0,
+      content_len: 0,
+      content: [0; MAX_CONTENT_LENGTH],
+      vote_count: 0,
+    }
+  }
 }
 
 impl PostAccount {
-  // ✅ 2. Mettez à jour la taille du compte (ajoutez 8 pour le u64)
-  pub const SIZE: usize = 8 + 32 + (4 + MAX_CONTENT_LENGTH) + 2 + 8 + 8;
+  // ✅ FIX: The SIZE is 8 (discriminator) + the size of all fields within the struct.
+  pub const SIZE: usize = 8 + 32 + 8 + 2 + MAX_CONTENT_LENGTH + 8;
 }

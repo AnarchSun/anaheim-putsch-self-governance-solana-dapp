@@ -18,7 +18,7 @@ export function useInitialize() {
                 [Buffer.from("anaheim"), wallet.publicKey.toBuffer()],
                 program.programId
             );
-            await program.methods.initialize(bump).accounts({
+            await program.methods.initialize().accounts({
                 anaheimAccount: pda,
                 payer: wallet.publicKey,
                 systemProgram: SystemProgram.programId,

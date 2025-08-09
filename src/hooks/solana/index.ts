@@ -1,5 +1,7 @@
 // src/hooks/solana/index.ts
 
+import {PublicKey} from "@solana/web3.js";
+
 export { useConnection } from './useConnection'
 export { useGetBalance } from './useGetBalance'
 export { useGetSignatures } from '../useGetSignatures'
@@ -21,4 +23,7 @@ export { useSolanaClient } from './useSolanaClient'
 //   // TODO ORION
 // }
 export class useSolanaWalletAddressHook {
+    async getAccountInfo(addressSyncElement: PublicKey) {
+
+    }
 }

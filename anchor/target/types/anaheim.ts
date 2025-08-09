@@ -5,7 +5,7 @@
  * IDL can be found at `target/idl/anaheim.json`.
  */
 export type Anaheim = {
-  "address": "6qUyfHoKhZ3hbHQ5PqdfgRD15nEiVnJUDeNhmCmjSYAH",
+  "address": "FSyJ9EGkBerkZB6C1DSzDkcmjzohhvydb22FfQptbYQH",
   "metadata": {
     "name": "anaheim",
     "version": "0.1.0",
@@ -27,7 +27,7 @@ export type Anaheim = {
       ],
       "accounts": [
         {
-          "name": "postAccount",
+          "name": "post",
           "writable": true,
           "pda": {
             "seeds": [
@@ -46,7 +46,29 @@ export type Anaheim = {
               },
               {
                 "kind": "account",
-                "path": "clock.unix_timestamp"
+                "path": "user_profile.post_count",
+                "account": "userAccount"
+              }
+            ]
+          }
+        },
+        {
+          "name": "userProfile",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  117,
+                  115,
+                  101,
+                  114
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "user"
               }
             ]
           }
@@ -59,10 +81,6 @@ export type Anaheim = {
         {
           "name": "systemProgram",
           "address": "11111111111111111111111111111111"
-        },
-        {
-          "name": "clock",
-          "address": "SysvarC1ock11111111111111111111111111111111"
         }
       ],
       "args": [
@@ -124,6 +142,33 @@ export type Anaheim = {
       ]
     },
     {
+      "name": "decrement",
+      "discriminator": [
+        106,
+        227,
+        168,
+        59,
+        248,
+        27,
+        150,
+        101
+      ],
+      "accounts": [
+        {
+          "name": "anaheimAccount",
+          "writable": true
+        },
+        {
+          "name": "authority",
+          "signer": true,
+          "relations": [
+            "anaheimAccount"
+          ]
+        }
+      ],
+      "args": []
+    },
+    {
       "name": "increment",
       "discriminator": [
         11,
@@ -182,13 +227,13 @@ export type Anaheim = {
               },
               {
                 "kind": "account",
-                "path": "payer"
+                "path": "user"
               }
             ]
           }
         },
         {
-          "name": "payer",
+          "name": "user",
           "writable": true,
           "signer": true
         },
@@ -215,16 +260,16 @@ export type Anaheim = {
       ]
     },
     {
-      "name": "postAccount",
+      "name": "post",
       "discriminator": [
-        85,
-        236,
-        139,
-        84,
-        240,
-        243,
-        196,
-        23
+        8,
+        147,
+        90,
+        186,
+        185,
+        56,
+        192,
+        150
       ]
     },
     {
@@ -301,6 +346,11 @@ export type Anaheim = {
       "code": 6011,
       "name": "missingBump",
       "msg": "Bump not found in context."
+    },
+    {
+      "code": 6012,
+      "name": "emptyContent",
+      "msg": "Empty Content."
     }
   ],
   "types": [
@@ -320,16 +370,12 @@ export type Anaheim = {
           {
             "name": "value",
             "type": "u8"
-          },
-          {
-            "name": "bump",
-            "type": "u8"
           }
         ]
       }
     },
     {
-      "name": "postAccount",
+      "name": "post",
       "type": {
         "kind": "struct",
         "fields": [
@@ -338,25 +384,21 @@ export type Anaheim = {
             "type": "pubkey"
           },
           {
-            "name": "content",
-            "type": {
-              "array": [
-                "u8",
-                1024
-              ]
-            }
+            "name": "timestamp",
+            "type": "i64"
           },
           {
             "name": "contentLen",
             "type": "u16"
           },
           {
-            "name": "timestamp",
-            "type": "i64"
-          },
-          {
-            "name": "voteCount",
-            "type": "u64"
+            "name": "content",
+            "type": {
+              "array": [
+                "u8",
+                280
+              ]
+            }
           }
         ]
       }
@@ -371,6 +413,14 @@ export type Anaheim = {
             "type": "pubkey"
           },
           {
+            "name": "timestamp",
+            "type": "i64"
+          },
+          {
+            "name": "usernameLen",
+            "type": "u8"
+          },
+          {
             "name": "username",
             "type": {
               "array": [
@@ -380,12 +430,8 @@ export type Anaheim = {
             }
           },
           {
-            "name": "usernameLen",
-            "type": "u8"
-          },
-          {
-            "name": "timestamp",
-            "type": "i64"
+            "name": "postCount",
+            "type": "u64"
           },
           {
             "name": "bump",

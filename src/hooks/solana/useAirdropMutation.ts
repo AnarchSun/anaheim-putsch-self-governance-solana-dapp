@@ -1,20 +1,34 @@
 // src/hooks/solana/useAirdropMutation.ts
-import { useMutation } from '@tanstack/react-query'
-import { airdropFactory, lamports, type Address } from 'gill'
-import { toast } from 'sonner'
-import { toastTx } from '@/components/use-transaction-toast'
-import { useInvalidateGetBalanceQuery, useInvalidateGetSignaturesQuery } from '@/components/account/account-data-access'
-import { useWalletUi } from '@wallet-ui/react'
+'use client';
+
+import { useMutation } from '@tanstack/react-query';
+import {airdropFactory, lamports, type Address, createSolanaRpc, createSolanaRpcSubscriptions} from 'gill';
+import { toast } from 'sonner';
+import { toastTx } from '@/components/use-transaction-toast';
+import { useWalletUi } from '@wallet-ui/react';
+
+
+// Import the invalidation hooks
+import { useInvalidateGetBalanceQuery } from './useInvalidateGetBalanceQuery';
+import { useInvalidateGetSignaturesQuery } from './useInvalidateGetSignaturesQuery';
 
 export function useAirdropMutation({ address }: { address: Address }) {
-    const { client } = useWalletUi()
-    const airdrop = airdropFactory({
-        rpc: client.rpc,
-        rpcSubscriptions: client.rpcSubscriptions,
-    })
+    // `client` is the RPC URL string (e.g., 'https://api.devnet.solana.com')
+    const { client: rpcUrl } = useWalletUi();
 
-    const invalidateBalanceQuery = useInvalidateGetBalanceQuery({ address })
-    const invalidateSignaturesQuery = useInvalidateGetSignaturesQuery({ address })
+    // ✅ FIX 2: Create the gill-compatible RPC and Subscription clients from the URL.
+    const rpc = createSolanaRpc(rpcUrl);
+    const rpcSubscriptions = createSolanaRpcSubscriptions(rpcUrl);
+
+    // ✅ FIX 3: Pass the newly created client objects to the factory.
+    const airdrop = airdropFactory({
+        rpc,
+        rpcSubscriptions,
+    });
+
+    // Get the invalidation functions from our new hooks
+    const invalidateBalance = useInvalidateGetBalanceQuery({ address });
+    const invalidateSignatures = useInvalidateGetSignaturesQuery({ address });
 
     return useMutation({
         mutationFn: async (amount: number = 1) =>
@@ -24,11 +38,12 @@ export function useAirdropMutation({ address }: { address: Address }) {
                 lamports: lamports(BigInt(Math.round(amount * 1_000_000_000))),
             }),
         onSuccess: async (tx) => {
-            toastTx(tx)
-            await Promise.all([invalidateBalanceQuery(), invalidateSignaturesQuery()])
+            toastTx(tx);
+            // Invalidate both queries in parallel for efficiency
+            await Promise.all([invalidateBalance(), invalidateSignatures()]);
         },
-        onError: (error) => {
-            toast.error(`Airdrop failed! ${error}`)
+        onError: (error: Error) => {
+            toast.error(`Airdrop failed! ${error.message}`);
         },
-    })
+    });
 }

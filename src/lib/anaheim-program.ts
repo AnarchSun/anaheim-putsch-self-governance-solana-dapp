@@ -20,13 +20,19 @@ export function createAnaheimProgram(connection: Connection, wallet: WalletConte
     return new Program<Anaheim>(idl as any, provider);
 }
 
-export const getAnaheimAccount = async (connection: useSolanaWalletAddressHook, walletPubkey: PublicKey, programId: PublicKey = ANAHEIM_PROGRAM_ID) => {
+export const getAnaheimAccount = async (
+    connection: Connection, // ✅ le bon type
+    walletPubkey: PublicKey,
+    programId: PublicKey = ANAHEIM_PROGRAM_ID
+) => {
     const addressSync = PublicKey.findProgramAddressSync(
         [Buffer.from("anaheim"), walletPubkey.toBuffer()],
         programId
     );
+
     const accountInfo = await connection.getAccountInfo(addressSync[0]);
     if (!accountInfo) return null;
+
     try {
         if (ANAHEIM_ACCOUNT_PUBKEY instanceof PublicKey) {
             const accountInfo = await connection.getAccountInfo(ANAHEIM_ACCOUNT_PUBKEY);
@@ -38,4 +44,4 @@ export const getAnaheimAccount = async (connection: useSolanaWalletAddressHook, 
         console.error(`Failed to decode the Anaheim account`, error);
         return null;
     }
-}
+};

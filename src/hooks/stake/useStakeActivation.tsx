@@ -3,7 +3,8 @@
 
 import { useEffect, useState } from 'react'
 import { Connection, PublicKey } from '@solana/web3.js'
-import { getStakeActivationSafe } from '@/hooks/solana/useSolanaClient'
+import {getStakeActivationSafe} from "@/lib/stake/stakeHelpers";
+
 
 export function useStakeActivation(pubkey: PublicKey, connection: Connection) {
   const [state, setState] = useState<string | null>(null)

@@ -38,5 +38,8 @@ pub enum ErrorCode {
   InvalidAuthority,
 
   #[msg("Bump not found in context.")]
-  MissingBump
+  MissingBump,
+
+  #[msg("Empty Content.")]
+  EmptyContent
 }
