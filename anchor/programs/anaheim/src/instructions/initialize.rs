@@ -1,31 +1,19 @@
-// FILE: anchor/programs/anaheim/src/instructions/initialize.rs
-use crate::contexts::initialize;
+// FILE: src/instructions/initialize.rs
 use anchor_lang::prelude::*;
-use crate::contexts;
-use crate::handlers::initialize_handler::initialize_handler;
-use crate::state::anaheim;
-use crate::state::anaheim_account::AnaheimAccount;
+use crate::state::AnaheimAccount;
 
 #[derive(Accounts)]
 pub struct Initialize<'info> {
-    #[account(
-        init,
-        payer = payer,
-        space = 8 + AnaheimAccount::INIT_SPACE,
-        seeds = [b"anaheim", payer.key().as_ref()],
-        bump,
-    )]
-    pub anaheim: Account<'info, AnaheimAccount>, // <-- name is "anaheim"
+    #[account(init, payer = payer, space = AnaheimAccount::SIZE, seeds = [b"anaheim"], bump)]
+    pub anaheim_account: Account<'info, AnaheimAccount>,
     #[account(mut)]
     pub payer: Signer<'info>,
     pub system_program: Program<'info, System>,
 }
 
-pub fn handler(ctx: Context<Initialize>, bump: u8) -> Result<()> {
-    let anaheim = &mut ctx.accounts.anaheim;
-    anaheim.bump = bump;
+pub fn initialize_handler(ctx: Context<Initialize>) -> Result<()> {
+    ctx.accounts.anaheim_account.authority = ctx.accounts.payer.key();
+    ctx.accounts.anaheim_account.bump = ctx.bumps.anaheim_account;
+    ctx.accounts.anaheim_account.count = 0;
     Ok(())
-}
-pub fn initialize(ctx: Context<initialize::Initialize>, bump: u8) -> Result<()>{
-    initialize_handler(ctx, bump)
 }

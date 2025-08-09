@@ -1,9 +1,13 @@
 // FILE: anchor/programs/anaheim/src/handlers/initialize_handler.rs
-use anchor_lang::prelude::*;
-use crate::contexts::initialize::Initialize;
+// VERSION FINALE ET CORRECTE
 
-pub fn initialize_handler(ctx: Context<Initialize>, bump: u8) -> Result<()> {
-  let account = &mut ctx.accounts.anaheim;
-  account.bump = bump;
+use anchor_lang::prelude::*;
+use crate::contexts::Initialize;
+
+pub fn initialize_handler(ctx: Context<Initialize>) -> Result<()> {
+  let account = &mut ctx.accounts.anaheim_account;
+  account.count = 0;
+  // Ceci va maintenant compiler, car `value` est un champ
+  account.value = 0;
   Ok(())
 }

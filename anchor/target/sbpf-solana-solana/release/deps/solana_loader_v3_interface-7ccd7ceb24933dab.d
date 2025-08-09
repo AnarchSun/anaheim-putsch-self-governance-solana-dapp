@@ -1,0 +1,9 @@
+/home/anarchsun/RustroverProjects/anarcrypt.sol/anaheim-putsch-self-governance-solana-dapp/anchor/target/sbpf-solana-solana/release/deps/libsolana_loader_v3_interface-7ccd7ceb24933dab.rmeta: /home/anarchsun/.cargo/registry/src/index.crates.io-6f17d22bba15001f/solana-loader-v3-interface-5.0.0/src/lib.rs /home/anarchsun/.cargo/registry/src/index.crates.io-6f17d22bba15001f/solana-loader-v3-interface-5.0.0/src/instruction.rs /home/anarchsun/.cargo/registry/src/index.crates.io-6f17d22bba15001f/solana-loader-v3-interface-5.0.0/src/state.rs
+
+/home/anarchsun/RustroverProjects/anarcrypt.sol/anaheim-putsch-self-governance-solana-dapp/anchor/target/sbpf-solana-solana/release/deps/libsolana_loader_v3_interface-7ccd7ceb24933dab.rlib: /home/anarchsun/.cargo/registry/src/index.crates.io-6f17d22bba15001f/solana-loader-v3-interface-5.0.0/src/lib.rs /home/anarchsun/.cargo/registry/src/index.crates.io-6f17d22bba15001f/solana-loader-v3-interface-5.0.0/src/instruction.rs /home/anarchsun/.cargo/registry/src/index.crates.io-6f17d22bba15001f/solana-loader-v3-interface-5.0.0/src/state.rs
+
+/home/anarchsun/RustroverProjects/anarcrypt.sol/anaheim-putsch-self-governance-solana-dapp/anchor/target/sbpf-solana-solana/release/deps/solana_loader_v3_interface-7ccd7ceb24933dab.d: /home/anarchsun/.cargo/registry/src/index.crates.io-6f17d22bba15001f/solana-loader-v3-interface-5.0.0/src/lib.rs /home/anarchsun/.cargo/registry/src/index.crates.io-6f17d22bba15001f/solana-loader-v3-interface-5.0.0/src/instruction.rs /home/anarchsun/.cargo/registry/src/index.crates.io-6f17d22bba15001f/solana-loader-v3-interface-5.0.0/src/state.rs
+
+/home/anarchsun/.cargo/registry/src/index.crates.io-6f17d22bba15001f/solana-loader-v3-interface-5.0.0/src/lib.rs:
+/home/anarchsun/.cargo/registry/src/index.crates.io-6f17d22bba15001f/solana-loader-v3-interface-5.0.0/src/instruction.rs:
+/home/anarchsun/.cargo/registry/src/index.crates.io-6f17d22bba15001f/solana-loader-v3-interface-5.0.0/src/state.rs:

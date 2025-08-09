@@ -11,4 +11,12 @@ pub mod update_post;
 pub mod handler_mine;
 pub mod close;
 pub use close::close_post_account;
-
+pub use handle_create_post::*;
+pub use handle_close_post::*;
+pub use decrement_handler::*;
+pub use increment_handler::*;
+pub use set::*;
+pub use shared::*;
+pub use update_post::*;
+pub use handler_mine::*;
+pub use close::*;

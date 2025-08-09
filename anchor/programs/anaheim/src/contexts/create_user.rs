@@ -1,24 +1,22 @@
-// ===================== contexts/create_user.rs =====================
-use anchor_lang::prelude::*;
+// FILE: anchor/programs/anaheim/src/contexts/create_user.rs
+// C'EST LA SEULE VERSION DE CETTE STRUCT QUI DOIT EXISTER
 
-use crate::state::user_account::UserAccount; // 🔁 adapte selon ton arborescence exacte
+use anchor_lang::prelude::*;
+use crate::state::UserAccount;
 
 #[derive(Accounts)]
 pub struct CreateUser<'info> {
     #[account(
         init,
-        payer = user,
-        space = 8 + UserAccount::SIZE,
-        seeds = [b"user", user.key().as_ref()],
+        payer = authority,
+        space = UserAccount::SIZE,
+        seeds = [b"user", authority.key().as_ref()],
         bump
     )]
     pub user_account: Account<'info, UserAccount>,
 
     #[account(mut)]
-    pub user: Signer<'info>,
+    pub authority: Signer<'info>,
 
     pub system_program: Program<'info, System>,
-
-    // 👇 Ceci permet d'accéder au bump sans `ctx.bumps.get(...)`
-    pub rent: Sysvar<'info, Rent>,
 }

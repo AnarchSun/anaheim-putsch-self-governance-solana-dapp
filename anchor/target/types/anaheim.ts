@@ -5,17 +5,151 @@
  * IDL can be found at `target/idl/anaheim.json`.
  */
 export type Anaheim = {
-  "address": "AsHWD3y98WU1ib9AkU2GkeALWMNT61BsNCkFoqskMhvY",
+  "address": "6qUyfHoKhZ3hbHQ5PqdfgRD15nEiVnJUDeNhmCmjSYAH",
   "metadata": {
     "name": "anaheim",
     "version": "0.1.0",
     "spec": "0.1.0",
     "description": "Created with Anchor"
   },
-  "docs": [
-    "─── PROGRAMME PRINCIPAL ────────────────────────────────────────────────────"
-  ],
   "instructions": [
+    {
+      "name": "createPost",
+      "discriminator": [
+        123,
+        92,
+        184,
+        29,
+        231,
+        24,
+        15,
+        202
+      ],
+      "accounts": [
+        {
+          "name": "postAccount",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  111,
+                  115,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "user"
+              },
+              {
+                "kind": "account",
+                "path": "clock.unix_timestamp"
+              }
+            ]
+          }
+        },
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "systemProgram",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "clock",
+          "address": "SysvarC1ock11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "content",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "createUser",
+      "discriminator": [
+        108,
+        227,
+        130,
+        130,
+        252,
+        109,
+        75,
+        218
+      ],
+      "accounts": [
+        {
+          "name": "userAccount",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  117,
+                  115,
+                  101,
+                  114
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "authority"
+              }
+            ]
+          }
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "systemProgram",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "username",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "increment",
+      "discriminator": [
+        11,
+        18,
+        104,
+        9,
+        104,
+        174,
+        59,
+        33
+      ],
+      "accounts": [
+        {
+          "name": "anaheimAccount",
+          "writable": true
+        },
+        {
+          "name": "authority",
+          "signer": true,
+          "relations": [
+            "anaheimAccount"
+          ]
+        }
+      ],
+      "args": []
+    },
     {
       "name": "initialize",
       "discriminator": [
@@ -30,7 +164,7 @@ export type Anaheim = {
       ],
       "accounts": [
         {
-          "name": "anaheim",
+          "name": "anaheimAccount",
           "writable": true,
           "pda": {
             "seeds": [
@@ -63,12 +197,7 @@ export type Anaheim = {
           "address": "11111111111111111111111111111111"
         }
       ],
-      "args": [
-        {
-          "name": "bump",
-          "type": "u8"
-        }
-      ]
+      "args": []
     }
   ],
   "accounts": [
@@ -83,6 +212,32 @@ export type Anaheim = {
         181,
         47,
         158
+      ]
+    },
+    {
+      "name": "postAccount",
+      "discriminator": [
+        85,
+        236,
+        139,
+        84,
+        240,
+        243,
+        196,
+        23
+      ]
+    },
+    {
+      "name": "userAccount",
+      "discriminator": [
+        211,
+        33,
+        136,
+        16,
+        186,
+        110,
+        242,
+        127
       ]
     }
   ],
@@ -167,12 +322,70 @@ export type Anaheim = {
             "type": "u8"
           },
           {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "postAccount",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "author",
+            "type": "pubkey"
+          },
+          {
+            "name": "content",
+            "type": {
+              "array": [
+                "u8",
+                1024
+              ]
+            }
+          },
+          {
+            "name": "contentLen",
+            "type": "u16"
+          },
+          {
             "name": "timestamp",
             "type": "i64"
           },
           {
             "name": "voteCount",
             "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "userAccount",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "username",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "usernameLen",
+            "type": "u8"
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
           },
           {
             "name": "bump",

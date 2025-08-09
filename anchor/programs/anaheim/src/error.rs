@@ -1,3 +1,4 @@
+// anchor/programs/anaheim/src/error.rs
 use anchor_lang::prelude::*;
 
 #[error_code]

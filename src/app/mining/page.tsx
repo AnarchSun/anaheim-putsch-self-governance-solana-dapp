@@ -3,23 +3,16 @@
 
 import React, { useEffect } from 'react';
 import { useWallet } from '@solana/wallet-adapter-react';
-import dynamic from 'next/dynamic'; // ✅ ÉTAPE 1: Importez 'dynamic'
+import dynamic from 'next/dynamic';
 
 // --- Hooks et composants ---
 import { useAnaheimProgram } from '@/hooks/useAnaheimProgram';
-import { useInitialize } from '@/hooks/useInitialize';
+import { useInitialize } from '@/hooks/useInitialize'; // Assurez-vous que ce hook existe et est correct
 import { ClientWalletMultiButton } from '@/components/wallet/ClientWalletMultiButton';
 
-// ✅ ÉTAPE 2: Chargez vos composants clients de manière dynamique
-const MiningClient = dynamic(
-    () => import('@/components/mining/MiningClient'),
-    { ssr: false } // 'ssr: false' signifie "ne pas rendre sur le serveur"
-);
-
-const TransferSolFeature = dynamic(
-    () => import('@/components/features/TransferSolFeature').then(mod => mod.TransferSolFeature),
-    { ssr: false }
-);
+// On charge les composants qui dépendent du client de manière dynamique
+const MiningClient = dynamic(() => import('@/components/mining/MiningClient'), { ssr: false });
+const TransferSolFeature = dynamic(() => import('@/components/features/TransferSolFeature').then(mod => mod.TransferSolFeature), { ssr: false });
 
 
 export default function HomePage() {
@@ -27,6 +20,7 @@ export default function HomePage() {
     const { program, provider } = useAnaheimProgram();
     const initializeMutation = useInitialize();
 
+    // Ce useEffect gère l'initialisation automatique UNE SEULE FOIS.
     useEffect(() => {
         if (program && provider && !initializeMutation.isPending && !initializeMutation.isSuccess) {
             initializeMutation.mutate();
@@ -35,7 +29,6 @@ export default function HomePage() {
 
     return (
         <div className="space-y-8 text-center">
-            {/* ... votre en-tête ... */}
             <div>
                 <h1 className="text-4xl font-bold">Anaheim Community Console</h1>
                 <p className="text-muted-foreground mt-2">
@@ -54,7 +47,6 @@ export default function HomePage() {
 
             {connected && (
                 <div className="flex flex-col md:flex-row justify-center items-start gap-8 p-4">
-                    {/* ✅ ÉTAPE 3: Les composants sont maintenant utilisés normalement, mais ils ne seront rendus que sur le client */}
                     <MiningClient />
                     <TransferSolFeature />
                 </div>

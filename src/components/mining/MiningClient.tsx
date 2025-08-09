@@ -1,120 +1,97 @@
 // FILE: src/components/mining/MiningClient.tsx
+// VERSION FINALE ET CORRIGÉE
 'use client';
 
 import React from 'react';
-import { useConnection, useWallet, WalletContextState} from '@solana/wallet-adapter-react';
-import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
-import {getAnaheimAccount} from '@/lib/anaheim-program';
-import {Button} from '@/components/ui/button';
-import {AppAlert} from '../app-alert';
-import {Connection, PublicKey} from '@solana/web3.js';
-import IDL from '@/../anchor/target/idl/anaheim.json';
-import {Program, AnchorProvider} from '@coral-xyz/anchor';
-import {Wallet} from '@coral-xyz/anchor/dist/cjs/provider';
-
-export function createAnaheimProgram(connection: Connection, wallet: Wallet | WalletContextState) {
-    const provider = new AnchorProvider(connection, wallet as Wallet, AnchorProvider.defaultOptions());
-    const programId = new PublicKey("EMKno4tmR5KgB9L1QqFwfARkjksgdUoFrPDAaCFBCmXa");
-    return new Program(IDL as any, provider);
-}
+import { useConnection, useWallet } from '@solana/wallet-adapter-react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { getAnaheimAccount } from '@/lib/anaheim-program';
+import { Button } from '@/components/ui/button';
+import { AppAlert } from '../app-alert';
+import { PublicKey } from '@solana/web3.js';
+import { useAnaheimProgram } from '@/hooks/useAnaheimProgram';
 
 // --- HOOKS ---
+
 function useAnaheimAccountQuery() {
     const { connection } = useConnection();
-    const wallet = useWallet();
+    const { publicKey } = useWallet(); // ✅ On déstructure 'publicKey' directement
 
     return useQuery({
-        queryKey: ['anaheim-account', wallet.publicKey?.toBase58()],
-        enabled: !!wallet.publicKey,
+        queryKey: ['anaheim-account', publicKey?.toBase58()],
         queryFn: () => {
-            if (!wallet.publicKey) return null;
-            return getAnaheimAccount(connection, wallet.publicKey);
+            if (!publicKey) return null;
+            return getAnaheimAccount(connection, publicKey);
         },
+        enabled: !!publicKey,
     });
 }
 
-function useIncrementMutation(anaheimAccountPubkey: PublicKey | null) {
-    const { connection } = useConnection();
-    const wallet = useWallet();
+function useIncrementMutation() {
+    const { program } = useAnaheimProgram();
+    const { publicKey } = useWallet(); // ✅ On déstructure 'publicKey'
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: async () => {
-            if (!wallet.connected || !wallet.publicKey || !anaheimAccountPubkey) {
-                throw new Error('Wallet or Anaheim account not available');
+        mutationFn: async (anaheimAccountPubkey: PublicKey) => {
+            if (!program || !publicKey) { // ✅ On vérifie 'publicKey'
+                throw new Error('Le programme ou le portefeuille n\'est pas prêt.');
             }
 
-            const program = createAnaheimProgram(connection, wallet);
-
-            const signature = await program.methods
-                .increment()
+            await program.methods
+                .increment() // ✅ Cette méthode existe maintenant
                 .accounts({
                     anaheimAccount: anaheimAccountPubkey,
-                    authority: wallet.publicKey,
+                    authority: publicKey, // ✅ On passe 'publicKey'
                 })
                 .rpc();
-
-            const latestBlockhash = await connection.getLatestBlockhash();
-            await connection.confirmTransaction(
-                {
-                    signature,
-                    ...latestBlockhash,
-                },
-                'finalized'
-            );
         },
         onSuccess: () => {
-            return queryClient.invalidateQueries({ queryKey: ['anaheim-account'] });
+            queryClient.invalidateQueries({ queryKey: ['anaheim-account'] });
         },
-        onError: (error: Error) => console.error('Increment failed:', error),
+        onError: (error: Error) => console.error('L\'incrémentation a échoué:', error),
     });
 }
 
 // --- MAIN COMPONENT ---
 export default function MiningClient() {
     const { data: anaheimAccount, isLoading } = useAnaheimAccountQuery();
-    const incrementMutation = useIncrementMutation(
-        anaheimAccount ? new PublicKey(anaheimAccount.publicKey) : null
-    );
-
-    const wallet = useWallet(); // We need this in the component scope for console.log
-    console.log("Frontend wallet pubkey:", wallet.publicKey?.toBase58());
+    const incrementMutation = useIncrementMutation();
 
     if (isLoading) {
-        return <p className="text-center">Loading on-chain data...</p>;
+        return <p className="text-center">Chargement des données...</p>;
     }
 
     if (!anaheimAccount) {
         return (
             <AppAlert action={null}>
                 <div className="text-center font-semibold text-red-500">
-                    <h3 className="text-lg font-bold">Program Not Initialized</h3>
-                    <p className="text-sm font-normal text-muted-foreground mt-2">
-                        The main program account was not found. Please run the following command from your project root and restart the server:
-                    </p>
-                    <pre className="mt-2 p-2 bg-gray-800 text-white rounded font-mono text-xs">
-                        pnpm tsx anchor/scripts/initialize.ts
-                    </pre>
+                    <h3 className="text-lg font-bold">Programme Non Initialisé</h3>
+                    <p>Le compte principal du programme n'a pas été trouvé.</p>
                 </div>
             </AppAlert>
         );
     }
 
-    const currentCount = anaheimAccount.count.toNumber();
+    const handleIncrement = () => {
+        if (anaheimAccount) {
+            incrementMutation.mutate(new PublicKey(anaheimAccount.publicKey));
+        }
+    };
 
     return (
         <div className="p-6 border rounded-xl bg-card text-card-foreground max-w-sm mx-auto">
-            <h2 className="text-xl font-bold text-center">Community Counter</h2>
+            <h2 className="text-xl font-bold text-center">Compteur Communautaire</h2>
             <div className="text-center">
-                <p className="text-muted-foreground">Current Count:</p>
-                <p className="text-5xl font-bold font-mono animate-pulse">{currentCount}</p>
+                <p className="text-muted-foreground">Compte actuel :</p>
+                <p className="text-5xl font-bold font-mono">{anaheimAccount.count.toNumber()}</p>
             </div>
             <Button
                 className="w-full text-lg py-6"
-                onClick={() => incrementMutation.mutate()}
+                onClick={handleIncrement}
                 disabled={incrementMutation.isPending}
             >
-                {incrementMutation.isPending ? 'Incrementing...' : 'Increment Count'}
+                {incrementMutation.isPending ? 'Incrémentation...' : 'Incrémenter'}
             </Button>
         </div>
     );

@@ -28,7 +28,8 @@ export function useTransferSolMutation({ address }: { address: Address }) {
 
             const signer: TransactionSigner = {
                 address: account.address as Address,
-                async signAndSendTransactions(transactions) {
+                // ✅ FIX : On préfixe avec '_' pour indiquer que le paramètre est volontairement inutilisé.
+                async signAndSendTransactions(_transactions) {
                     throw new Error("La logique de signature du portefeuille n'est pas encore implémentée !");
                 },
             };
@@ -36,7 +37,7 @@ export function useTransferSolMutation({ address }: { address: Address }) {
             const connection = new Connection(client.toString(), "confirmed");
             const latestBlockhash = await connection.getLatestBlockhash("confirmed");
 
-            // ÉTAPE 1: Crée la transaction de base.
+            // ÉTAPE 1 : Crée la transaction de base SANS la durée de vie.
             const baseTransaction = createTransaction({
                 feePayer: signer,
                 version: 0,
@@ -49,7 +50,7 @@ export function useTransferSolMutation({ address }: { address: Address }) {
                 ],
             });
 
-            // ÉTAPE 2: On crée l'objet final que la fonction de signature attend à l'exécution.
+            // ÉTAPE 2 : On crée l'objet final en ajoutant manuellement la propriété `lifetimeConstraint'.
             const transactionToSign = {
                 ...baseTransaction,
                 lifetimeConstraint: {
@@ -59,7 +60,7 @@ export function useTransferSolMutation({ address }: { address: Address }) {
             };
 
             // ✅ SOLUTION FINALE : On passe l'objet final, en utilisant `as any`
-            // pour contourner le bug de typage de la librairie.
+            // pour contourner le bug de typage de la librairie qui cause le paradoxe.
             const signatureBytes = await signAndSendTransactionMessageWithSigners(
                 transactionToSign as any
             );

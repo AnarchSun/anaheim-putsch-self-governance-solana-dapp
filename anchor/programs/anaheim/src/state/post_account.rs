@@ -1,19 +1,17 @@
-// state/post_account.rs
-
+// FILE: anchor/programs/anaheim/src/state/post_account.rs
 use anchor_lang::prelude::*;
+use crate::constants::MAX_CONTENT_LENGTH;
 
 #[account]
 pub struct PostAccount {
-  pub content: [u8; 280],
   pub author: Pubkey,
-  pub created_at: i64,
-  pub vote_count: u64, // <-- Ajoute ce champ ici
+  pub content: [u8; MAX_CONTENT_LENGTH],
+  pub content_len: u16,
+  pub timestamp: i64,
+  pub vote_count: u64, // ✅ 1. Ajoutez le nouveau champ ici
 }
 
 impl PostAccount {
-  pub const SIZE: usize = 8 // Discriminator Anchor
-    + 280 // content: [u8; 280]
-    + 32 // author: Pubkey
-    + 8  // created_at: i64
-    + 8; // vote_count: u64
+  // ✅ 2. Mettez à jour la taille du compte (ajoutez 8 pour le u64)
+  pub const SIZE: usize = 8 + 32 + (4 + MAX_CONTENT_LENGTH) + 2 + 8 + 8;
 }

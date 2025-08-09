@@ -1,7 +1,7 @@
 use anchor_lang::prelude::*;
-use crate::instructions::CreatePost;
+use crate::contexts::CreatePost;
 
-pub fn handle_create_post(_ctx: Context<CreatePost>) -> Result<()> {
+pub fn handle_create_post(ctx: Context<CreatePost>, content: String) -> Result<()> {
     // Post logic
     Ok(())
 }

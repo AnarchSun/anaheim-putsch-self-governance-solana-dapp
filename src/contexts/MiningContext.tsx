@@ -1,3 +1,4 @@
+// src/contexts/MiningContext.tsx
 'use client'
 
 import { createContext } from 'react'
