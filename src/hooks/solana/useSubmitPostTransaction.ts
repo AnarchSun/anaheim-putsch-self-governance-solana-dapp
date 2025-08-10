@@ -1,76 +1,96 @@
-// FILE: src/hooks/solana/useSubmitPostTransaction.ts
-'use client';
-
-import { useMemo } from 'react';
-import { useConnection, useWallet } from '@solana/wallet-adapter-react';
+// src/hooks/solana/useSubmitPostTransaction.ts
 import {
-    createTransaction,
+    Instruction,
+    TransactionSigner,
+    Address,
+    blockhash,
+    TransactionVersion,
     signAndSendTransactionMessageWithSigners,
-    type TransactionVersion,
-    type Instruction,
-    type TransactionSigner,
-    type Address,
-    blockhash, // Import the blockhash factory
 } from 'gill';
-import type { BlockhashWithExpiryBlockHeight } from '@solana/web3.js';
 
-/**
- * A hook that returns an async function to submit a transaction
- * composed of one or more `gill`-compatible instructions.
- */
+import type { BlockhashWithExpiryBlockHeight } from '@solana/web3.js';
+import { useConnection } from '@/hooks/solana/useConnection';
+import { useWallet } from '@solana/wallet-adapter-react';
+import { useMemo } from 'react';
+import { NominalType } from '@solana/nominal-types';  // Clé magique
+
 export function useSubmitPostTransaction() {
     const { connection } = useConnection();
     const wallet = useWallet();
 
     return useMemo(() => {
-        // This async function is the actual submission logic
         return async function submitPost(
-            gillInstructions: Instruction<string, readonly any[]>[],
-            latestBlockhash: BlockhashWithExpiryBlockHeight, transactionMessage: any
-) {
+            gillInstructions: Instruction[],
+            latestBlockhash: BlockhashWithExpiryBlockHeight
+        ) {
             if (!wallet.publicKey || !wallet.signTransaction) {
-                throw new Error("Wallet not connected or does not support signing.");
+                throw new Error('Wallet not connected or does not support signing.');
             }
 
-            // ✅ FIX 1: Create a fully compliant TransactionSigner object.
-            // This object contains both the address and the signing methods.
             const signer: TransactionSigner = {
                 address: wallet.publicKey.toBase58() as Address,
-                signTransactions: wallet.signAllTransactions
-                    ? async (txs) => wallet.signAllTransactions!(txs as any)
-                    : async (txs) => {
-                        // Fallback for wallets that only support single signing
-                        const signedTxs = [];
-                        for (const tx of txs) {
-                            signedTxs.push(await wallet.signTransaction!(tx as any));
-                        }
-                        return signedTxs;
-                    },
+
+                // Le cœur : transforme en signature typée nominalement
+                signTransactions: async (
+                    transactions,
+                    config?
+                ): Promise<readonly Readonly<Record<Address, NominalType<'brand', 'SignatureBytes'> & Uint8Array>>[]> => {
+                    if (wallet.signAllTransactions) {
+                        const signedTxs = await wallet.signAllTransactions(
+                            transactions as any
+                        );
+                        return signedTxs.map((tx) =>
+                            transactionToSignatureMap(tx, wallet.publicKey!.toBase58() as Address)
+                        );
+                    }
+
+                    const results: Readonly<Record<Address, NominalType<'brand', 'SignatureBytes'> & Uint8Array>>[] = [];
+                    for (const tx of transactions) {
+                        const signedTx = await wallet.signTransaction!(tx as any);
+                        results.push(
+                            transactionToSignatureMap(signedTx, wallet.publicKey!.toBase58() as Address)
+                        );
+                    }
+                    return results;
+                },
             };
 
-            // ✅ FIX 2: Create a correctly typed lifetimeConstraint.
-            // Note that `Blockhash` is now `blockhash`.
-            const lifetimeConstraint = {
-                blockhash: blockhash(latestBlockhash.blockhash),
-                lastValidBlockHeight: BigInt(latestBlockhash.lastValidBlockHeight),
-            };
-
-            // ✅ FIX 3: Create the transaction in a single, type-safe step.
-            // Pass the entire `signer` object as the `feePayer`.
-            const transaction = createTransaction({
+            const txInput = {
                 version: 0 as TransactionVersion,
-                feePayer: signer, // Pass the full signer object, not just the address
+                feePayer: signer,
                 instructions: gillInstructions,
-                lifetimeConstraint,
-            }as any);
+                lifetimeConstraint: {
+                    blockhash: blockhash(latestBlockhash.blockhash),
+                    lastValidBlockHeight: BigInt(latestBlockhash.lastValidBlockHeight),
+                },
+            } as any;
 
-            // ✅ FIX 4: Call the sign-and-send function. It will use the signer
-            // provided as the feePayer to request the user's signature.
-            // No need for extra signers or type casting.
-            const signatureBytes = await signAndSendTransactionMessageWithSigners(transactionMessage);
-
-            // The function returns the signature bytes, which you can then encode if needed.
-            return signatureBytes;
+            return await signAndSendTransactionMessageWithSigners(txInput, {
+                connection,
+                signers: [signer],
+            } as any);
         };
     }, [connection, wallet]);
+}
+
+/**
+ * Injecte la marque nominale SignatureBytes sur un Uint8Array normal
+ */
+function asSignatureBytes(arr: Uint8Array): NominalType<'brand', 'SignatureBytes'> & Uint8Array {
+    return arr as NominalType<'brand', 'SignatureBytes'> & Uint8Array;
+}
+
+/**
+ * Crée la map des signatures attendue par gill avec le bon typage nominal.
+ */
+function transactionToSignatureMap(
+    tx: any,
+    signerAddress: Address
+): Readonly<Record<Address, NominalType<'brand', 'SignatureBytes'> & Uint8Array>> {
+    const map: Record<Address, NominalType<'brand', 'SignatureBytes'> & Uint8Array> = {};
+    if (!tx.signatures || tx.signatures.length === 0)
+        throw new Error('Transaction has no signatures');
+
+    map[signerAddress] = asSignatureBytes(tx.signatures[0]);
+    return map;
 }

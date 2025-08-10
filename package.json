@@ -155,6 +155,7 @@
     "vite": "^6.3.5",
     "vitest": "^3.2.4",
     "webpack": "^5.101.0",
+    "xrpl": "^4.4.0",
     "zod": "^3.25.76"
   },
   "devDependencies": {

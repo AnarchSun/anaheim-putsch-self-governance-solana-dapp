@@ -10,8 +10,6 @@ import type { Address } from "@solana/addresses";
 import type { SignatureBytes } from "@solana/keys";
 import type { BlockhashWithExpiryBlockHeight } from "@solana/web3.js";
 
-import { convertToGillInstruction } from "@/lib/solana/convertToGillInstruction";
-
 /**
  * Create and send a transaction using gill-compatible components.
  *
@@ -26,17 +24,17 @@ export async function createAndSendTx(
     recentBlockhash: BlockhashWithExpiryBlockHeight,
     signers: (TransactionSigner | Address)[]
 ): Promise<SignatureBytes> {
-    const transaction = await createTransaction({
+    const transaction = createTransaction({
         version: "v0",
-        instructions: [convertToGillInstruction(instruction)],
+        instructions: [instruction],
         feePayer,
         ...recentBlockhash,
-    });
+    } as any);
 
     const signature = await signAndSendTransactionMessageWithSigners({
         transactionMessage: transaction,
         signers,
-    });
+    }as any);
 
     return signature;
 }
