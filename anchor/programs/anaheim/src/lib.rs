@@ -21,7 +21,7 @@ use handlers::increment_handler::increment_handler;
 use handlers::initialize_handler;
 use crate::handlers::{decrement_handler, handle_create_post, handle_create_user};
 
-declare_id!("FSyJ9EGkBerkZB6C1DSzDkcmjzohhvydb22FfQptbYQH");
+declare_id!("4mvmrkyN16iAHgwwK9BDb3XuFEpE1GTzRbyhkcmDsnrC");
 // 4. Le module principal du programme.
 #[program]
 pub mod anaheim {

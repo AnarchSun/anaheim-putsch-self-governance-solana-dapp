@@ -1,4 +1,4 @@
-import packageJson from '../../../../anarcrypt.sol/anaheim-putsch-self-governance-solana-dapp/package.json' assert { type: 'json' }
+import packageJson from '../../package.json' assert { type: 'json' }
 
 export interface AppInfo {
   name: string
