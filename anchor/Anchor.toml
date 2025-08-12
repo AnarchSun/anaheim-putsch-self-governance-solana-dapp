@@ -6,8 +6,8 @@ resolution = true
 skip-lint = false
 
 [programs.devnet]
-anaheim = "8bCmQr6a5Fr3S3CRbXyzBKXBNnRaTLDeArfYSWevJdfA"
-journal = "6bkfHQA2EJpakfQtHZMfdm4Mb7HEaXJpk5WX2EzghvaR"
+anaheim = "DzSr3g6JfuN6nigqsX4AXLomPMVGZ6kJUqchB74H7gwt"
+journal = "nxR5cyDfF6qfRgcCgVXzUkZxZjC6HL7StnkEs5M1xqv"
 
 [registry]
 url = "https://api.apr.dev"
