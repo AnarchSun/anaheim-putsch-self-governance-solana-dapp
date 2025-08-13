@@ -14,6 +14,6 @@ pub struct SetData<'info> {
 }
 
 pub fn set_data_handler(ctx: Context<SetData>) -> Result<()> {
-    let anaheim_account = &mut ctx.accounts.anaheim_account;
+    let _anaheim_account = &mut ctx.accounts.anaheim_account;
     Ok(())
 }

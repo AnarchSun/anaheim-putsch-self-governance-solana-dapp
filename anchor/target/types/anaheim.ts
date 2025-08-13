@@ -155,15 +155,12 @@ export type Anaheim = {
       ],
       "accounts": [
         {
-          "name": "anaheimAccount",
+          "name": "anaheim",
           "writable": true
         },
         {
-          "name": "authority",
-          "signer": true,
-          "relations": [
-            "anaheimAccount"
-          ]
+          "name": "user",
+          "signer": true
         }
       ],
       "args": []
@@ -182,15 +179,12 @@ export type Anaheim = {
       ],
       "accounts": [
         {
-          "name": "anaheimAccount",
+          "name": "anaheim",
           "writable": true
         },
         {
-          "name": "authority",
-          "signer": true,
-          "relations": [
-            "anaheimAccount"
-          ]
+          "name": "user",
+          "signer": true
         }
       ],
       "args": []
@@ -242,7 +236,41 @@ export type Anaheim = {
           "address": "11111111111111111111111111111111"
         }
       ],
-      "args": []
+      "args": [
+        {
+          "name": "bump",
+          "type": "u8"
+        }
+      ]
+    },
+    {
+      "name": "set",
+      "discriminator": [
+        198,
+        51,
+        53,
+        241,
+        116,
+        29,
+        126,
+        194
+      ],
+      "accounts": [
+        {
+          "name": "anaheim",
+          "writable": true
+        },
+        {
+          "name": "user",
+          "signer": true
+        }
+      ],
+      "args": [
+        {
+          "name": "value",
+          "type": "u64"
+        }
+      ]
     }
   ],
   "accounts": [

@@ -13,7 +13,7 @@ pub struct Initialize<'info> {
 
 pub fn initialize_handler(ctx: Context<Initialize>) -> Result<()> {
     ctx.accounts.anaheim_account.authority = ctx.accounts.payer.key();
-    ctx.accounts.anaheim_account.bump = ctx.bumps.anaheim_account;
+    ctx.accounts.anaheim_account.value = ctx.bumps.anaheim_account;
     ctx.accounts.anaheim_account.count = 0;
     Ok(())
 }

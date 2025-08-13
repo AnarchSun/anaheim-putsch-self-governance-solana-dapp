@@ -149,15 +149,12 @@
       ],
       "accounts": [
         {
-          "name": "anaheim_account",
+          "name": "anaheim",
           "writable": true
         },
         {
-          "name": "authority",
-          "signer": true,
-          "relations": [
-            "anaheim_account"
-          ]
+          "name": "user",
+          "signer": true
         }
       ],
       "args": []
@@ -176,15 +173,12 @@
       ],
       "accounts": [
         {
-          "name": "anaheim_account",
+          "name": "anaheim",
           "writable": true
         },
         {
-          "name": "authority",
-          "signer": true,
-          "relations": [
-            "anaheim_account"
-          ]
+          "name": "user",
+          "signer": true
         }
       ],
       "args": []
@@ -236,7 +230,41 @@
           "address": "11111111111111111111111111111111"
         }
       ],
-      "args": []
+      "args": [
+        {
+          "name": "bump",
+          "type": "u8"
+        }
+      ]
+    },
+    {
+      "name": "set",
+      "discriminator": [
+        198,
+        51,
+        53,
+        241,
+        116,
+        29,
+        126,
+        194
+      ],
+      "accounts": [
+        {
+          "name": "anaheim",
+          "writable": true
+        },
+        {
+          "name": "user",
+          "signer": true
+        }
+      ],
+      "args": [
+        {
+          "name": "value",
+          "type": "u64"
+        }
+      ]
     }
   ],
   "accounts": [

@@ -47,7 +47,6 @@ pub fn create_post_handler(ctx: Context<CreatePost>, content: String) -> Result<
   post_account.content_len = content_bytes.len() as u16;
   post_account.content[..content_bytes.len()].copy_from_slice(content_bytes);
   post_account.vote_count = 0; // Initialisation du nouveau champ
-  post_account.bump = ctx.bumps.post_account; // Sauvegarde de la bump
 
   msg!("Post créé par {} à {}", user.key(), clock.unix_timestamp);
 
