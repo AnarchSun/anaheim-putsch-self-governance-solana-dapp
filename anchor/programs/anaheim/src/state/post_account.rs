@@ -1,6 +1,6 @@
 // FILE: anchor/programs/anaheim/src/state/post_account.rs
 use anchor_lang::prelude::*;
-use crate::constants::MAX_CONTENT_LENGTH;
+pub(crate) use crate::constants::MAX_CONTENT_LENGTH;
 
 #[account]
 pub struct PostAccount {

@@ -15,16 +15,28 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4810219b-60ff-4b11-905a-547b78f825c7" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/components/wallet/WalletProviders.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/anchor/programs/anaheim/src/contexts/initialize.rs" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/programs/anaheim/src/contexts/initialize.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/anchor/programs/anaheim/src/handlers/initialize_handler.rs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/anchor/programs/anaheim/src/handlers/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/programs/anaheim/src/handlers/mod.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/anchor/programs/anaheim/src/instructions/create_post.rs" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/programs/anaheim/src/instructions/create_post.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anchor/programs/anaheim/src/instructions/initialize.rs" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/programs/anaheim/src/instructions/initialize.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anchor/programs/anaheim/src/instructions/set_data.rs" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/programs/anaheim/src/instructions/set_data.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/anchor/programs/anaheim/src/instructions/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/programs/anaheim/src/instructions/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/anchor/programs/anaheim/src/instructions/update.rs" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/programs/anaheim/src/instructions/update.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/anchor/programs/anaheim/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/programs/anaheim/src/lib.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/.fingerprint/anaheim-5e1b5427db68f5e5/lib-anaheim" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/.fingerprint/anaheim-5e1b5427db68f5e5/lib-anaheim" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/.fingerprint/anaheim-5e1b5427db68f5e5/output-lib-anaheim" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/.fingerprint/anaheim-5e1b5427db68f5e5/output-lib-anaheim" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/deps/anaheim.d" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/deps/anaheim.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/deps/anaheim.so" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/deps/libanaheim.rlib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/anchor/programs/anaheim/src/state/anaheim_account.rs" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/programs/anaheim/src/state/anaheim_account.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/anchor/programs/anaheim/src/state/post_account.rs" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/programs/anaheim/src/state/post_account.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pnpm-lock.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/mining/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/mining/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/providers.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/providers.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ClientOnly.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ClientOnly.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/app-layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/app-layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/wallet/ClientWalletProvider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/wallet/ClientWalletProvider.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/wallet/ueseWalletContext.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hooks/useInitialize.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/useInitialize.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/anaheim-program.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/anaheim-program.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,48 +52,63 @@
   <component name="PackageJsonUpdateNotifier">
     <dismissed value="$PROJECT_DIR$/package.json" />
   </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 7
 }</component>
   <component name="ProjectId" id="31AmQleGfRJO87y9hzRfp1n7Lav" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;Node.js.initialize.ts.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.rust.reset.selective.auto.import&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;yew&quot;,
-    &quot;js.debugger.nextJs.config.created.client&quot;: &quot;true&quot;,
-    &quot;js.debugger.nextJs.config.created.server&quot;: &quot;true&quot;,
-    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;pnpm&quot;,
-    &quot;org.rust.cargo.project.model.PROJECT_DISCOVERY&quot;: &quot;true&quot;,
-    &quot;org.rust.cargo.project.model.impl.CargoExternalSystemProjectAware.subscribe.first.balloon&quot;: &quot;&quot;,
-    &quot;org.rust.disableDetachedFileInspection/home/anarchsun/RustroverProjects/anaheim-putsch-self-governance-solana-dapp/anchor/programs/anaheim/src/instructions/initialize.rs&quot;: &quot;true&quot;,
-    &quot;org.rust.first.attach.projects&quot;: &quot;true&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;settings.sync&quot;,
-    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;/home/anarchsun/RustroverProjects/anaheim-putsch-self-governance-solana-dapp/node_modules/typescript/lib&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "Node.js.initialize.ts.executor": "Run",
+    "Node.js.useInitialize.ts.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.rust.reset.selective.auto.import": "true",
+    "git-widget-placeholder": "yew",
+    "js.debugger.nextJs.config.created.client": "true",
+    "js.debugger.nextJs.config.created.server": "true",
+    "junie.onboarding.icon.badge.shown": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "pnpm",
+    "org.rust.cargo.project.model.PROJECT_DISCOVERY": "true",
+    "org.rust.cargo.project.model.impl.CargoExternalSystemProjectAware.subscribe.first.balloon": "",
+    "org.rust.disableDetachedFileInspection/home/anarchsun/RustroverProjects/anaheim-putsch-self-governance-solana-dapp/anchor/programs/anaheim/src/instructions/initialize.rs": "true",
+    "org.rust.first.attach.projects": "true",
+    "settings.editor.selected.configurable": "preferences.keymap",
+    "to.speed.mode.migration.done": "true",
+    "ts.external.directory.path": "/home/anarchsun/RustroverProjects/anaheim-putsch-self-governance-solana-dapp/node_modules/typescript/lib",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
-  <component name="RunManager" selected="Node.js.initialize.ts">
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/src/components/wallet" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Node.js.useInitialize.ts">
     <configuration name="Next.js: debug client-side" type="JavascriptDebugType" uri="http://localhost:3000/">
       <method v="2" />
     </configuration>
     <configuration name="initialize.ts" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/anchor/scripts/initialize.ts" typescript-loader="bundled" working-dir="$PROJECT_DIR$/anchor/scripts">
+      <method v="2" />
+    </configuration>
+    <configuration name="useInitialize.ts" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/src/hooks/useInitialize.ts" typescript-loader="bundled" working-dir="$PROJECT_DIR$/src/hooks">
       <method v="2" />
     </configuration>
     <configuration name="Next.js: server-side" type="js.build_tools.npm">
@@ -96,6 +123,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Node.js.useInitialize.ts" />
         <item itemvalue="Node.js.initialize.ts" />
       </list>
     </recent_temporary>
@@ -115,7 +143,9 @@
       <workItem from="1755000581334" duration="3650000" />
       <workItem from="1755004278734" duration="2447000" />
       <workItem from="1755006742566" duration="89000" />
-      <workItem from="1755006857323" duration="3263000" />
+      <workItem from="1755006857323" duration="4373000" />
+      <workItem from="1755047724197" duration="5341000" />
+      <workItem from="1755053353290" duration="6860000" />
     </task>
     <servers />
   </component>

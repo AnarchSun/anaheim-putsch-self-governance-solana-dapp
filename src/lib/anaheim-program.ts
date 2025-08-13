@@ -4,10 +4,13 @@ import {Connection, PublicKey} from '@solana/web3.js';
 import {WalletContextState} from '@solana/wallet-adapter-react';
 import {Anaheim} from '../../anchor/target/types/anaheim';
 import IDL from '../../anchor/target/idl/anaheim.json';
-import {useSolanaWalletAddressHook} from "@/hooks/solana/index";
+
 
 const programIdString = process.env.NEXT_PUBLIC_ANAHEIM_PROGRAM_ID;
-if (!programIdString) { throw new Error("FATAL ERROR: Program ID not in .env"); }
+
+if (!programIdString) {
+    throw new Error('FATAL ERROR: Program ID not in .env');
+}
 export const ANAHEIM_PROGRAM_ID = new PublicKey(programIdString);
 
 const accountPubKeyString = process.env.NEXT_PUBLIC_ANAHEIM_ACCOUNT_PUBKEY;

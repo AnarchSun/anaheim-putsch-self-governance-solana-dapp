@@ -1,31 +1,37 @@
 // FILE: src/components/wallet/ClientWalletProvider.tsx
-'use client';
+'use client'
 
-import React, { ReactNode } from 'react';
-import { SolanaProvider } from 'gill-react';
-import { SolanaClient } from "gill";
+import { WalletAdapterNetwork } from '@solana/wallet-adapter-base'
+import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react'
+import { PhantomWalletAdapter } from '@solana/wallet-adapter-wallets'
+import React, { useEffect, useMemo } from 'react'
+import { useWallet } from '@solana/wallet-adapter-react';
 
-function WalletUiProvider({ children }: { children: ReactNode }) {
-    return <>{children}</>;
+export function WalletConnector() {
+  const { connect, connected, connecting, disconnect, wallet, publicKey } = useWallet();
+
+  useEffect(() => {
+    if (!connected && wallet) {
+      connect().catch((err) => {
+        console.error('Wallet connection failed:', err);
+      });
+    }
+  }, [wallet, connected, connect]);
+
+  return null;
 }
 
-const mockSolanaClient: SolanaClient = {
-    rpc: null as any,
-    rpcSubscriptions: null as any,
-    sendAndConfirmTransaction: async () => {
-        throw new Error('sendAndConfirmTransaction not implemented in mock client.');
-    },
-    simulateTransaction: async () => {
-        throw new Error('simulateTransaction not implemented in mock client.');
-    },
-};
-
 export function ClientWalletProvider({ children }: { children: React.ReactNode }) {
+    const network = WalletAdapterNetwork.Devnet
+    const endpoint = 'https://api.devnet.solana.com'
+
+    const wallets = useMemo(() => [new PhantomWalletAdapter()], [])
+
     return (
-        <SolanaProvider client={mockSolanaClient}>
-            <WalletUiProvider>
-                {children}
-            </WalletUiProvider>
-        </SolanaProvider>
-    );
+      <ConnectionProvider endpoint={endpoint}>
+          <WalletProvider wallets={wallets} autoConnect>
+              {children}
+          </WalletProvider>
+      </ConnectionProvider>
+    )
 }

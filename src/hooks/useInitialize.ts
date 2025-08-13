@@ -1,38 +1,53 @@
-// Contenu pour src/hooks/useInitialize.ts
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useAnaheimProgram } from "@/hooks/useAnaheimProgram";
-import { useWallet } from "@solana/wallet-adapter-react";
-import { SystemProgram, PublicKey } from "@solana/web3.js";
+// FILE: src/hooks/useInitialize.ts
+'use client';
+
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useAnaheimProgram } from './useProgram';
+import { useWallet } from '@solana/wallet-adapter-react';
+import { PublicKey, SystemProgram } from '@solana/web3.js';
+import { toast } from 'sonner';
 
 export function useInitialize() {
-    const { program, provider } = useAnaheimProgram();
-    const wallet = useWallet();
     const queryClient = useQueryClient();
+    const { program, provider } = useAnaheimProgram();
+    const { publicKey } = useWallet();
 
     return useMutation({
+        mutationKey: ['initialize', publicKey?.toBase58()],
         mutationFn: async () => {
-            if (!provider || !program || !wallet.publicKey) {
-                throw new Error("Programme ou portefeuille non prêt pour l'initialisation.");
+            if (!program || !provider || !publicKey) {
+                throw new Error("Wallet or program not ready!");
             }
-            const [pda, bump] = PublicKey.findProgramAddressSync(
-                [Buffer.from("anaheim"), wallet.publicKey.toBuffer()],
-                program.programId
+            const [anaheimPda, _] = PublicKey.findProgramAddressSync(
+              [Buffer.from("anaheim"), publicKey.toBuffer()],
+              program.programId
             );
-            await program.methods.initialize().accounts({
-                anaheimAccount: pda,
-                payer: wallet.publicKey,
-                systemProgram: SystemProgram.programId,
-            }as any).rpc();
+
+            // @ts-ignore
+            const signature = await program.methods
+              .initialize() // Correctly called with ZERO arguments
+              .accounts({
+                  // --- THIS IS THE FIX ---
+                  anaheimAccount: anaheimPda,
+                  // ---
+                  payer: publicKey,
+                  systemProgram: SystemProgram.programId,
+              }as any)
+              .rpc();
+
+            const latestBlockhash = await provider.connection.getLatestBlockhash();
+            await provider.connection.confirmTransaction({ signature, ...latestBlockhash });
+            return signature;
         },
-        onSuccess: () => {
-            console.log("✅ Programme initialisé avec succès !");
-            queryClient.invalidateQueries({ queryKey: ["anaheim-account"] });
+        onSuccess: (signature) => {
+            toast.success('Program initialized successfully!', {
+                description: `Transaction: ${signature}`,
+                action: { label: 'View', onClick: () => window.open(`https://explorer.solana.com/tx/${signature}?cluster=devnet`, '_blank') },
+            });
+            return queryClient.invalidateQueries({ queryKey: ['anaheim-account'] });
         },
-        onError: (err: Error) => {
-            // On ignore souvent les erreurs "already in use" qui signifient que c'est déjà initialisé.
-            if (!err.message.includes("already in use")) {
-                console.error("❌ Erreur lors de l'initialisation :", err.message);
-            }
-        }
+        onError: (error: Error) => {
+            toast.error('Initialization failed!', { description: error.message });
+        },
     });
 }

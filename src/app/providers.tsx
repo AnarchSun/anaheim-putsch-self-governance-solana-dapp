@@ -13,21 +13,21 @@ import React, { useMemo } from 'react';
 require('@solana/wallet-adapter-react-ui/styles.css');
 
 export function SolanaProvider({ children }: { children: React.ReactNode }) {
-    // ... (rest of your provider logic)
-    const network = WalletAdapterNetwork.Devnet;
-    const endpoint = useMemo(() => clusterApiUrl(network), [network]);
-    const wallets = useMemo(
-        () => [new SolflareWalletAdapter(), new UnsafeBurnerWalletAdapter()],
-        [network]
-    );
+  // ... (rest of your provider logic)
+  const network = WalletAdapterNetwork.Devnet;
+  const endpoint = useMemo(() => clusterApiUrl(network), [network]);
+  const wallets = useMemo(
+    () => [new SolflareWalletAdapter(), new UnsafeBurnerWalletAdapter()],
+    [network]
+  );
 
-    return (
-        <ConnectionProvider endpoint={endpoint}>
-            <WalletProvider wallets={wallets} autoConnect>
-                <WalletModalProvider>
-                    {children}
-                </WalletModalProvider>
-            </WalletProvider>
-        </ConnectionProvider>
-    );
+  return (
+    <ConnectionProvider endpoint={endpoint}>
+      <WalletProvider wallets={wallets} autoConnect>
+        <WalletModalProvider>
+          {children}
+        </WalletModalProvider>
+      </WalletProvider>
+    </ConnectionProvider>
+  );
 }

@@ -1,54 +1,44 @@
 // FILE: anchor/programs/anaheim/src/instructions/create_post.rs
-// VERSION FINALE ET AUTONOME
-
 use anchor_lang::prelude::*;
-use crate::state::PostAccount; // Importe la structure de l'état du compte
-use crate::constants::MAX_CONTENT_LENGTH;
+use crate::state::post_account::{PostAccount, MAX_CONTENT_LENGTH}; // Use our new state file
 use crate::error::ErrorCode;
 
-// --- CONTEXTE DE L'INSTRUCTION ---
-// Définit tous les comptes nécessaires pour cette instruction.
+// Defines the accounts required for our instruction.
 #[derive(Accounts)]
 pub struct CreatePost<'info> {
   #[account(
         init,
         payer = user,
-        space = PostAccount::SIZE,
-        seeds = [b"post", user.key().as_ref(), clock.unix_timestamp.to_string().as_ref()],
-        bump
+        space = 8 + PostAccount::SIZE, // 8-byte discriminator + struct size
   )]
-  pub post_account: Account<'info, PostAccount>,
+  pub post: Account<'info, PostAccount>,
 
   #[account(mut)]
   pub user: Signer<'info>,
 
   pub system_program: Program<'info, System>,
-
-  // On a besoin de la Clock pour le timestamp
-  pub clock: Sysvar<'info, Clock>,
 }
 
-// --- HANDLER (LOGIQUE) DE L'INSTRUCTION ---
-// C'est la fonction qui sera appelée par `lib.rs'.
-pub fn create_post_handler(ctx: Context<CreatePost>, content: String) -> Result<()> {
-  let post_account = &mut ctx.accounts.post_account;
-  let user = &ctx.accounts.user;
-  let clock = &ctx.accounts.clock;
+// This is the function that holds the logic for the instruction.
+pub fn handler(ctx: Context<CreatePost>, content: String) -> Result<()> {
+  let post_account = &mut ctx.accounts.post;
 
+  // --- THIS IS THE FIX ---
+  // We convert the String to bytes and check its length.
   let content_bytes = content.as_bytes();
-
-  // Validations
   require!(!content.trim().is_empty(), ErrorCode::InvalidContent);
   require!(content_bytes.len() <= MAX_CONTENT_LENGTH, ErrorCode::ContentTooLong);
 
-  // Initialisation des champs du compte
-  post_account.author = user.key();
-  post_account.timestamp = clock.unix_timestamp;
-  post_account.content_len = content_bytes.len() as u16;
+  // Copy the bytes from the input string into our fixed-size array.
   post_account.content[..content_bytes.len()].copy_from_slice(content_bytes);
-  post_account.vote_count = 0; // Initialisation du nouveau champ
 
-  msg!("Post créé par {} à {}", user.key(), clock.unix_timestamp);
+  // Set the rest of the fields.
+  post_account.content_len = content_bytes.len() as u16;
+  post_account.author = ctx.accounts.user.key();
+  post_account.timestamp = Clock::get()?.unix_timestamp;
+  post_account.vote_count = 0;
+
+  msg!("Post created successfully by {}", ctx.accounts.user.key());
 
   Ok(())
 }

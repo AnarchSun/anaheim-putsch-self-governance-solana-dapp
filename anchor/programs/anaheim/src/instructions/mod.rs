@@ -11,6 +11,8 @@ pub mod initialize;
 pub mod mine;
 pub mod set_data;
 pub mod increment;
+
+pub use use_anaheim::*;
 pub use set_data::*;
 pub use increment::*;
 pub use anchor_lang::system_program::System;
