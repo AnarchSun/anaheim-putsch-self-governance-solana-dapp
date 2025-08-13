@@ -34,7 +34,7 @@ importers:
         version: 10.0.0
       '@gokiprotocol/client':
         specifier: ^0.11.1
-        version: 0.11.1(@project-serum/anchor@0.26.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10))(@saberhq/anchor-contrib@1.15.0(@project-serum/anchor@0.26.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10))(@solana/web3.js@1.98.4(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10))(bn.js@5.2.2))(@saberhq/solana-contrib@1.15.0(@solana/web3.js@1.98.4(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10))(bn.js@5.2.2))(@saberhq/token-utils@1.15.0(@solana/web3.js@1.98.4(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10))(bn.js@5.2.2)(bufferutil@4.0.9)(jsbi@3.2.5)(typescript@5.9.2)(utf-8-validate@5.0.10))(@solana/web3.js@1.98.4(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10))(bn.js@5.2.2)
+        version: 0.11.1(@project-serum/anchor@0.26.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10))(@saberhq/anchor-contrib@1.15.0(@project-serum/anchor@0.26.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10))(@solana/web3.js@1.98.4(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10))(bn.js@5.2.2))(@saberhq/solana-contrib@3.0.0(@solana/web3.js@1.98.4(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10))(bn.js@5.2.2))(@saberhq/token-utils@1.15.0(@solana/web3.js@1.98.4(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10))(bn.js@5.2.2)(bufferutil@4.0.9)(jsbi@3.2.5)(typescript@5.9.2)(utf-8-validate@5.0.10))(@solana/web3.js@1.98.4(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10))(bn.js@5.2.2)
       '@google/generative-ai':
         specifier: ^0.24.1
         version: 0.24.1
@@ -59,6 +59,9 @@ importers:
       '@radix-ui/react-slot':
         specifier: ^1.2.3
         version: 1.2.3(@types/react@18.3.23)(react@18.3.1)
+      '@saberhq/solana-contrib':
+        specifier: ^3.0.0
+        version: 3.0.0(@solana/web3.js@1.98.4(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10))(bn.js@5.2.2)
       '@scure/base':
         specifier: ^1.2.6
         version: 1.2.6
@@ -146,6 +149,9 @@ importers:
       '@trezor/connect':
         specifier: ^9.6.2
         version: 9.6.2(@solana/sysvars@2.3.0(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.9.2))(bufferutil@4.0.9)(fastestsmallesttextencoderdecoder@1.0.22)(react-native@0.81.0(@babel/core@7.28.0)(@react-native/metro-config@0.81.0(@babel/core@7.28.0))(@types/react@18.3.23)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@5.0.10))(tslib@2.8.1)(typescript@5.9.2)(utf-8-validate@5.0.10)(ws@7.5.10(bufferutil@4.0.9)(utf-8-validate@5.0.10))
+      '@trezor/connect-common':
+        specifier: ^0.4.2
+        version: 0.4.2(react-native@0.81.0(@babel/core@7.28.0)(@react-native/metro-config@0.81.0(@babel/core@7.28.0))(@types/react@18.3.23)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@5.0.10))(tslib@2.8.1)
       '@trezor/connect-web':
         specifier: ^9.6.2
         version: 9.6.2(@solana/sysvars@2.3.0(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.9.2))(bufferutil@4.0.9)(fastestsmallesttextencoderdecoder@1.0.22)(react-native@0.81.0(@babel/core@7.28.0)(@react-native/metro-config@0.81.0(@babel/core@7.28.0))(@types/react@18.3.23)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@5.0.10))(tslib@2.8.1)(typescript@5.9.2)(utf-8-validate@5.0.10)(ws@7.5.10(bufferutil@4.0.9)(utf-8-validate@5.0.10))
@@ -2283,8 +2289,17 @@ packages:
   '@saberhq/option-utils@1.15.0':
     resolution: {integrity: sha512-XVbS9H4b8PIGXJGaErkOurxV2FKFyvMwYq0pD8Y1iEPoi6HB//+HnpEKAv8tCssIQ5Nn1zQWzmQ9CmGkrwzcsw==}
 
+  '@saberhq/option-utils@3.0.0':
+    resolution: {integrity: sha512-6OaWhmwBvJ3Gc8yRza6DBSDnP4qWZAwQ7l015d+wTqpMt+YOXKUgN97l9QJN1qgeZmTAYjvUQ8wRDPHpQ7fXaQ==}
+
   '@saberhq/solana-contrib@1.15.0':
     resolution: {integrity: sha512-OExL5qGrNMmIKINU7qFUDmY7+xIwVM2s360g99k8CRNHSnjpnqIzwDjr2CnvEFpeQPp22OdGlS63woDp0w0JsQ==}
+    peerDependencies:
+      '@solana/web3.js': ^1.42
+      bn.js: ^4 || ^5
+
+  '@saberhq/solana-contrib@3.0.0':
+    resolution: {integrity: sha512-Jp6J5PJFBGx3swkCTFUfbB+zruoJ1bD469GT/nXSjKgK8hxG/e5QZqN+PGArhI4XNEF0PRdWCmT5WKHgCqwabw==}
     peerDependencies:
       '@solana/web3.js': ^1.42
       bn.js: ^4 || ^5
@@ -10001,11 +10016,11 @@ snapshots:
       - react
       - react-dom
 
-  '@gokiprotocol/client@0.11.1(@project-serum/anchor@0.26.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10))(@saberhq/anchor-contrib@1.15.0(@project-serum/anchor@0.26.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10))(@solana/web3.js@1.98.4(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10))(bn.js@5.2.2))(@saberhq/solana-contrib@1.15.0(@solana/web3.js@1.98.4(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10))(bn.js@5.2.2))(@saberhq/token-utils@1.15.0(@solana/web3.js@1.98.4(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10))(bn.js@5.2.2)(bufferutil@4.0.9)(jsbi@3.2.5)(typescript@5.9.2)(utf-8-validate@5.0.10))(@solana/web3.js@1.98.4(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10))(bn.js@5.2.2)':
+  '@gokiprotocol/client@0.11.1(@project-serum/anchor@0.26.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10))(@saberhq/anchor-contrib@1.15.0(@project-serum/anchor@0.26.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10))(@solana/web3.js@1.98.4(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10))(bn.js@5.2.2))(@saberhq/solana-contrib@3.0.0(@solana/web3.js@1.98.4(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10))(bn.js@5.2.2))(@saberhq/token-utils@1.15.0(@solana/web3.js@1.98.4(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10))(bn.js@5.2.2)(bufferutil@4.0.9)(jsbi@3.2.5)(typescript@5.9.2)(utf-8-validate@5.0.10))(@solana/web3.js@1.98.4(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10))(bn.js@5.2.2)':
     dependencies:
       '@project-serum/anchor': 0.26.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)
       '@saberhq/anchor-contrib': 1.15.0(@project-serum/anchor@0.26.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10))(@solana/web3.js@1.98.4(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10))(bn.js@5.2.2)
-      '@saberhq/solana-contrib': 1.15.0(@solana/web3.js@1.98.4(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10))(bn.js@5.2.2)
+      '@saberhq/solana-contrib': 3.0.0(@solana/web3.js@1.98.4(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10))(bn.js@5.2.2)
       '@saberhq/token-utils': 1.15.0(@solana/web3.js@1.98.4(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10))(bn.js@5.2.2)(bufferutil@4.0.9)(jsbi@3.2.5)(typescript@5.9.2)(utf-8-validate@5.0.10)
       '@solana/web3.js': 1.98.4(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)
       bn.js: 5.2.2
@@ -11387,9 +11402,26 @@ snapshots:
     dependencies:
       tslib: 2.8.1
 
+  '@saberhq/option-utils@3.0.0':
+    dependencies:
+      tslib: 2.8.1
+
   '@saberhq/solana-contrib@1.15.0(@solana/web3.js@1.98.4(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10))(bn.js@5.2.2)':
     dependencies:
       '@saberhq/option-utils': 1.15.0
+      '@solana/buffer-layout': 4.0.1
+      '@solana/web3.js': 1.98.4(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)
+      '@types/promise-retry': 1.1.6
+      '@types/retry': 0.12.5
+      bn.js: 5.2.2
+      promise-retry: 2.0.1
+      retry: 0.13.1
+      tiny-invariant: 1.3.3
+      tslib: 2.8.1
+
+  '@saberhq/solana-contrib@3.0.0(@solana/web3.js@1.98.4(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10))(bn.js@5.2.2)':
+    dependencies:
+      '@saberhq/option-utils': 3.0.0
       '@solana/buffer-layout': 4.0.1
       '@solana/web3.js': 1.98.4(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)
       '@types/promise-retry': 1.1.6

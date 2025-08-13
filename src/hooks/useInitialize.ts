@@ -1,4 +1,5 @@
-// FILE: src/hooks/useInitialize.ts
+// **File:** `src/hooks/useInitialize.ts`
+//  ```tsx
 'use client';
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -23,31 +24,35 @@ export function useInitialize() {
               program.programId
             );
 
-            // @ts-ignore
             const signature = await program.methods
               .initialize() // Correctly called with ZERO arguments
               .accounts({
-                  // --- THIS IS THE FIX ---
+                  // --- THIS IS THE FINAL FIX ---
+                  // Use camelCase to match the Anchor convention for the generated IDL.
                   anaheimAccount: anaheimPda,
                   // ---
                   payer: publicKey,
                   systemProgram: SystemProgram.programId,
-              }as any)
+              })
               .rpc();
 
             const latestBlockhash = await provider.connection.getLatestBlockhash();
-            await provider.connection.confirmTransaction({ signature, ...latestBlockhash });
+            await provider.connection.confirmTransaction({
+                signature,
+                blockhash: latestBlockhash.blockhash,
+                lastValidBlockHeight: latestBlockhash.lastValidBlockHeight
+            });
             return signature;
         },
-        onSuccess: (signature) => {
+        onSuccess: async (signature) => {
             toast.success('Program initialized successfully!', {
                 description: `Transaction: ${signature}`,
                 action: { label: 'View', onClick: () => window.open(`https://explorer.solana.com/tx/${signature}?cluster=devnet`, '_blank') },
-            });
-            return queryClient.invalidateQueries({ queryKey: ['anaheim-account'] });
-        },
-        onError: (error: Error) => {
-            toast.error('Initialization failed!', { description: error.message });
-        },
-    });
+  });
+await queryClient.invalidateQueries({ queryKey: ['anaheim-account'] });
+},
+onError: (error: Error) => {
+  toast.error('Initialization failed!', { description: error.message });
+},
+});
 }

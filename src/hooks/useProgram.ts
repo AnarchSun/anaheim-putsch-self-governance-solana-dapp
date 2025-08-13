@@ -1,35 +1,24 @@
-// src/hooks/useProgram.ts
+// FILE: src/hooks/useProgram.ts
 import { useMemo } from 'react';
 import { AnchorProvider, Program } from '@coral-xyz/anchor';
-import { useWallet, useConnection } from '@solana/wallet-adapter-react';
-import { Anaheim } from '@/../anchor/target/types/anaheim';
-import IDL from '@/lib/idl/anaheim.json';
-// The ANAHEIM_PROGRAM_ID is no longer needed for initialization
-// but might be useful elsewhere. We remove it from here for clarity.
-// import { ANAHEIM_PROGRAM_ID } from '@/lib/anaheim-program';
+import { useConnection, useWallet } from '@solana/wallet-adapter-react';
+import { Anaheim } from '@/types/anaheim'; // This path must point to your generated types
+import { IDL } from '@coral-xyz/anchor/dist/cjs/native/system'
 
-export function useAnaheimProgram(): { program: Program<Anaheim> | null, provider: AnchorProvider | null } {
+export function useAnaheimProgram() {
     const { connection } = useConnection();
     const wallet = useWallet();
-
     const provider = useMemo(() => {
-        // The provider needs a wallet that can sign transactions.
-        if (!wallet || !wallet.publicKey || !wallet.signTransaction) {
-            return null;
+        if (wallet.connected && wallet.wallet) {
+            return new AnchorProvider(connection, wallet as any, { commitment: "confirmed" });
         }
-        // The `wallet as any` cast is a common workaround for type differences
-        // between wallet-adapter and Anchor's expected wallet interface.
-        return new AnchorProvider(connection, wallet as any, AnchorProvider.defaultOptions());
+        return null;
     }, [connection, wallet]);
-
     const program = useMemo(() => {
-        if (!provider) return null;
-
-        // ✅ FIX: Use the modern, two-argument constructor.
-        // Anchor will get the program ID from the provided IDL file.
-        return new Program<Anaheim>(IDL as any, provider);
-
+        if (provider) {
+            return new Program<Anaheim>(IDL, provider);
+        }
+        return null;
     }, [provider]);
-
     return { program, provider };
 }

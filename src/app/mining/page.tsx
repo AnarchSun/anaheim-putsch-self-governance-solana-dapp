@@ -1,8 +1,4 @@
-// FILE: src/app/page.tsx
-
-// THIS IS THE CRITICAL FIX.
-// This directive tells Next.js to render this component on the client,
-// giving it access to hooks and browser APIs.
+// FILE: src/app/mining/page.tsx
 'use client';
 
 import React from 'react';
@@ -20,18 +16,22 @@ export default function HomePage() {
   const initializeMutation = useInitialize();
   const [hasTriedInit, setHasTriedInit] = React.useState(false);
 
-  // This effect attempts to auto-initialize the program once the wallet is connected.
+  // This effect combines the auto-init logic with debugging console logs.
   React.useEffect(() => {
-    if (
-      program &&
-      provider &&
-      connected && // Only try if connected
-      !hasTriedInit &&
-      initializeMutation.status !== 'pending' &&
-      initializeMutation.status !== 'success'
-    ) {
+    console.log("Checking conditions to auto-initialize...");
+    console.log("Is connected?", connected);
+    console.log("Has program loaded?", !!program);
+    console.log("Has provider loaded?", !!provider);
+    console.log("Has already tried init?", hasTriedInit);
+    console.log("Mutation status:", initializeMutation.status);
+
+    // Use the more precise 'idle' check to prevent re-triggers.
+    if (program && provider && connected && !hasTriedInit && initializeMutation.status === 'idle') {
+      console.log("✅ Conditions met. Automatically calling initializeMutation.mutate()...");
       initializeMutation.mutate();
-      setHasTriedInit(true);
+      setHasTriedInit(true); // Mark that we've attempted it.
+    } else {
+      console.log("❌ Conditions not met. Not auto-initializing.");
     }
   }, [program, provider, connected, initializeMutation, hasTriedInit]);
 
@@ -62,7 +62,7 @@ export default function HomePage() {
         </div>
       )}
 
-      {/* Explicit initialize button if needed */}
+      {/* Explicit initialize button is a great fallback UX */}
       {connected && !initializeMutation.isSuccess && (
         <button
           onClick={() => initializeMutation.mutate()}

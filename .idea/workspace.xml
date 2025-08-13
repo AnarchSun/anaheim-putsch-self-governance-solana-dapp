@@ -15,28 +15,36 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4810219b-60ff-4b11-905a-547b78f825c7" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/components/wallet/WalletProviders.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/anchor/Anchor.toml" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/Anchor.toml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/anchor/programs/anaheim/src/contexts/initialize.rs" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/programs/anaheim/src/contexts/initialize.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anchor/programs/anaheim/src/handlers/initialize_handler.rs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/anchor/programs/anaheim/src/handlers/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/programs/anaheim/src/handlers/mod.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anchor/programs/anaheim/src/instructions/create_post.rs" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/programs/anaheim/src/instructions/create_post.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anchor/programs/anaheim/src/instructions/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/programs/anaheim/src/instructions/mod.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anchor/programs/anaheim/src/instructions/update.rs" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/programs/anaheim/src/instructions/update.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/anchor/programs/anaheim/src/instructions/initialize.rs" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/programs/anaheim/src/instructions/initialize.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/anchor/programs/anaheim/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/programs/anaheim/src/lib.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/anchor/programs/anaheim/src/state/anaheim_account.rs" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/programs/anaheim/src/state/anaheim_account.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anchor/programs/anaheim/src/state/post_account.rs" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/programs/anaheim/src/state/post_account.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/anchor/programs/journal/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/programs/journal/src/lib.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/anchor/target/idl/anaheim.json" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/target/idl/anaheim.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/anchor/target/idl/journal.json" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/target/idl/journal.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/.fingerprint/anaheim-5e1b5427db68f5e5/dep-lib-anaheim" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/.fingerprint/anaheim-5e1b5427db68f5e5/dep-lib-anaheim" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/.fingerprint/anaheim-5e1b5427db68f5e5/lib-anaheim" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/.fingerprint/anaheim-5e1b5427db68f5e5/lib-anaheim" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/.fingerprint/anaheim-5e1b5427db68f5e5/output-lib-anaheim" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/.fingerprint/anaheim-5e1b5427db68f5e5/output-lib-anaheim" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/anaheim.d" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/anaheim.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/anaheim.so" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/anaheim.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/deps/anaheim.d" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/deps/anaheim.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/deps/anaheim.so" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/deps/journal.so" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/deps/journal.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/deps/libanaheim.rlib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/deps/libjournal.rlib" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/deps/libjournal.rlib" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/journal.so" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/journal.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/libanaheim.d" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/libanaheim.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/libanaheim.rlib" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/libanaheim.rlib" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/libjournal.rlib" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/libjournal.rlib" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/anchor/target/types/anaheim.ts" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/target/types/anaheim.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/anchor/target/types/journal.ts" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/target/types/journal.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pnpm-lock.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pnpm-lock.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pnpm-lock.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/mining/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/mining/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/providers.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/providers.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ClientOnly.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ClientOnly.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/app-layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/app-layout.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/wallet/ClientWalletProvider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/wallet/ClientWalletProvider.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/wallet/ueseWalletContext.ts" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/hooks/useInitialize.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/useInitialize.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/anaheim-program.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/anaheim-program.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hooks/useProgram.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/useProgram.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -79,7 +87,9 @@
     "git-widget-placeholder": "yew",
     "js.debugger.nextJs.config.created.client": "true",
     "js.debugger.nextJs.config.created.server": "true",
+    "js.introduce.parameter.add.jsdoc": "true",
     "junie.onboarding.icon.badge.shown": "true",
+    "last_opened_file_path": "/home/anarchsun/RustroverProjects",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -145,7 +155,7 @@
       <workItem from="1755006742566" duration="89000" />
       <workItem from="1755006857323" duration="4373000" />
       <workItem from="1755047724197" duration="5341000" />
-      <workItem from="1755053353290" duration="6860000" />
+      <workItem from="1755053353290" duration="24572000" />
     </task>
     <servers />
   </component>
