@@ -5,7 +5,7 @@ import { AnchorProvider, Program, Idl } from '@coral-xyz/anchor';
 import { useConnection, useWallet } from '@solana/wallet-adapter-react';
 import { PublicKey } from '@solana/web3.js';
 
-import IDL from '@/lib/idl/anaheim.json';
+import IDL from '@/../anchor/target/idl/anaheim.json';
 import { Anaheim } from '@/../anchor/target/types/anaheim';
 
 export function useAnaheimProgram() {

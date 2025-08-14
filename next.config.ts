@@ -10,9 +10,18 @@ const nextConfig: NextConfig = {
             allowedOrigins: ['https://anarcrypt.sol']
         }
     },
-    // ⚠️ Ceci est optionnel, garde ou retire selon besoin
-    webpack(config: any, { dev, isServer }): any {
-        // Tu peux mettre des règles custom ici si tu veux modifier Webpack
+
+    webpack(config, { isServer }) {
+        // This is the fix. We are telling Webpack to ignore the 'fs' module
+        // for the client-side bundle (when isServer is false).
+        if (!isServer) {
+            config.resolve.fallback = {
+                ...config.resolve.fallback,
+                fs: false,
+            };
+        }
+
+        // Important: return the modified config
         return config;
     }
 };
