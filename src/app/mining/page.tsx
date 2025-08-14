@@ -38,7 +38,7 @@ export default function HomePage() {
   }, [program, provider, connected, initializeMutation, hasTriedInit]);
 
   return (
-      // ... (Your JSX remains the same and is very well structured) ...
+      // ... (Your JSX remains the same and is very well-structured) ...
       <div className="space-y-6 text-center max-w-4xl mx-auto py-8">
         <h1 className="text-4xl md:text-5xl font-bold">Anaheim Community Console</h1>
         <p className="text-lg text-muted-foreground">

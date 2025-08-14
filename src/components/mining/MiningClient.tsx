@@ -1,65 +1,85 @@
 // FILE: src/components/mining/MiningClient.tsx
-// VERSION FINALE ET CORRIGÉE
 'use client';
 
 import React from 'react';
-import { useConnection, useWallet } from '@solana/wallet-adapter-react';
+import { useWallet } from '@solana/wallet-adapter-react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { getAnaheimAccount } from '@/lib/anaheim-program';
+import { PublicKey } from '@solana/web3.js';
+import { useAnaheimProgram } from '@/hooks/useProgram';
 import { Button } from '@/components/ui/button';
 import { AppAlert } from '../app-alert';
-import { PublicKey } from '@solana/web3.js';
-import { useAnaheimProgram } from '@/hooks/useAnaheimProgram';
+// =========================================================================
+//                          HELPER & HOOK DEFINITIONS
+// =========================================================================
 
-// --- HOOKS ---
-
-function useAnaheimAccountQuery() {
-    const { connection } = useConnection();
-    const { publicKey } = useWallet(); // ✅ On déstructure 'publicKey' directement
-
-    return useQuery({
-        queryKey: ['anaheim-account', publicKey?.toBase58()],
-        queryFn: () => {
-            if (!publicKey) return null;
-            return getAnaheimAccount(connection, publicKey);
-        },
-        enabled: !!publicKey,
-    });
+// Async data fetching logic (this is correct)
+async function getAnaheimAccount(program: any, userPublicKey: PublicKey | null) {
+    if (!program || !userPublicKey) return null;
+    const [pda] = PublicKey.findProgramAddressSync(
+        [Buffer.from("anaheim"), userPublicKey.toBuffer()],
+        program.programId
+    );
+    try {
+        return await program.account.anaheimAccount.fetch(pda);
+    } catch (error) {
+        return null;
+    }
 }
 
+// ✅ FIX 1: The custom hook is now defined at the top level of the module.
 function useIncrementMutation() {
-    const { program } = useAnaheimProgram();
-    const { publicKey } = useWallet(); // ✅ On déstructure 'publicKey'
+    const { program } = useAnaheimProgram(); // The hook now correctly uses the program from context
+    const { publicKey } = useWallet();
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: async (anaheimAccountPubkey: PublicKey) => {
-            if (!program || !publicKey) { // ✅ On vérifie 'publicKey'
-                throw new Error('Le programme ou le portefeuille n\'est pas prêt.');
+        // The mutation needs to know what to do when called
+        mutationFn: async () => {
+            if (!program || !publicKey) {
+                throw new Error("Programme ou portefeuille non prêt.");
             }
+            const [pda] = PublicKey.findProgramAddressSync(
+                [Buffer.from("anaheim"), publicKey.toBuffer()],
+                program.programId
+            );
 
-            await program.methods
-                .increment() // ✅ Cette méthode existe maintenant
+            // This will work after you rebuild and redeploy your Anchor program
+            return program.methods
+                .increment()
                 .accounts({
-                    anaheimAccount: anaheimAccountPubkey,
-                    authority: publicKey, // ✅ On passe 'publicKey'
-                }as any)
+                    anaheimAccount: pda,
+                    authority: publicKey,
+                })
                 .rpc();
         },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['anaheim-account'] });
+        onSuccess: (signature) => {
+            console.log("Increment successful!", signature);
+            // Invalidate the query to refetch the account data
+            queryClient.invalidateQueries({queryKey: ["anaheim-account", publicKey?.toBase58()]}).then(r =>{});
         },
-        onError: (error: Error) => console.error('L\'incrémentation a échoué:', error),
+        onError: (error: Error) => console.error("Increment failed", error),
     });
 }
 
-// --- MAIN COMPONENT ---
+// =========================================================================
+//                             MAIN COMPONENT
+// =========================================================================
+
 export default function MiningClient() {
-    const { data: anaheimAccount, isLoading } = useAnaheimAccountQuery();
+    const { program } = useAnaheimProgram();
+    const { publicKey } = useWallet();
+
+    const { data: anaheimAccount, isLoading } = useQuery({
+        queryKey: ['anaheim-account', publicKey?.toBase58()],
+        queryFn: () => getAnaheimAccount(program, publicKey),
+        enabled: !!program && !!publicKey,
+    });
+
+    // ✅ FIX 2: Call the hook ONCE at the top level of the component.
     const incrementMutation = useIncrementMutation();
 
     if (isLoading) {
-        return <p className="text-center">Chargement des données...</p>;
+        return <div className="text-center p-4">Chargement des données...</div>;
     }
 
     if (!anaheimAccount) {
@@ -73,25 +93,26 @@ export default function MiningClient() {
         );
     }
 
-    const handleIncrement = () => {
-        if (anaheimAccount) {
-            incrementMutation.mutate(new PublicKey(anaheimAccount.publicKey));
-        }
-    };
+    if (!program || !publicKey) return <p>Connexion au portefeuille ou programme manquante...</p>;
+
+    const [anaheimPda] = PublicKey.findProgramAddressSync(
+        [Buffer.from('anaheim'), publicKey.toBuffer()],
+        program.programId
+    );
 
     return (
-        <div className="p-6 border rounded-xl bg-card text-card-foreground max-w-sm mx-auto">
-            <h2 className="text-xl font-bold text-center">Compteur Communautaire</h2>
-            <div className="text-center">
-                <p className="text-muted-foreground">Compte actuel :</p>
-                <p className="text-5xl font-bold font-mono">{anaheimAccount.count.toNumber()}</p>
+        <div className="p-6 border rounded-xl bg-card text-card-foreground">
+            <h2 className="text-2xl font-bold">Tableau de Bord Minier</h2>
+            <div className="text-center my-4">
+                <p className="text-muted-foreground">Compte Actuel:</p>
+                <p className="text-6xl font-bold font-mono">{anaheimAccount.count.toString()}</p>
             </div>
             <Button
                 className="w-full text-lg py-6"
-                onClick={handleIncrement}
+                onClick={() => incrementMutation.mutate(anaheimAccount.count)}
                 disabled={incrementMutation.isPending}
             >
-                {incrementMutation.isPending ? 'Incrémentation...' : 'Incrémenter'}
+                {incrementMutation.isPending ? 'Incrémentation...' : 'Incrémenter le Compte'}
             </Button>
         </div>
     );
