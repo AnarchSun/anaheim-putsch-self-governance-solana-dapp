@@ -43,7 +43,8 @@
     "node_modules/.pnpm/vitest@3.2.3_@types+node@24.0.10/node_modules/vitest/globals.d.ts",
     "node_modules/.pnpm/vitest@3.2.3_@types+node@24.0.10/node_modules/vitest/globals.d.ts",
     "src/lib/ethereumjs-monorepo/packages/ethereum-tests/src/Templates/TestEachOpcode/testOpcodesGen.js",
-    "src/lib/ethereumjs-monorepo/packages/ethereum-tests/src/Templates/TestEachOpcode/testOpcodesGen.js"
+    "src/lib/ethereumjs-monorepo/packages/ethereum-tests/src/Templates/TestEachOpcode/testOpcodesGen.js",
+    "node_modules/.pnpm/@types+node@24.2.1/node_modules/@types/node/buffer.d.ts"
   ],
   "exclude": ["node_modules"]
 }

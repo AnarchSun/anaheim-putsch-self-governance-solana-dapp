@@ -9,7 +9,7 @@ use anchor_lang::prelude::*;
 // pub mod validate_post_content;
 
 // Use your actual Program ID from Anchor.toml
-declare_id!("B1cHVNAFWYX3zXZjqi2tubPZGzrLQEAiL5A9URqKskFi");
+declare_id!("9FXKYdyPqSy7GdLX3MVJPUhN5oTcSE4iFrL9hi1s3uvF");
 
 // =========================================================================
 //                          THE MAIN PROGRAM LOGIC

@@ -1,37 +1,76 @@
 // FILE: src/hooks/useAnaheimProgram.ts
+'use client';
 
-import { useMemo } from 'react';
-import { AnchorProvider, Program, Idl } from '@coral-xyz/anchor';
-import { useConnection, useWallet } from '@solana/wallet-adapter-react';
-import { PublicKey } from '@solana/web3.js';
+import { useEffect, useMemo, useState } from 'react';
+import { Program, AnchorProvider, Idl } from '@coral-xyz/anchor';
+import { useAnchorWallet, useWallet } from '@solana/wallet-adapter-react';
+import { Connection, PublicKey } from '@solana/web3.js';
+import { Anaheim } from '@/types/anaheim';
 
-import IDL from '@/../anchor/target/idl/anaheim.json';
-import { Anaheim } from '@/../anchor/target/types/anaheim';
+// =========================================================================
+// IDL & CONFIG
+// =========================================================================
+const idl: Idl = {
+    version: '0.1.0',
+    name: 'anaheim',
+    address: 'B1cHVNAFWYX3zXZjqi2tubPZGzrLQEAiL5A9URqKskFi',
+    instructions: [],
+    accounts: [
+        {
+            name: 'AnaheimAccount',
+            discriminator: [],
+        },
+    ],
+    types: [
+        {
+            name: 'AnaheimAccount',
+            type: {
+                kind: 'struct',
+                fields: [
+                    { name: 'authority', type: 'pubkey' },
+                    { name: 'bump', type: 'u8' },
+                    { name: 'count', type: 'u64' },
+                ],
+            },
+        },
+    ],
+    errors: [],
+} as any as Idl;
 
+const network = process.env.NEXT_PUBLIC_SOLANA_RPC_HOST || 'https://api.devnet.solana.com';
+const programId = new PublicKey(idl.address);
+
+// =========================================================================
+// CUSTOM HOOK
+// =========================================================================
 export function useAnaheimProgram() {
-    const { connection } = useConnection();
-    const wallet = useWallet();
+    const wallet = useAnchorWallet();
+    const { connected, publicKey } = useWallet();
+    const [isProgramReady, setIsProgramReady] = useState(false);
 
-    // ⚠️ Le programmeId du saint graal, clé de la vérité
-    const programId = useMemo(() => new PublicKey('EMKno4tmR5KgB9L1QqFwfARkjksgdUoFrPDAaCFBCmXa'), []);
-
-    // Le provider est l’autel où se tient la magie des transactions
+    // AnchorProvider
     const provider = useMemo(() => {
-        if (
-            !wallet.publicKey ||
-            !wallet.signTransaction ||
-            !wallet.signAllTransactions
-        ) return null;
+        if (!wallet) return undefined;
+        const connection = new Connection(network, 'processed');
+        return new AnchorProvider(connection, wallet, { preflightCommitment: 'processed' });
+    }, [wallet]);
 
-        return new AnchorProvider(connection, wallet as any, AnchorProvider.defaultOptions());
-    }, [connection, wallet]);
-
-    // Le programme est l’esprit, qui écoute l’autel et comprend l’IDL
+    // Program instance
     const program = useMemo(() => {
-        if (!provider) return null;
-        return new Program<Anaheim>(IDL as unknown as Idl, provider);
-    }, [provider, programId]);
+        if (!provider) return undefined;
+        return new Program<Anaheim>(idl, provider);
+    }, [provider]);
 
-    // ✨ Retourne le duo sacré, l’instrument et son canal
-    return { program, provider };
+    // Track readiness
+    useEffect(() => {
+        if (connected && publicKey && program) {
+            console.log(`✅ Program loaded for wallet ${publicKey.toBase58()}`);
+            setIsProgramReady(true);
+        } else {
+            console.log('⏳ Waiting for wallet connection & program...');
+            setIsProgramReady(false);
+        }
+    }, [connected, publicKey, program]);
+
+    return { program, provider, programId, isProgramReady };
 }

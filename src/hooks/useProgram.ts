@@ -2,75 +2,26 @@
 'use client';
 
 import { useMemo } from 'react';
-import { Program, AnchorProvider } from '@coral-xyz/anchor';
+import { Program, AnchorProvider, Idl } from '@coral-xyz/anchor';
 import { useAnchorWallet } from '@solana/wallet-adapter-react';
-import { Connection } from '@solana/web3.js';
-import { Anaheim } from '@/../anchor/target/types/anaheim'; // This type import is correct
+import { Connection, PublicKey } from '@solana/web3.js';
 
-// =========================================================================
-//                             IDL & CONFIG
-// =========================================================================
+// ✅ BEST PRACTICE: Import the generated types and IDL directly.
+// This requires a symlink or correct relative path to your anchor project.
+import { Anaheim } from '../../anchor/target/types/anaheim';
+import idlJson from '../../anchor/target/idl/anaheim.json';
 
-// ✅ THE FIX: The `idl` constant now contains the COMPLETE and VALID IDL.
-// This includes the `address`, `instructions`, `accounts`, AND `types` arrays.
-const idl = {
-    "address": "B1cHVNAFWYX3zXZjqi2tubPZGzrLQEAiL5A9URqKskFi",
-    "metadata": {
-        "name": "anaheim",
-        "version": "0.1.0",
-        "spec": "0.1.0",
-        "description": "Created with Anchor"
-    },
-    "instructions": [
-        {
-            "name": "decrement",
-            "discriminator": [ 106, 227, 168, 59, 248, 27, 150, 101 ],
-            "accounts": [ /* ... */ ],
-            "args": []
-        },
-        {
-            "name": "increment",
-            "discriminator": [ 11, 18, 104, 9, 104, 174, 59, 33 ],
-            "accounts": [ /* ... */ ],
-            "args": []
-        },
-        {
-            "name": "initialize",
-            "discriminator": [ 175, 175, 109, 31, 13, 152, 155, 237 ],
-            "accounts": [ /* ... */ ],
-            "args": []
-        },
-        {
-            "name": "set",
-            "discriminator": [ 198, 51, 53, 241, 116, 29, 126, 194 ],
-            "accounts": [ /* ... */ ],
-            "args": [ /* ... */ ]
-        }
-    ],
-    "accounts": [
-        {
-            "name": "AnaheimAccount",
-            "discriminator": [ 26, 253, 236, 239, 22, 181, 47, 158 ]
-        }
-    ],
-    "types": [
-        {
-            "name": "AnaheimAccount",
-            "type": {
-                "kind": "struct",
-                "fields": [
-                    { "name": "authority", "type": "pubkey" },
-                    { "name": "bump", "type": "u8" },
-                    { "name": "count", "type": "u64" }
-                ]
-            }
-        }
-    ]
-};
+// --- CONFIGURATION ---
 
-// =========================================================================
+const network = process.env.NEXT_PUBLIC_SOLANA_RPC_HOST || "https://api.devnet.solana.com";
 
-const network = "https://api.devnet.solana.com";
+// We cast the imported JSON to the Idl type once.
+const idl = idlJson as Idl;
+// We create the PublicKey object from the address in the IDL.
+const programId = new PublicKey(idl.address);
+
+
+// --- THE CUSTOM HOOK ---
 
 export function useAnaheimProgram() {
     const wallet = useAnchorWallet();
@@ -78,16 +29,20 @@ export function useAnaheimProgram() {
     const provider = useMemo(() => {
         if (!wallet) return undefined;
         const connection = new Connection(network, "processed");
-        return new AnchorProvider(connection, wallet, {
-            preflightCommitment: "processed",
-        });
+        return new AnchorProvider(connection, wallet, { preflightCommitment: "processed" });
     }, [wallet]);
 
     const program = useMemo(() => {
         if (!provider) return undefined;
-        // The Program constructor will now receive a complete IDL and will not throw an error.
-        return new Program<Anaheim>(idl as any, provider);
-    }, [provider]);
+        try {
+            // ✅ THE FIX: Use the modern, three-argument constructor for full type safety.
+            // This is the source of all the previous runtime errors.
+            return new Program<Anaheim>(idl, provider);
+        } catch (error) {
+            console.error("🔥 FATAL ERROR creating Program instance:", error);
+            return undefined;
+        }
+    }, [provider, programId]);
 
     return { program, provider };
 }
