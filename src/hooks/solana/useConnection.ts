@@ -16,5 +16,8 @@ export function useConnection() {
     sendRawTransaction(buffer: Buffer) {
       return Promise.resolve ( undefined )
     },
+      getAccountInfo(pda: PublicKey, PublicKey: typeof PublicKey) {
+          return Promise.resolve(undefined);
+      }
   }
 }

@@ -1,15 +1,18 @@
 // src/components/wallet/wallet-status.tsx
-'use client'
+'use client';
 
-import { useWalletUi } from '@wallet-ui/react'
+import { useWallet } from '@solana/wallet-adapter-react';
 
-export function WalletStatus() {
-  const { account } = useWalletUi()
-  const address = account?.toBase58?.() ?? account?.address ?? 'Adresse inconnue'
+export default function WalletStatus() {
+  const { publicKey, connected } = useWallet();
 
   return (
-    <div className="flex flex-col text-xs text-right leading-tight">
-      <p>🧙 Adresse : <span className="font-mono">{address}</span></p>
-    </div>
-  )
+      <div className="p-4 border rounded-lg">
+        {connected && publicKey ? (
+            <p>Wallet: {publicKey.toBase58().slice(0, 4)}...{publicKey.toBase58().slice(-4)}</p>
+        ) : (
+            <p>Connect your wallet</p>
+        )}
+      </div>
+  );
 }

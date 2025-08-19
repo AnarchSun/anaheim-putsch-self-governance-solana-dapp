@@ -1,5 +1,5 @@
 {
-  "address": "9FXKYdyPqSy7GdLX3MVJPUhN5oTcSE4iFrL9hi1s3uvF",
+  "address": "DWiMeBh6xzNMCZq5eW7u67NRNaCkvGaQczcJSzpF5mC9",
   "metadata": {
     "name": "anaheim",
     "version": "0.1.0",
@@ -151,6 +151,53 @@
       "args": []
     },
     {
+      "name": "mine",
+      "discriminator": [
+        59,
+        22,
+        178,
+        213,
+        139,
+        197,
+        160,
+        196
+      ],
+      "accounts": [
+        {
+          "name": "anaheim_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  97,
+                  110,
+                  97,
+                  104,
+                  101,
+                  105,
+                  109
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "authority"
+              }
+            ]
+          }
+        },
+        {
+          "name": "authority",
+          "signer": true,
+          "relations": [
+            "anaheim_account"
+          ]
+        }
+      ],
+      "args": []
+    },
+    {
       "name": "set",
       "discriminator": [
         198,
@@ -216,6 +263,13 @@
         47,
         158
       ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "InvalidBump",
+      "msg": "This error is no longer used, but can be kept for future checks."
     }
   ],
   "types": [

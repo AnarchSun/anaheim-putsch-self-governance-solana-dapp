@@ -5,7 +5,7 @@
  * IDL can be found at `target/idl/anaheim.json`.
  */
 export type Anaheim = {
-  "address": "9FXKYdyPqSy7GdLX3MVJPUhN5oTcSE4iFrL9hi1s3uvF",
+  "address": "DWiMeBh6xzNMCZq5eW7u67NRNaCkvGaQczcJSzpF5mC9",
   "metadata": {
     "name": "anaheim",
     "version": "0.1.0",
@@ -157,6 +157,53 @@ export type Anaheim = {
       "args": []
     },
     {
+      "name": "mine",
+      "discriminator": [
+        59,
+        22,
+        178,
+        213,
+        139,
+        197,
+        160,
+        196
+      ],
+      "accounts": [
+        {
+          "name": "anaheimAccount",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  97,
+                  110,
+                  97,
+                  104,
+                  101,
+                  105,
+                  109
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "authority"
+              }
+            ]
+          }
+        },
+        {
+          "name": "authority",
+          "signer": true,
+          "relations": [
+            "anaheimAccount"
+          ]
+        }
+      ],
+      "args": []
+    },
+    {
       "name": "set",
       "discriminator": [
         198,
@@ -222,6 +269,13 @@ export type Anaheim = {
         47,
         158
       ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "invalidBump",
+      "msg": "This error is no longer used, but can be kept for future checks."
     }
   ],
   "types": [

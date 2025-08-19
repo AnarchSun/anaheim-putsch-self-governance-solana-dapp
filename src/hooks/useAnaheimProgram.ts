@@ -1,19 +1,18 @@
-// FILE: src/hooks/useAnaheimProgram.ts
-'use client';
-
 import { useEffect, useMemo, useState } from 'react';
-import { Program, AnchorProvider, Idl } from '@coral-xyz/anchor';
+import {Program, AnchorProvider, Idl} from '@coral-xyz/anchor';
 import { useAnchorWallet, useWallet } from '@solana/wallet-adapter-react';
 import { Connection, PublicKey } from '@solana/web3.js';
 import { Anaheim } from '@/types/anaheim';
 
-// =========================================================================
-// IDL & CONFIG
-// =========================================================================
+const network = process.env.NEXT_PUBLIC_SOLANA_RPC_HOST || 'https://api.devnet.solana.com';
 const idl: Idl = {
-    version: '0.1.0',
-    name: 'anaheim',
-    address: 'B1cHVNAFWYX3zXZjqi2tubPZGzrLQEAiL5A9URqKskFi',
+    address: 'DWiMeBh6xzNMCZq5eW7u67NRNaCkvGaQczcJSzpF5mC9',
+    metadata: {
+        "name": "anaheim",
+        "version": "0.1.0",
+        "spec": "0.1.0",
+        "description": "Created with Anchor"
+    },
     instructions: [],
     accounts: [
         {
@@ -35,35 +34,28 @@ const idl: Idl = {
         },
     ],
     errors: [],
-} as any as Idl;
+};
 
-const network = process.env.NEXT_PUBLIC_SOLANA_RPC_HOST || 'https://api.devnet.solana.com';
 const programId = new PublicKey(idl.address);
 
-// =========================================================================
-// CUSTOM HOOK
-// =========================================================================
 export function useAnaheimProgram() {
     const wallet = useAnchorWallet();
     const { connected, publicKey } = useWallet();
     const [isProgramReady, setIsProgramReady] = useState(false);
 
-    // AnchorProvider
     const provider = useMemo(() => {
-        if (!wallet) return undefined;
+        if (!wallet) return null;  // ✅ instead of undefined
         const connection = new Connection(network, 'processed');
         return new AnchorProvider(connection, wallet, { preflightCommitment: 'processed' });
     }, [wallet]);
 
-    // Program instance
     const program = useMemo(() => {
-        if (!provider) return undefined;
+        if (!provider) return null;  // ✅ instead of undefined
         return new Program<Anaheim>(idl, provider);
     }, [provider]);
 
-    // Track readiness
     useEffect(() => {
-        if (connected && publicKey && program) {
+        if (connected && publicKey && program) {  // ✅ program is never void
             console.log(`✅ Program loaded for wallet ${publicKey.toBase58()}`);
             setIsProgramReady(true);
         } else {
