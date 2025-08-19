@@ -14,6 +14,53 @@ export type Anaheim = {
   },
   "instructions": [
     {
+      "name": "createStake",
+      "discriminator": [
+        201,
+        134,
+        55,
+        171,
+        2,
+        136,
+        228,
+        226
+      ],
+      "accounts": [
+        {
+          "name": "stakeAccount",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  116,
+                  97,
+                  107,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "user"
+              }
+            ]
+          }
+        },
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "systemProgram",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
       "name": "decrement",
       "discriminator": [
         106,
@@ -27,34 +74,39 @@ export type Anaheim = {
       ],
       "accounts": [
         {
-          "name": "anaheimAccount",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  97,
-                  110,
-                  97,
-                  104,
-                  101,
-                  105,
-                  109
+          "name": "base",
+          "accounts": [
+            {
+              "name": "anaheimAccount",
+              "writable": true,
+              "pda": {
+                "seeds": [
+                  {
+                    "kind": "const",
+                    "value": [
+                      97,
+                      110,
+                      97,
+                      104,
+                      101,
+                      105,
+                      109
+                    ]
+                  },
+                  {
+                    "kind": "account",
+                    "path": "authority"
+                  }
                 ]
-              },
-              {
-                "kind": "account",
-                "path": "authority"
               }
-            ]
-          }
-        },
-        {
-          "name": "authority",
-          "signer": true,
-          "relations": [
-            "anaheimAccount"
+            },
+            {
+              "name": "authority",
+              "signer": true,
+              "relations": [
+                "anaheimAccount"
+              ]
+            }
           ]
         }
       ],
@@ -74,34 +126,39 @@ export type Anaheim = {
       ],
       "accounts": [
         {
-          "name": "anaheimAccount",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  97,
-                  110,
-                  97,
-                  104,
-                  101,
-                  105,
-                  109
+          "name": "base",
+          "accounts": [
+            {
+              "name": "anaheimAccount",
+              "writable": true,
+              "pda": {
+                "seeds": [
+                  {
+                    "kind": "const",
+                    "value": [
+                      97,
+                      110,
+                      97,
+                      104,
+                      101,
+                      105,
+                      109
+                    ]
+                  },
+                  {
+                    "kind": "account",
+                    "path": "authority"
+                  }
                 ]
-              },
-              {
-                "kind": "account",
-                "path": "authority"
               }
-            ]
-          }
-        },
-        {
-          "name": "authority",
-          "signer": true,
-          "relations": [
-            "anaheimAccount"
+            },
+            {
+              "name": "authority",
+              "signer": true,
+              "relations": [
+                "anaheimAccount"
+              ]
+            }
           ]
         }
       ],
@@ -170,34 +227,39 @@ export type Anaheim = {
       ],
       "accounts": [
         {
-          "name": "anaheimAccount",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  97,
-                  110,
-                  97,
-                  104,
-                  101,
-                  105,
-                  109
+          "name": "base",
+          "accounts": [
+            {
+              "name": "anaheimAccount",
+              "writable": true,
+              "pda": {
+                "seeds": [
+                  {
+                    "kind": "const",
+                    "value": [
+                      97,
+                      110,
+                      97,
+                      104,
+                      101,
+                      105,
+                      109
+                    ]
+                  },
+                  {
+                    "kind": "account",
+                    "path": "authority"
+                  }
                 ]
-              },
-              {
-                "kind": "account",
-                "path": "authority"
               }
-            ]
-          }
-        },
-        {
-          "name": "authority",
-          "signer": true,
-          "relations": [
-            "anaheimAccount"
+            },
+            {
+              "name": "authority",
+              "signer": true,
+              "relations": [
+                "anaheimAccount"
+              ]
+            }
           ]
         }
       ],
@@ -217,34 +279,39 @@ export type Anaheim = {
       ],
       "accounts": [
         {
-          "name": "anaheimAccount",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  97,
-                  110,
-                  97,
-                  104,
-                  101,
-                  105,
-                  109
+          "name": "base",
+          "accounts": [
+            {
+              "name": "anaheimAccount",
+              "writable": true,
+              "pda": {
+                "seeds": [
+                  {
+                    "kind": "const",
+                    "value": [
+                      97,
+                      110,
+                      97,
+                      104,
+                      101,
+                      105,
+                      109
+                    ]
+                  },
+                  {
+                    "kind": "account",
+                    "path": "authority"
+                  }
                 ]
-              },
-              {
-                "kind": "account",
-                "path": "authority"
               }
-            ]
-          }
-        },
-        {
-          "name": "authority",
-          "signer": true,
-          "relations": [
-            "anaheimAccount"
+            },
+            {
+              "name": "authority",
+              "signer": true,
+              "relations": [
+                "anaheimAccount"
+              ]
+            }
           ]
         }
       ],
@@ -268,6 +335,19 @@ export type Anaheim = {
         181,
         47,
         158
+      ]
+    },
+    {
+      "name": "stakeAccount",
+      "discriminator": [
+        80,
+        158,
+        67,
+        124,
+        50,
+        189,
+        192,
+        255
       ]
     }
   ],
@@ -294,6 +374,22 @@ export type Anaheim = {
           },
           {
             "name": "count",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "stakeAccount",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "owner",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
             "type": "u64"
           }
         ]

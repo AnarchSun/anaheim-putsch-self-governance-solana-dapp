@@ -1,9 +1,8 @@
-// FILE: anchor/programs/anaheim/src/lib.rs
-#![allow(deprecated)] // This is okay to keep for now.
+#![allow(deprecated)]
 #![allow(unexpected_cfgs)]
 use anchor_lang::prelude::*;
 
-// Use your actual Program ID.
+// Program ID
 declare_id!("DWiMeBh6xzNMCZq5eW7u67NRNaCkvGaQczcJSzpF5mC9");
 
 // =========================================================================
@@ -13,11 +12,10 @@ declare_id!("DWiMeBh6xzNMCZq5eW7u67NRNaCkvGaQczcJSzpF5mC9");
 pub mod anaheim {
     use super::*;
 
-    // Create the user's PDA.
+    // Create the user's PDA
     pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
         let anaheim_account = &mut ctx.accounts.anaheim_account;
 
-        // ✅ The modern, correct way to get the bump. No manual derivation needed.
         anaheim_account.authority = ctx.accounts.payer.key();
         anaheim_account.bump = ctx.bumps.anaheim_account;
         anaheim_account.count = 0;
@@ -26,27 +24,39 @@ pub mod anaheim {
         Ok(())
     }
 
-    // Mine instruction.
+    // Mine instruction
     pub fn mine(ctx: Context<UseAnaheim>) -> Result<()> {
-        let account = &mut ctx.accounts.anaheim_account;
+        let account = &mut ctx.accounts.base.anaheim_account;
         account.count = account.count.checked_add(1).unwrap();
         msg!("Account mined! New count: {}", account.count);
         Ok(())
     }
 
-    // Standard counter-instructions.
+    // Create stake
+    pub fn create_stake(ctx: Context<CreateStake>) -> Result<()> {
+        let stake_account = &mut ctx.accounts.stake_account;
+        stake_account.owner = ctx.accounts.user.key();
+        stake_account.amount = 0;
+        Ok(())
+    }
+
+
+    // Standard counter-instructions
     pub fn increment(ctx: Context<UseAnaheim>) -> Result<()> {
-        ctx.accounts.anaheim_account.count = ctx.accounts.anaheim_account.count.checked_add(1).unwrap();
+        let account = &mut ctx.accounts.base.anaheim_account;
+        account.count = account.count.checked_add(1).unwrap();
         Ok(())
     }
 
     pub fn decrement(ctx: Context<UseAnaheim>) -> Result<()> {
-        ctx.accounts.anaheim_account.count = ctx.accounts.anaheim_account.count.checked_sub(1).unwrap();
+        let account = &mut ctx.accounts.base.anaheim_account;
+        account.count = account.count.checked_sub(1).unwrap();
         Ok(())
     }
 
     pub fn set(ctx: Context<UseAnaheim>, value: u64) -> Result<()> {
-        ctx.accounts.anaheim_account.count = value;
+        let account = &mut ctx.accounts.base.anaheim_account;
+        account.count = value;
         Ok(())
     }
 }
@@ -70,14 +80,7 @@ pub struct Initialize<'info> {
 }
 
 #[derive(Accounts)]
-pub struct Mine<'info> {
-    #[account(mut, has_one = authority, seeds = [b"anaheim", authority.key().as_ref()], bump = anaheim_account.bump)]
-    pub anaheim_account: Account<'info, AnaheimAccount>,
-    pub authority: Signer<'info>,
-}
-
-#[derive(Accounts)]
-pub struct UseAnaheim<'info> {
+pub struct AnaheimAuthority<'info> {
     #[account(
         mut,
         has_one = authority,
@@ -87,6 +90,33 @@ pub struct UseAnaheim<'info> {
     pub anaheim_account: Account<'info, AnaheimAccount>,
     pub authority: Signer<'info>,
 }
+
+#[derive(Accounts)]
+pub struct UseAnaheim<'info> {
+    pub base: AnaheimAuthority<'info>,
+}
+
+#[derive(Accounts)]
+pub struct Mine<'info> {
+    pub base: AnaheimAuthority<'info>,
+}
+
+#[derive(Accounts)]
+pub struct CreateStake<'info> {
+    #[account(
+        init,
+        payer = user,
+        space = 8 + StakeAccount::LEN,
+        seeds = [b"stake", user.key().as_ref()],
+        bump
+    )]
+    pub stake_account: Account<'info, StakeAccount>,
+
+    #[account(mut)]
+    pub user: Signer<'info>,
+    pub system_program: Program<'info, System>,
+}
+
 
 // =========================================================================
 //                         ACCOUNT STATE
@@ -102,6 +132,17 @@ pub struct AnaheimAccount {
 impl AnaheimAccount {
     pub const SIZE: usize = 32 + 1 + 8;
 }
+
+#[account]
+pub struct StakeAccount {
+    pub owner: Pubkey,
+    pub amount: u64,
+}
+
+impl StakeAccount {
+    pub const LEN: usize = 32 + 8; // owner + amount
+}
+
 
 // =========================================================================
 //                         CUSTOM ERRORS

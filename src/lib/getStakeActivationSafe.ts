@@ -7,22 +7,24 @@ import { Connection, PublicKey } from '@solana/web3.js'
  * Ajoute le 5e argument ici, par exemple un callback vide ou un mode, selon ce que la lib attend.
  */
 export async function getStakeActivationSafe(
-  connection: ExtendedConnection,
-  pollInterval: number,
-  pubkey: PublicKey
-): Promise<getStakeActivation> {
+    connection: Connection,
+    pubkey: PublicKey
+): Promise<StakeState> {
   try {
-    // Exemple concret : on ajoute null comme 5e argument, à adapter selon lib
-    return new getStakeActivation(connection, pubkey, 'confirmed')
+    const result = await getStakeActivation(connection, pubkey) as unknown as {
+      state: string
+      active: number
+      inactive: number
+    }
+
+    return {
+      state: result.state ?? "unknown",
+      active: result.active ?? 0,
+      inactive: result.inactive ?? 0,
+    }
   } catch (e) {
-    console.error('getStakeActivationSafe failed:', e)
-    throw e
+    console.error('getStakeActivationSafe error:', e)
+    return { state: "unknown", active: 0, inactive: 0 }
   }
 }
-export class getStakeActivation {
-  constructor(
-    public connection: Connection, // ← utilise le vrai Solana Connection ici
-    public publicKey: PublicKey,
-    public confirmed: string
-  ) {}
-}
+

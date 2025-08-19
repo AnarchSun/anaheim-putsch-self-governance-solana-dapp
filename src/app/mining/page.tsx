@@ -6,19 +6,29 @@ import { useWallet } from '@solana/wallet-adapter-react';
 import { ClientWalletMultiButton } from '@/components/wallet/ClientWalletMultiButton';
 import { TransferSolFeature } from '@/components/account/account-data-access';
 import { ClientOnly } from '@/components/ClientOnly';
-import { useAnaheimAccount } from '@/hooks/useAnaheimAccount'; // ✅ The single data-fetching hook
+import { useAnaheimAccount } from '@/hooks/useAnaheimAccount'; // ✅ The single data-fetching hookA
 import MiningClient from "@/components/mining/MiningClient";
+import { useAnaheimProgram } from '@/hooks/useAnaheimProgram';
+import { useInitializeMutation } from '@/hooks/solana/useInitializeMutation';
 
 export default function HomePage() {
     const { connected, publicKey } = useWallet();
+    const { program, provider, isProgramReady } = useAnaheimProgram();
+    const initializeMutation = useInitializeMutation();
 
+    if (!isProgramReady) return <div>Connecting wallet & loading program...</div>;
+
+    const handleInitialize = async () => {
+        await initializeMutation.mutateAsync();
+    };
     // ✅ This is now the single source of truth for the account data.
     const { data: accountInfo, isLoading, error } = useAnaheimAccount(publicKey);
 
     return (
         <div className="space-y-6 text-center max-w-4xl mx-auto py-8">
             <h1 className="text-4xl md:text-5xl font-bold">Anaheim Community Console</h1>
-
+            <h2>Mining Page</h2>
+            <button onClick={handleInitialize}>Initialize Anaheim Account</button>
             {connected ? (
                 <p className="text-lg text-muted-foreground">
                     Welcome! Your program account is loaded below.

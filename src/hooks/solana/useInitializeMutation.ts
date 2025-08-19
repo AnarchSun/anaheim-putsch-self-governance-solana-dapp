@@ -2,8 +2,9 @@
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useWallet } from '@solana/wallet-adapter-react';
-import { useAnaheimProgram } from './useProgram';
+
 import { PublicKey, SystemProgram } from "@solana/web3.js";
+import { useAnaheimProgram } from "@/hooks/useAnaheimProgram";
 
 // ====================================================
 // Custom Hook for Initialize Mutation
@@ -27,16 +28,17 @@ export function useInitializeMutation() {
             );
 
             // ✅ Send initialize transaction
-            const txSig = await program.methods
-                .initialize() // IDL shows no args
+            const txSig = await (program.methods as any)
+                .initialize()
                 .accounts({
-                    anaheimAccount: anaheimPda, // must match IDL
+                    anaheimAccount: anaheimPda,
                     payer: publicKey,
                     systemProgram: SystemProgram.programId,
-                } as any)
+                })
                 .rpc();
 
-            // ✅ Confirm transaction using new Solana pattern
+
+            // ✅ Confirm transaction using a new Solana pattern
             const { blockhash, lastValidBlockHeight } =
                 await program.provider.connection.getLatestBlockhash('finalized');
 
