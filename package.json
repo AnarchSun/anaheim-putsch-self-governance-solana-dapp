@@ -19,7 +19,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "lint:fix": "next lint --fix"
+    "lint:fix": "next lint --fix",
     "clean": "rm -rf .next dist out",
     "anchor:build": "cd anchor && cargo clean && cargo update && anchor build && cd .. && cp -r anchor/target/idl/* target/ && cp -r anchor/target/types/* target/ && pnpm build && pnpm start && pnpm keygen",
     "anchor:deploy": "cd anchor && anchor deploy --provider.cluster devnet && cd ..",
