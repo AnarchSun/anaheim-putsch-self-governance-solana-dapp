@@ -6,9 +6,8 @@ resolution = true
 skip-lint = false
 
 [programs.devnet]
-anaheim = "DWiMeBh6xzNMCZq5eW7u67NRNaCkvGaQczcJSzpF5mC9"
-journal = "Abi5ZccG8Cymr7gK3a176tMUekKWEq4wudSRUKz4NmaR"
-
+anaheim = "3Yk7LTGn7n4nXrgiJzHhXJEaz8QHzzN41EDoKd2T95wm"
+quadratic = "quadCSapU8nTdLg73KHDnmdxKnJQsh7GUbu5tZfnRRr"
 [registry]
 url = "https://api.apr.dev"
 
@@ -17,7 +16,7 @@ cluster = "devnet"
 wallet = "~/.config/solana/id.json"
 
 [workspace]
-members = ["programs/anaheim", "programs/journal"]
+members = ["programs/anaheim", "programs/shared", "programs/quadratic"]
 
 [scripts]
 Initialize = "pnpm run Initialize"
