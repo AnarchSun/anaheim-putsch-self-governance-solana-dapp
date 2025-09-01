@@ -1,0 +1,2 @@
+test-ledger/rocksdb/* filter=lfs diff=lfs merge=lfs -text
+test-ledger/*.log filter=lfs diff=lfs merge=lfs -text
