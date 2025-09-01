@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+# Ignore test ledger files
+test-ledger/
+*.log
+test-ledger/
