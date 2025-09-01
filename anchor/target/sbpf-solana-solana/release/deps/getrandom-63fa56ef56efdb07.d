@@ -1,0 +1,10 @@
+/home/anarchsun/RustroverProjects/anarcrypt.sol/anaheim-putsch-self-governance-solana-dapp/anchor/target/sbpf-solana-solana/release/deps/libgetrandom-63fa56ef56efdb07.rmeta: /home/anarchsun/.cargo/registry/src/index.crates.io-6f17d22bba15001f/getrandom-0.2.16/src/lib.rs /home/anarchsun/.cargo/registry/src/index.crates.io-6f17d22bba15001f/getrandom-0.2.16/src/error.rs /home/anarchsun/.cargo/registry/src/index.crates.io-6f17d22bba15001f/getrandom-0.2.16/src/util.rs /home/anarchsun/.cargo/registry/src/index.crates.io-6f17d22bba15001f/getrandom-0.2.16/src/custom.rs
+
+/home/anarchsun/RustroverProjects/anarcrypt.sol/anaheim-putsch-self-governance-solana-dapp/anchor/target/sbpf-solana-solana/release/deps/libgetrandom-63fa56ef56efdb07.rlib: /home/anarchsun/.cargo/registry/src/index.crates.io-6f17d22bba15001f/getrandom-0.2.16/src/lib.rs /home/anarchsun/.cargo/registry/src/index.crates.io-6f17d22bba15001f/getrandom-0.2.16/src/error.rs /home/anarchsun/.cargo/registry/src/index.crates.io-6f17d22bba15001f/getrandom-0.2.16/src/util.rs /home/anarchsun/.cargo/registry/src/index.crates.io-6f17d22bba15001f/getrandom-0.2.16/src/custom.rs
+
+/home/anarchsun/RustroverProjects/anarcrypt.sol/anaheim-putsch-self-governance-solana-dapp/anchor/target/sbpf-solana-solana/release/deps/getrandom-63fa56ef56efdb07.d: /home/anarchsun/.cargo/registry/src/index.crates.io-6f17d22bba15001f/getrandom-0.2.16/src/lib.rs /home/anarchsun/.cargo/registry/src/index.crates.io-6f17d22bba15001f/getrandom-0.2.16/src/error.rs /home/anarchsun/.cargo/registry/src/index.crates.io-6f17d22bba15001f/getrandom-0.2.16/src/util.rs /home/anarchsun/.cargo/registry/src/index.crates.io-6f17d22bba15001f/getrandom-0.2.16/src/custom.rs
+
+/home/anarchsun/.cargo/registry/src/index.crates.io-6f17d22bba15001f/getrandom-0.2.16/src/lib.rs:
+/home/anarchsun/.cargo/registry/src/index.crates.io-6f17d22bba15001f/getrandom-0.2.16/src/error.rs:
+/home/anarchsun/.cargo/registry/src/index.crates.io-6f17d22bba15001f/getrandom-0.2.16/src/util.rs:
+/home/anarchsun/.cargo/registry/src/index.crates.io-6f17d22bba15001f/getrandom-0.2.16/src/custom.rs:

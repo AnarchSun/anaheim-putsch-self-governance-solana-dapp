@@ -1,3 +1,4 @@
+#[allow(dead_code)]
 use crate::mint::MintMaxVoterWeight;
 use anchor_lang::prelude::*;
 use enum_dispatch::enum_dispatch;
@@ -21,6 +22,28 @@ pub enum GenericMaxVoterWeightEnum {
     MaxVoterWeightRecord(MaxVoterWeightRecord),
     Mint(MintMaxVoterWeight),
 }
+
+impl GenericMaxVoterWeightEnum {
+    /// Return the governance token mint as a `Pubkey` for this enum variant
+    pub(crate) fn governing_token_mint(&self) -> Pubkey {
+        match self {
+            GenericMaxVoterWeightEnum::MaxVoterWeightRecord(r) => {
+                // MaxVoterWeightRecord has a field governing_token_mint
+                Pubkey::new_from_array(r.governing_token_mint.to_bytes())
+            }
+            GenericMaxVoterWeightEnum::Mint(m) => {
+                // MintMaxVoterWeight stores a Pubkey directly
+                m.key
+            }
+        }
+    }
+
+    /// Alias for `governing_token_mint` for uniform trait usage
+    pub(crate) fn get_governing_token_mint(&self) -> Pubkey {
+        self.governing_token_mint()
+    }
+}
+
 
 // the "official" on-chain max voter weight record has a discriminator field
 // when a predecessor voter weight is provided, it uses this struct

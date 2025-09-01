@@ -22,6 +22,43 @@ pub enum GenericVoterWeightEnum {
     TokenOwnerRecord(TokenOwnerRecordV2),
 }
 
+impl GenericVoterWeightEnum {
+    /// Return the governing token owner for this enum variant
+    pub(crate) fn governing_token_owner(&self) -> Pubkey {
+        match self {
+            GenericVoterWeightEnum::VoterWeightRecord(r) => r.get_governing_token_owner(),
+            GenericVoterWeightEnum::TokenOwnerRecord(r) => r.get_governing_token_owner(),
+        }
+    }
+
+    /// Return the governing token mint for this enum variant
+    pub(crate) fn governing_token_mint(&self) -> Pubkey {
+        match self {
+            GenericVoterWeightEnum::VoterWeightRecord(r) => r.get_governing_token_mint(),
+            GenericVoterWeightEnum::TokenOwnerRecord(r) => r.get_governing_token_mint(),
+        }
+    }
+
+    /// Return the realm for this enum variant
+    pub(crate) fn get_realm(&self) -> Pubkey {
+        match self {
+            GenericVoterWeightEnum::VoterWeightRecord(r) => r.get_realm(),
+            GenericVoterWeightEnum::TokenOwnerRecord(r) => r.get_realm(),
+        }
+    }
+
+    /// Alias for `governing_token_owner()`
+    pub(crate) fn get_governing_token_owner(&self) -> Pubkey {
+        self.governing_token_owner()
+    }
+
+    /// Alias for `governing_token_mint()`
+    pub(crate) fn get_governing_token_mint(&self) -> Pubkey {
+        self.governing_token_mint()
+    }
+}
+
+
 // the "official" on-chain voter weight record has a discriminator field
 // when a predecessor voter weight is provided, it uses this struct
 // We add the GenericVoterWeight trait here to hide this from the rest of the code.

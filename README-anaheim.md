@@ -71,7 +71,7 @@ build = "anchor build && node anchor/post-build-copy.js"
 
 *   Devnet uniquement pour l’instant
 *   Programmes : anaheim, journal
-*   Token principal : r=3.57
+*   Token principal : _r=3.57
 
 🧪 Tests
 

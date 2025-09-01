@@ -1,9 +1,19 @@
+// FILE: programs/anaheim/src/lib.rs
 #![allow(deprecated)]
 #![allow(unexpected_cfgs)]
+
 use anchor_lang::prelude::*;
 
-// Program ID
-declare_id!("DWiMeBh6xzNMCZq5eW7u67NRNaCkvGaQczcJSzpF5mC9");
+pub mod constants;
+pub mod error;
+pub mod validate_post_content;
+pub use constants::*;
+pub use validate_post_content::*;
+
+// =========================================================================
+//                          PROGRAM ID
+// =========================================================================
+declare_id!("3Yk7LTGn7n4nXrgiJzHhXJEaz8QHzzN41EDoKd2T95wm");
 
 // =========================================================================
 //                          PROGRAM LOGIC
@@ -24,7 +34,7 @@ pub mod anaheim {
         Ok(())
     }
 
-    // Mine instruction
+    // Mine instruction (basic counter++)
     pub fn mine(ctx: Context<UseAnaheim>) -> Result<()> {
         let account = &mut ctx.accounts.base.anaheim_account;
         account.count = account.count.checked_add(1).unwrap();
@@ -39,7 +49,6 @@ pub mod anaheim {
         stake_account.amount = 0;
         Ok(())
     }
-
 
     // Standard counter-instructions
     pub fn increment(ctx: Context<UseAnaheim>) -> Result<()> {
@@ -97,11 +106,6 @@ pub struct UseAnaheim<'info> {
 }
 
 #[derive(Accounts)]
-pub struct Mine<'info> {
-    pub base: AnaheimAuthority<'info>,
-}
-
-#[derive(Accounts)]
 pub struct CreateStake<'info> {
     #[account(
         init,
@@ -117,6 +121,13 @@ pub struct CreateStake<'info> {
     pub system_program: Program<'info, System>,
 }
 
+#[derive(Accounts)]
+pub struct CloseAccount<'info> {
+    #[account(mut, close = user)]
+    pub post_account: Account<'info, PostAccount>,
+    #[account(mut)]
+    pub user: Signer<'info>,
+}
 
 // =========================================================================
 //                         ACCOUNT STATE
@@ -130,7 +141,18 @@ pub struct AnaheimAccount {
 }
 
 impl AnaheimAccount {
-    pub const SIZE: usize = 32 + 1 + 8;
+    pub const SIZE: usize = 32 + 1 + 8; // authority + bump + count
+}
+
+#[account]
+pub struct PostAccount {
+    pub authority: Pubkey,
+    pub content: Vec<u8>, // fixed-size content stored as bytes
+}
+
+impl PostAccount {
+    // 4 = Vec prefix, 280 = max chars
+    pub const LEN: usize = 32 + 4 + 280;
 }
 
 #[account]
@@ -142,7 +164,6 @@ pub struct StakeAccount {
 impl StakeAccount {
     pub const LEN: usize = 32 + 8; // owner + amount
 }
-
 
 // =========================================================================
 //                         CUSTOM ERRORS

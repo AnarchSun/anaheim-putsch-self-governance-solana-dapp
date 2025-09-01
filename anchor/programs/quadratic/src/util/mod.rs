@@ -1,3 +1,5 @@
+pub mod generic_voter_weight_ext;
+
 use crate::state::QuadraticCoefficients;
 
 pub fn convert_vote(input_voter_weight: u64, coefficients: &QuadraticCoefficients) -> f64 {

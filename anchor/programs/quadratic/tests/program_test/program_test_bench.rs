@@ -5,7 +5,7 @@ use anchor_lang::{
     AccountDeserialize,
 };
 
-use solana_program::{borsh::try_from_slice_unchecked, system_program};
+use solana_program::{borsh1::try_from_slice_unchecked, system_program};
 use solana_program_test::{BanksClientError, ProgramTest, ProgramTestContext};
 use solana_sdk::{
     account::{Account, ReadableAccount},
@@ -16,10 +16,8 @@ use solana_sdk::{
     system_instruction,
     transaction::Transaction,
 };
-
-use borsh::BorshDeserialize;
-
 use crate::program_test::tools::clone_keypair;
+use borsh::BorshDeserialize;
 
 pub struct MintCookie {
     pub address: Pubkey,

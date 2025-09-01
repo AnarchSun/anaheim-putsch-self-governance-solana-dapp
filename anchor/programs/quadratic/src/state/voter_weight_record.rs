@@ -1,7 +1,12 @@
 use anchor_lang::prelude::*;
-use gpl_shared::anchor::{DISCRIMINATOR_SIZE, PUBKEY_SIZE};
 use num_derive::FromPrimitive;
 
+pub const DISCRIMINATOR_SIZE: usize = 8;
+pub const PUBKEY_SIZE: usize = 32;
+
+/// Size of voter weight record (generic)
+pub const VOTER_WEIGHT_RECORD_SIZE: usize =
+    DISCRIMINATOR_SIZE + PUBKEY_SIZE * 4 + 8 + 1 + 8 + 1 + 1 + 1 + 8;
 /// VoterWeightAction enum as defined in spl-governance-addin-api
 /// It's redefined here for Anchor to export it to IDL
 #[derive(AnchorSerialize, AnchorDeserialize, Debug, Clone, Copy, PartialEq, FromPrimitive)]
