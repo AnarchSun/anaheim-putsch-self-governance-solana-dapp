@@ -114,7 +114,7 @@ where
 // ------------------------ core logic (byte-safe) ------------------------
 
 pub fn resolve_input_voter_weight<'a, R, V>(
-    input_account: &AccountInfo,
+    input_account: &'a AccountInfo<'a>,           // <-- tie the lifetime to 'a
     voter_weight_record_to_update: &'a Account<V>,
     registrar: &'a Account<R>,
 ) -> Result<GenericVoterWeightEnum>
@@ -126,7 +126,6 @@ where
         get_generic_voter_weight_record_data(input_account, registrar)?;
 
     // --- Compare by bytes (avoid cross-crate Pubkey equality issues) ---
-    // Extract the predecessor values as [u8; 32]
     let (pred_mint_bytes, pred_owner_bytes, pred_realm_bytes) = match &predecessor_generic_voter_weight_record {
         GenericVoterWeightEnum::TokenOwnerRecord(r) => (
             r.governing_token_mint.to_bytes(),
@@ -146,7 +145,7 @@ where
     if update_mint_bytes != pred_mint_bytes {
         return Err(error!(VoterWeightError::InvalidPredecessorVoterWeightRecordGovTokenMint));
     }
-    // ... existing code ...
+
     let update_owner_bytes = voter_weight_record_to_update
         .get_governing_token_owner()
         .to_bytes();
@@ -161,6 +160,7 @@ where
 
     Ok(predecessor_generic_voter_weight_record)
 }
+
 
 // --- helper to produce the exact Pubkey type spl_governance expects ---
 #[inline(always)]
