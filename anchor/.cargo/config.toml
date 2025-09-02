@@ -1,0 +1,8 @@
+[build]
+target = "sbf-solana-solana"
+
+[target.sbf-solana-solana]
+rustflags = ["-C", "link-arg=-zstack-size=16777216",
+    "-Z", "unstable-options"
+]
+runner = "cargo-build-sbf"

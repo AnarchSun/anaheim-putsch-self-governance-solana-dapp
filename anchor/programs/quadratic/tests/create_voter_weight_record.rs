@@ -1,7 +1,7 @@
 use gpl_quadratic::state::QuadraticCoefficients;
 use program_test::quadratic_voter_test::QuadraticVoterTest;
 use program_test::tools::assert_ix_err;
-use solana_program::instruction::InstructionError;
+use anchor_lang::solana_program::instruction::InstructionError;
 use solana_program_test::*;
 use solana_sdk::transport::TransportError;
 

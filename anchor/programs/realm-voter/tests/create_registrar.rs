@@ -4,7 +4,7 @@ use anchor_lang::prelude::{ErrorCode, Pubkey};
 use gpl_realm_voter::error::RealmVoterError;
 use program_test::realm_voter_test::RealmVoterTest;
 
-use solana_program::instruction::InstructionError;
+use anchor_lang::solana_program::instruction::InstructionError;
 use solana_program_test::*;
 use solana_sdk::{signature::Keypair, transport::TransportError};
 

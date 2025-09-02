@@ -4,7 +4,7 @@ use anchor_spl::associated_token;
 use gpl_token_voter::error::TokenVoterError;
 use program_test::token_voter_test::TokenVoterTest;
 use program_test::tools::*;
-use solana_program_test::*;
+use anchor_lang::solana_program_test::*;
 use solana_sdk::instruction::InstructionError;
 use solana_sdk::pubkey::Pubkey;
 use solana_sdk::signer::Signer;

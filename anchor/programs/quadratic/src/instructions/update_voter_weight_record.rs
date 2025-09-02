@@ -10,7 +10,7 @@ use crate::util::convert_vote;
 use anchor_lang::prelude::Pubkey;
 use anchor_lang::prelude::*;
 use gpl_shared::generic_voter_weight::{GenericVoterWeight, GenericVoterWeightEnum};
-use solana_program::clock::Clock;
+use anchor_lang::solana_program::clock::Clock;
 use std::cmp::max;
 
 /// Base trait for voter weight records

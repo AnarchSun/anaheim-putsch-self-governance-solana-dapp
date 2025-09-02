@@ -1,7 +1,7 @@
 use crate::program_test::program_test_bench::MintType;
 use program_test::token_voter_test::TokenVoterTest;
 use program_test::tools::*;
-use solana_program_test::*;
+use anchor_lang::solana_program_test::*;
 use solana_sdk::instruction::InstructionError;
 use solana_sdk::signature::Keypair;
 use solana_sdk::signer::Signer;

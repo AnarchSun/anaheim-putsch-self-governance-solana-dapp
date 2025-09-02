@@ -2,7 +2,7 @@ use crate::program_test::governance_test::RealmCookie;
 use gpl_quadratic::state::QuadraticCoefficients;
 use itertools::Either;
 use program_test::{quadratic_voter_test::QuadraticVoterTest, tools::*};
-use solana_program::instruction::InstructionError;
+use anchor_lang::solana_program::instruction::InstructionError;
 use solana_program_test::*;
 use solana_sdk::transport::TransportError;
 use spl_governance::state::realm::RealmV2;

@@ -1,0 +1,3 @@
+Error: Function _ZN14regex_automata4meta8strategy3new17hdb3bce4752e92825E Stack offset of 7008 exceeded max offset of 4096 by 2912 bytes, please minimize large stack variables. Estimated function frame size: 14144 bytes. Exceeding the maximum stack offset may cause undefined behavior during execution.
+
+rustc-LLVM ERROR: Branch target out of insn range

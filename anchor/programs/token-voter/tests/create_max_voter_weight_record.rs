@@ -1,7 +1,7 @@
 use crate::program_test::token_voter_test::TokenVoterTest;
 use program_test::tools::assert_ix_err;
-use solana_program::instruction::InstructionError;
-use solana_program_test::*;
+use anchor_lang::solana_program::instruction::InstructionError;
+use anchor_lang::solana_program_test::*;
 use solana_sdk::transport::TransportError;
 
 mod program_test;

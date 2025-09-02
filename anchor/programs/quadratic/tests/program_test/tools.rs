@@ -6,7 +6,7 @@ use crate::{
 use anchor_lang::prelude::ERROR_CODE_OFFSET;
 use gpl_quadratic::error::QuadraticError;
 use itertools::Either;
-use solana_program::{instruction::InstructionError, pubkey::Pubkey};
+use anchor_lang::solana_program::{instruction::InstructionError, pubkey::Pubkey};
 use solana_program_test::BanksClientError;
 use solana_sdk::{signature::Keypair, transaction::TransactionError};
 use spl_governance_tools::error::GovernanceToolsError;

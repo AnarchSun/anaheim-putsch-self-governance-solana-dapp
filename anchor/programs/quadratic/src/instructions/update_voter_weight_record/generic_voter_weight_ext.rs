@@ -1,5 +1,5 @@
 use gpl_shared::generic_voter_weight::GenericVoterWeightEnum;
-use solana_program::slot_history::Slot;
+use anchor_lang::solana_program::slot_history::Slot;
 
 /// Extension trait pour simplifier l'accès aux champs communs
 /// de GenericVoterWeightEnum (TokenOwnerRecord ou VoterWeightRecord).

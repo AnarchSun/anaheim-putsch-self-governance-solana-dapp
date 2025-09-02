@@ -6,7 +6,7 @@ use anchor_lang::prelude::Pubkey;
 use gpl_quadratic::error::QuadraticError;
 use gpl_quadratic::quadratic;
 use gpl_quadratic::state::QuadraticCoefficients;
-use solana_program::instruction::InstructionError;
+use anchor_lang::solana_program::instruction::InstructionError;
 use solana_program_test::*;
 use solana_sdk::{signature::Keypair, transport::TransportError};
 

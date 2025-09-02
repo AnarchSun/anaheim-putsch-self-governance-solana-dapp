@@ -4,7 +4,7 @@ use anchor_lang::prelude::Pubkey;
 
 use gpl_quadratic::error::QuadraticError;
 use gpl_quadratic::state::QuadraticCoefficients;
-use solana_program::instruction::{Instruction, InstructionError};
+use anchor_lang::solana_program::instruction::{Instruction, InstructionError};
 use solana_program_test::*;
 use solana_sdk::{signature::Keypair, signer::Signer};
 

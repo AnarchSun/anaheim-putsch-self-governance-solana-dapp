@@ -12,7 +12,7 @@ use solana_sdk::{instruction::AccountMeta, sysvar::instructions};
 use crate::program_test::governance_test::GovernanceTest;
 use crate::program_test::program_test_bench::ProgramTestBench;
 use anchor_lang::ToAccountMetas;
-use solana_program::program_pack::Pack;
+use anchor_lang::solana_program::program_pack::Pack;
 use solana_program_test::{processor, BanksClientError, ProgramTest};
 use solana_sdk::instruction::Instruction;
 use solana_sdk::signature::Keypair;

@@ -1,6 +1,6 @@
 use gpl_realm_voter::{error::RealmVoterError, state::CollectionItemChangeType};
 use program_test::realm_voter_test::RealmVoterTest;
-use solana_program_test::*;
+use anchor_lang::solana_program_test::*;
 use solana_sdk::{signature::Keypair, signer::Signer, transport::TransportError};
 mod program_test;
 use program_test::tools::{assert_anchor_err, assert_realm_voter_err};

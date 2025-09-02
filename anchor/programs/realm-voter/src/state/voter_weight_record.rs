@@ -1,6 +1,6 @@
 use anchor_lang::prelude::*;
 use anchor_spl::token_2022_extensions::spl_token_metadata_interface::borsh::{BorshDeserialize, BorshSerialize};
-use solana_program::pubkey::PUBKEY_BYTES;
+use anchor_lang::solana_program::pubkey::PUBKEY_BYTES;
 
 use crate::tools::anchor::DISCRIMINATOR_SIZE;
 
