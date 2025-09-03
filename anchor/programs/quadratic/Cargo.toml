@@ -28,9 +28,8 @@ spl-governance = { version = "4.0", features = ["no-entrypoint"] }
 spl-governance-tools=  "0.1.4"
 spl-token = { version = "4.0.0", features = [ "no-entrypoint" ] }
 
-
 [dev-dependencies]
 borsh = "0.10.3"
-solana-sdk = "1.18.26"
-solana-program-test = "1.18.26"
+solana-sdk = "3.0.0"
+solana-program-test = "3.0.0"
 spl-governance-addin-mock = "0.1.4"
