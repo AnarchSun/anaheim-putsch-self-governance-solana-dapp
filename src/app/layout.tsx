@@ -26,8 +26,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     const links = [
         { label: 'Home', path: '/' },
         { label: 'Account', path: '/account' },
-        { label: 'Mining', path: '/mining' },
-        { label: 'Stake', path: '/stake' },
+        { label: 'Stake & Mining', path: '/stake-mining' }, // <- label plus explicite
         { label: 'Posts', path: '/posts' },
         { label: 'Gemini-Helper', path: '/dev-helper' },
     ];

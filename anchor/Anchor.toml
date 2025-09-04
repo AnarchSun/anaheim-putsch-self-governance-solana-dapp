@@ -16,7 +16,7 @@ cluster = "devnet"
 wallet = "~/.config/solana/id.json"
 
 [workspace]
-members = ["programs/*"]
+members = ["programs/anaheim"]
 
 [scripts]
 Initialize = "pnpm run Initialize"

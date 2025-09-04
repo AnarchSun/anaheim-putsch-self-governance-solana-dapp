@@ -7,7 +7,11 @@ import { useInitializeMutation } from '@/hooks/useInitialize';
 import { useMineMutation } from '@/hooks/useMine'; // Assuming you have this hook
 
 // ✅ This component now receives its data as props. It does NOT fetch its own data.
-export default function MiningClient({ account, isLoading }: { account: any, isLoading: boolean }) {
+export default function MiningClient({account, isLoading, accountInfo}: {
+    account: any,
+    isLoading: boolean,
+    accountInfo?: any
+}) {
     const initializeMutation = useInitializeMutation();
     const mineMutation = useMineMutation();
 
