@@ -1,4 +1,4 @@
 [toolchain]
-channel = "nightly"
+channel = "1.69.0"
 components = ["rustfmt", "clippy"]
 targets = ["sbf-solana-solana"]

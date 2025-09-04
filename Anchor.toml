@@ -1,9 +1,17 @@
-[programs.devnet]
-anaheim = "8MEoUTwTTyRFRhr2smGtoxT7DonyJakDsWxZJCZxs3nB"
+anchor_version = "0.31.1"
+solana_version = "1.18.18"
+
+[features]
+seeds = false
+
+[programs.localnet]
+anaheim = "3Yk7LTGn7n4nXrgiJzHhXJEaz8QHzzN41EDoKd2T95wm"
+quadratic = "quadCSapU8nTdLg73KHDnmdxKnJQsh7GUbu5tZfnRRr"
+token_voter = "HA99cuBQCCzZu1zuHN2qBxo2FBo1cxNLwKkdt6Prhy8v"
+realm_voter = "GRmVtfLq2BPeWs5EDoQoZc787VYkhdkA11k63QM1Xemz"
 
 [registry]
 url = "https://anchor.projectserum.com"
 
-[provider]
-cluster = "devnet"
-wallet = "~/.config/solana/id.json"
+[scripts]
+test = "pnpm run ts-mocha -p ./tsconfig.json -t 1000000 tests/**/*.ts"

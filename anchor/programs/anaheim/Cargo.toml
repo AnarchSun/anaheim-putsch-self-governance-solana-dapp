@@ -4,8 +4,8 @@ version = "0.1.0"
 edition = "2021"
 
 [lib]
-crate-type = ["cdylib", "lib"]
 name = "anaheim"
+crate-type = ["cdylib", "lib"]
 
 [features]
 default = []
@@ -15,5 +15,6 @@ no-idl = []
 no-log-ix-name = []
 idl-build = ["anchor-lang/idl-build"]
 
+
 [dependencies]
-anchor-lang = { version = "0.31.1", features = ["init-if-needed", "idl-build"] }
+anchor-lang = { version = "0.31.1", features = ["init-if-needed"] }

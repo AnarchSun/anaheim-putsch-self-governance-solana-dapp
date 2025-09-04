@@ -1,8 +1,17 @@
-[build]
-target = "sbf-solana-solana"
+[profile.release]
+overflow-checks = true
 
-[target.sbf-solana-solana]
-rustflags = ["-C", "link-arg=-zstack-size=16777216",
-    "-Z", "unstable-options"
-]
-runner = "cargo-build-sbf"
+[profile.release.package."*"]
+opt-level = 3
+
+[profile.release.package."regex"]
+opt-level = 0
+
+[profile.release.package."regex-automata"]
+opt-level = 0
+
+[profile.release.package."aho-corasick"]
+opt-level = 0
+
+[net]
+git-fetch-with-cli = true

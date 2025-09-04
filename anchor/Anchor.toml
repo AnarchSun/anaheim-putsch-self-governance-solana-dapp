@@ -5,37 +5,18 @@ anchor_version = "0.31.1"
 resolution = true
 skip-lint = false
 
-[programs.localnet]
-anaheim = "3Yk7LTGn7n4nXrgiJzHhXJEaz8QHzzN41EDoKd2T95wm"
-quadratic = "quadCSapU8nTdLg73KHDnmdxKnJQsh7GUbu5tZfnRRr"
-realm-voter = "GRmVtfLq2BPeWs5EDoQoZc787VYkhdkA11k63QM1Xemz"
-token_voter = "HA99cuBQCCzZu1zuHN2qBxo2FBo1cxNLwKkdt6Prhy8v"
+[programs.devnet]
+anaheim = "FZ1uRqV9P17MA2QP9ABmsvDP831UBjVicuc82SmrTykw"
 
 [registry]
 url = "https://api.apr.dev"
 
 [provider]
-cluster = "localnet"
+cluster = "devnet"
 wallet = "~/.config/solana/id.json"
 
 [workspace]
-members = [
-    "programs/anaheim",
-    "programs/quadratic",
-    "programs/realm-voter",
-    "programs/token-voter"
-]
-resolver = "2"
+members = ["programs/*"]
 
 [scripts]
 Initialize = "pnpm run Initialize"
-
-[profile.release]
-overflow-checks = true
-lto = "fat"
-codegen-units = 1
-
-[profile.release.build-override]
-opt-level = 3
-incremental = false
-codegen-units = 1

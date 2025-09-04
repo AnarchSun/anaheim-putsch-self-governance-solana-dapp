@@ -12,7 +12,7 @@ pub use validate_post_content::*;
 // =========================================================================
 //                          PROGRAM ID
 // =========================================================================
-declare_id!("3Yk7LTGn7n4nXrgiJzHhXJEaz8QHzzN41EDoKd2T95wm");
+declare_id!("FZ1uRqV9P17MA2QP9ABmsvDP831UBjVicuc82SmrTykw");
 
 // =========================================================================
 //                          PROGRAM LOGIC

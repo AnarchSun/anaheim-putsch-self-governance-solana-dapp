@@ -1,3 +1,0 @@
-[submodule "anchor/programs/patched_crates/regex-automata"]
-	path = anchor/programs/patched_crates/regex-automata
-	url = https://github.com/rust-lang/regex.git
