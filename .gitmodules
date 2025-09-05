@@ -1,0 +1,3 @@
+[submodule "src/gill"]
+	path = src/gill
+	url = git@github.com:codebender828/gill.git

@@ -5,42 +5,62 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAnaheimProgram } from "./useProgram";
 import { useWallet } from "@solana/wallet-adapter-react";
 
-// This is a correctly structured custom hook for the 'increment' mutation.
+/**
+ * Custom hook to increment the Anaheim account counter.
+ * To use: call useIncrementMutation() in your component,
+ * then use its mutate() method when you want to trigger the increment.
+ */
 export function useIncrementMutation() {
     const { program } = useAnaheimProgram();
     const { publicKey } = useWallet();
     const queryClient = useQueryClient();
 
-    // useMutation expects an object as its argument
     return useMutation({
-        // The async logic goes inside the 'mutationFn' property
         mutationFn: async () => {
             if (!program || !publicKey) {
                 throw new Error("Program or wallet not ready");
             }
 
-            // You must re-derive the PDA here to know which account to increment
-            const [pda] = (await import('@solana/web3.js')).PublicKey.findProgramAddressSync(
+            // Derive the PDA for 'base' (anaheimAccount)
+            const [base] = (await import('@solana/web3.js')).PublicKey.findProgramAddressSync(
                 [Buffer.from("anaheim"), publicKey.toBuffer()],
                 program.programId
             );
 
+            // Pass only 'base' as account -- IDL expects only 'base' here
             return await program.methods
                 .increment()
                 .accounts({
-                    anaheimAccount: pda,
-                    authority: publicKey,
+                    base
                 })
                 .rpc();
         },
         onSuccess: (signature) => {
             console.log("Increment successful!", signature);
-            // This is crucial: invalidate the query to force a refetch of the account data
-            queryClient.invalidateQueries({queryKey: ['anaheim-account', publicKey?.toBase58()]}).then(r =>{});
+            queryClient.invalidateQueries({queryKey: ['anaheim-account', publicKey?.toBase58()]});
         },
         onError: (error: Error) => {
             console.error("Increment failed:", error);
-            // You can add a toast notification for the error here
         }
     });
 }
+
+/*
+ * Usage Example (to avoid "unused function" warning):
+ *
+ * import { useIncrementMutation } from "@/hooks/useIncrement";
+ *
+ * function IncrementButton() {
+ *   const incrementMutation = useIncrementMutation();
+ *   return (
+ *     <button
+ *       disabled={incrementMutation.isLoading}
+ *       onClick={() => incrementMutation.mutate()}
+ *     >
+ *       {incrementMutation.isLoading ? "Incrementing..." : "Increment"}
+ *     </button>
+ *   );
+ * }
+ *
+ * // Place <IncrementButton /> somewhere in your UI.
+ */

@@ -16,7 +16,7 @@ async function fetchBalance(addressRaw: string | null | undefined) {
 
   const pubkey = new PublicKey(addressRaw)
 
-  const { value } = await client.arguments.getAccountInfo(pubkey.toBase58()).send()
+  const { value } = await client.arguments.getAccountInfo({pda : pubkey.toBase58()}).send()
 
   if (!value) {
     throw new Error('Account not found')

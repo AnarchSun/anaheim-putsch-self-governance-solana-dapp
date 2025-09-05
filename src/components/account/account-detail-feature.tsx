@@ -7,8 +7,6 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useConnection } from '@solana/wallet-adapter-react';
 import { PublicKey, LAMPORTS_PER_SOL } from '@solana/web3.js';
 import { assertIsAddress } from '@solana/addresses';
-
-// --- Local Component Imports ---
 import AccountUI from './account-ui';
 import { AccountButtons } from './AccountButtons';
 import { AccountTransactions } from './AccountTransactions';
@@ -51,6 +49,7 @@ function useGetBalance(address: string) {
     enabled: !!address,
     queryFn: async () => {
       assertIsAddress(address);
+      // FIX: getAccountInfo expects a PublicKey, NOT an object or custom syntax.
       const accountInfo = await connection.getAccountInfo(new PublicKey(address));
       if (!accountInfo) {
         throw new Error('Account not found');
@@ -61,11 +60,6 @@ function useGetBalance(address: string) {
   });
 }
 
-// ===================================================================
-// THIS IS THE DEFINITIVE FIX FOR THE TS2355 ERROR.
-// The placeholder comments have been replaced with the full, correct
-// component code, including the essential `return` statements.
-// ===================================================================
 const AccountBalance: React.FC<{ address: string }> = ({ address }) => {
   const { data, isLoading } = useGetBalance(address);
   if (isLoading) {
@@ -77,7 +71,6 @@ const AccountBalance: React.FC<{ address: string }> = ({ address }) => {
 const AccountTokens: React.FC<{ address: string }> = ({ address }) => {
   return <div>Tokens for {ellipsify(address)}</div>;
 };
-
 
 // --- MAIN FEATURE COMPONENT ---
 export default function AccountDetailFeature() {

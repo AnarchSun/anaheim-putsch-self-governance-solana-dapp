@@ -5,10 +5,12 @@ import { useQuery } from '@tanstack/react-query';
 import { PublicKey } from '@solana/web3.js';
 import { useAnaheimProgram } from './useProgram';
 import { Program } from '@coral-xyz/anchor';
-import { Anaheim } from '@/types/anaheim';
 
 // Helper function to fetch account data. It returns null if not found.
-async function getAnaheimAccount(program: Program<Anaheim> | undefined, userPublicKey: PublicKey | null) {
+async function getAnaheimAccount(
+    program: Program<any> | undefined,
+    userPublicKey: PublicKey | undefined | null
+) {
     if (!program || !userPublicKey) {
         return null;
     }
@@ -16,8 +18,18 @@ async function getAnaheimAccount(program: Program<Anaheim> | undefined, userPubl
         [Buffer.from("anaheim"), userPublicKey.toBuffer()],
         program.programId
     );
+
     try {
-        return await program.account.anaheimAccount.fetch(pda);
+        // TS18046: program.account.anaheimAccount is 'unknown', need type assertion
+        if ("anaheimAccount" in program.account) {
+            const accountNamespace = program.account["anaheimAccount"] as {
+                fetch: (address: PublicKey) => Promise<any>;
+            };
+            return await accountNamespace.fetch(pda);
+        }
+        // TS2339: Property 'anaheim' does not exist on type 'AccountNamespace<any>'
+        // Fallback: Try to fetch via anaheimAccount only (remove ambiguous fallback)
+        return null;
     } catch (error) {
         console.log("Account not found, which is expected before initialization.");
         return null;
@@ -33,7 +45,7 @@ export function useAnaheimAccount(publicKey: PublicKey | undefined | null) {
         queryKey: ['anaheim-account', publicKey?.toBase58()],
 
         // The function that performs the fetch.
-        queryFn: () => getAnaheimAccount(program, publicKey),
+        queryFn: () => getAnaheimAccount(program as Program<any>, publicKey),
 
         // Only run this query if the program and wallet are ready.
         enabled: !!program && !!publicKey,

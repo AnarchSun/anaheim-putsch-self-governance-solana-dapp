@@ -1,3 +1,4 @@
+// src/hooks/stake/getStakeActivationSafe.ts
 import { Connection, PublicKey } from '@solana/web3.js'
 // Supprime cette ligne si tu ne l'utilises pas dans ce fichier
 // import { useStakeActivationSafe } from '@/hooks/stake/useStakeActivationSafe'
@@ -21,6 +22,7 @@ export class getStakeActivationSafe {
     const pubkeyStr = this.pubkey.toBase58()
     console.log('Fetching stake info for:', pubkeyStr)
 
+    // FIX: getAccountInfo expects a PublicKey, NOT an object!
     const accountInfo = await this.connection.getAccountInfo(this.pubkey)
 
     if (accountInfo?.data) {

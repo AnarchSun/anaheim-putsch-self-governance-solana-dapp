@@ -13,7 +13,18 @@
     "wallet-ui"
   ],
   "type": "module",
-  "packageManager": "pnpm@10.14.0",
+  "packageManager": "pnpm@10.15.1",
+  "engines": {
+    "node": ">=22",
+    "pnpm": "10.15.1"
+  },
+  "workspaces": [
+    "src/gill"
+  ],
+  "pnpm": {
+    "ignore-workspace-root-check": true,
+    "engine-strict": false
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -121,6 +132,7 @@
     "fast-glob": "^3.3.3",
     "giget": "^2.0.0",
     "gill": "0.10.1",
+    "gill-monorepo": "github:codebender828/gill",
     "gill-react": "^0.4.4",
     "h3": "^1.15.4",
     "install": "^0.13.0",

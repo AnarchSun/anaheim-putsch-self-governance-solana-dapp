@@ -27,7 +27,7 @@ describe('Anaheim Initialization', () => {
     anaheimKeypair = Keypair.generate()
 
     // Ensure the test keypair has SOL
-    const info = await connection.getAccountInfo(anaheimKeypair.publicKey)
+    const info = await connection.getAccountInfo({pda : anaheimKeypair.publicKey})
     if (!info) {
       const sig = await connection.requestAirdrop(anaheimKeypair.publicKey, anchor.web3.LAMPORTS_PER_SOL)
 

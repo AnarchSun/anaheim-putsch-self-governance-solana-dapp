@@ -16,7 +16,7 @@ export function useInitialize() {
                 throw new Error("Missing provider, program, or wallet");
             }
 
-            const typedProgram = program as Program<AnaheimType>;
+            const typedProgram = program as unknown as Program<AnaheimType>;
             const [anaheimPda, bump] = web3.PublicKey.findProgramAddressSync(
                 [Buffer.from("anaheim"), wallet.publicKey.toBuffer()],
                 program.programId

@@ -1,6 +1,6 @@
 // src/lib/getStakeActivationSafe.ts
-import { ExtendedConnection } from '@/lib/ExtendedConnection'
-import { Connection, PublicKey } from '@solana/web3.js'
+import {Connection, PublicKey} from '@solana/web3.js'
+import {getStakeActivation} from "@anza-xyz/solana-rpc-get-stake-activation";
 
 /**
  * Wrapper async pour créer une instance getStakeActivation avec tous les arguments attendus.
@@ -9,7 +9,7 @@ import { Connection, PublicKey } from '@solana/web3.js'
 export async function getStakeActivationSafe(
     connection: Connection,
     pubkey: PublicKey
-): Promise<StakeState> {
+): Promise<{ state: string; active: number; inactive: number }> {
   try {
     const result = await getStakeActivation(connection, pubkey) as unknown as {
       state: string

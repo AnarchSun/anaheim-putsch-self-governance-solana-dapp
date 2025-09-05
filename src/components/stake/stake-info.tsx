@@ -18,15 +18,17 @@ export function StakeInfo({ stakeAddress, connection }: StakeInfoProps) {
     async function fetchStakeAccount() {
       try {
         const pubkey = new PublicKey(stakeAddress)
+        // FIX: getAccountInfo expects a PublicKey, not an object!
         const accountInfo = await connection.getAccountInfo(pubkey)
         if (!accountInfo) {
           setStakeAccount(null)
           return
         }
-        // Ici, adapte selon le décodage réel des données du compte Stake
-        // Exemple fictif pour l’instant :
-        const activationEpoch = 123
-        const delegatedStake = 456
+
+        // NOTE: You must decode the accountInfo.data here to get real values.
+        // For now, use placeholder values. In a real app, decode buffer accordingly.
+        const activationEpoch = 123 // TODO: decode from accountInfo.data
+        const delegatedStake = 456 // TODO: decode from accountInfo.data
 
         setStakeAccount({ activationEpoch, delegatedStake })
       } catch (error) {
@@ -35,26 +37,25 @@ export function StakeInfo({ stakeAddress, connection }: StakeInfoProps) {
       }
     }
 
-    // Appel du fetch sans imbriquer un autre useEffect
-    fetchStakeAccount()
+    fetchStakeAccount().then(() =>{} )
   }, [stakeAddress, connection])
 
   if (!stakeAccount) {
     return (
-      <div>
-        No stake account data available for <code>{stakeAddress}</code>
-      </div>
+        <div>
+          No stake account data available for <code>{stakeAddress}</code>
+        </div>
     )
   }
 
   const { activationEpoch, delegatedStake } = stakeAccount
 
   return (
-    <div>
-      Stake info in console for <code>{stakeAddress}</code>
-      <h3>Stake Details</h3>
-      <p>Delegated Stake: {delegatedStake}</p>
-      <p>Activation Epoch: {activationEpoch}</p>
-    </div>
+      <div>
+        Stake info in console for <code>{stakeAddress}</code>
+        <h3>Stake Details</h3>
+        <p>Delegated Stake: {delegatedStake}</p>
+        <p>Activation Epoch: {activationEpoch}</p>
+      </div>
   )
 }
