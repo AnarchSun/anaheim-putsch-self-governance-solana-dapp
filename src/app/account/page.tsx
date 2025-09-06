@@ -1,11 +1,7 @@
-// FILE: src/app/account/page.tsx
 'use client'
 
-import { useWallet } from '@solana/wallet-adapter-react'
 import React, { useEffect } from 'react'
 import { toast } from 'sonner'
-import { Connection, clusterApiUrl } from '@solana/web3.js'
-
 import AccountListFeature from '@/components/account/account-list-feature'
 import { StakeStatus } from '@/components/stake/StakeStatus'
 import { Rapper } from '@/components/rapper'
@@ -14,24 +10,21 @@ import AccountUI from '@/components/account/account-ui'
 import { AccountButtons } from '@/components/account/AccountButtons'
 import { AccountBalance } from '@/components/account/AccountBalance'
 import { useTransferSolMutation } from '@/components/solana/useTransferSolMutation'
-import { useWalletUi } from '@/hooks/wallet/useWalletUi' // Ajusté selon structure réelle
+import { useWalletUi } from '@/hooks/wallet/useWalletUi'
 
+// ⚑ NE JAMAIS EXPORTER DE PROVIDER ICI !
+// ⚑ Si tu veux wrapper la page dans SolanaWalletProvider, fais-le dans src/app/account/layout.tsx
 
 export default function AccountDashboardPage() {
-    const { publicKey, signTransaction, sendTransaction } = useWallet()
-    const { wallet, address } = useWalletUi()
-    const connection = new Connection(clusterApiUrl('devnet'), 'confirmed')
-
-    const { mutateAsync: transferSol, data, isSuccess, isError, error } =
-        useTransferSolMutation({ address })
+    const { wallet } = useWalletUi()
+    const { data, isSuccess, isError, error } = useTransferSolMutation({
+        address: wallet?.publicKey?.toBase58()
+    })
 
     useEffect(() => {
-        // Si la mutation a réussi et que `data` (la signature string) existe
         if (isSuccess && data) {
-            // `data` EST la signature. On l'utilise directement.
             toast.success(`✅ Transaction réussie ! Signature: ${data}`)
         }
-
         if (isError) {
             toast.error(`❌ Échec de transaction : ${error?.message || 'Erreur inconnue'}`)
         }

@@ -3,7 +3,6 @@
 
 import { useWallet } from '@solana/wallet-adapter-react';
 import { useState } from 'react';
-
 export function WalletConnectButton() {
     const { connect, connected, connecting, disconnect, wallet, select } = useWallet();
     const [errorMsg, setErrorMsg] = useState('');

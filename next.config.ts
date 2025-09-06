@@ -1,11 +1,11 @@
-// FILE: next.config.ts
 import type { NextConfig } from 'next'
 
-// All of your configuration is defined in this single object.
+// 🏴‍☠️ BATCH FIX: Add gill-monorepo to transpilePackages for TypeScript/JSX in node_modules
+// This ensures Next.js will transpile Gill's raw .ts/.tsx code for you, fixing build errors!
+
 const nextConfig: NextConfig = {
-    // This is the modern, correct way to transpile packages.
-    // The old `next-transpile-modules` is no longer needed.
-    transpilePackages: ["salmon-adapter-sdk"],
+    // Transpile both your Solana SDK and Gill monorepo (add more as needed!)
+    transpilePackages: ["salmon-adapter-sdk", "gill-monorepo"],
 
     productionBrowserSourceMaps: true,
     reactStrictMode: true,
@@ -16,7 +16,6 @@ const nextConfig: NextConfig = {
         }
     },
 
-    // Your webpack configuration to handle the 'fs' module is correct.
     webpack(config, { isServer }) {
         if (!isServer) {
             config.resolve.fallback = {
@@ -28,5 +27,4 @@ const nextConfig: NextConfig = {
     }
 };
 
-// This is the correct way to export the configuration in a TypeScript file.
 export default nextConfig;

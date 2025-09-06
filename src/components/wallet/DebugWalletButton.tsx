@@ -3,6 +3,7 @@
 import { useWallet } from '@solana/wallet-adapter-react';
 import { useWalletModal } from '@solana/wallet-adapter-react-ui';
 import React, { useCallback } from 'react';
+import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 
 export const DebugWalletButton = () => {
     const { connected, wallets } = useWallet();

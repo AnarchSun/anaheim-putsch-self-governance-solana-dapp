@@ -5,8 +5,6 @@ import React from 'react';
 
 // FIX: Import the two correct hooks from the main adapter library.
 import { useConnection, useWallet } from '@solana/wallet-adapter-react';
-
-// Import your utility for shortening addresses.
 import { ellipsify } from '@/lib/utils';
 import { AppAlert } from '../app-alert';
 

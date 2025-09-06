@@ -7,7 +7,7 @@ import { useAnaheimProgram } from '@/hooks/useAnaheimProgram';
 import { useInitializeMutation } from '@/hooks/solana/useInitializeMutation';
 import { useAnaheimAccount } from '@/hooks/useAnaheimAccount';
 import MiningClient from '@/components/mining/MiningClient';
-import StakingComponent from '@/components/StakingComponent';
+import {StakingComponent} from "@/components/StakingComponent";
 import { StakeStatus } from '@/app/stake-mining/stake/stakeStatus'
 import { StakeViewer } from '@/app/stake-mining/stake/stake-viewer'
 import { PublicKey } from '@solana/web3.js'

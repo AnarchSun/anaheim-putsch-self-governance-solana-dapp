@@ -4,6 +4,7 @@
 import { useEffect, useState } from 'react'
 import { getStakeActivation } from '@/lib/solana/stake-utils'
 import { Connection, PublicKey } from '@solana/web3.js'
+import { WalletConnectButton } from '@solana/wallet-adapter-react-ui';
 
 export type StakeActivationState = {
   state: 'active' | 'inactive' | 'activating' | 'deactivating'

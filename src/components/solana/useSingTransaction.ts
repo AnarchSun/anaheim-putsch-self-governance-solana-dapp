@@ -1,17 +1,18 @@
-import {LAMPORTS_PER_SOL, PublicKey, SystemProgram, Transaction, TransactionSignature,} from "@solana/web3.js";
-import {useMutation, UseMutationResult, useQueryClient} from "@tanstack/react-query";
-import {useConnection, useWallet} from "@solana/wallet-adapter-react";
+// src/components/solana/useSingTransaction.ts
+import { LAMPORTS_PER_SOL, PublicKey, SystemProgram, Transaction, TransactionSignature } from "@solana/web3.js";
+import { useMutation, UseMutationResult, useQueryClient } from "@tanstack/react-query";
+import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 
 interface TransferSolInput {
     destination: string;
     amount: number; // en SOL
 }
 
-let p0: any;
+// ⚑ BATCH FIX: PURE ESM ONLY — NO module.exports, NO CommonJS anywhere.
+
 export function useTransferSolMutation(
     address: { address: any },
 ): UseMutationResult<string, Error, TransferSolInput, unknown> {
-
     const queryClient = useQueryClient();
     const { publicKey, sendTransaction } = useWallet();
     const { connection } = useConnection();
@@ -32,8 +33,7 @@ export function useTransferSolMutation(
 
             const tx = new Transaction().add(ix);
 
-
-             // ✅ Aucune option requise ici
+            // ✅ Aucune option requise ici
             return await sendTransaction(tx, connection);
         },
         onSuccess: () => {

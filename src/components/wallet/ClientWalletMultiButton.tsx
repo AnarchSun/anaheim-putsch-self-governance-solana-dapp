@@ -3,6 +3,7 @@
 
 import React from 'react';
 import dynamic from 'next/dynamic';
+import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 
 // This is the crucial part. We are dynamically importing the WalletMultiButton
 // from the UI library, and explicitly telling Next.js to NOT render it on the server (ssr: false).

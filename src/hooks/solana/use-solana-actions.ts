@@ -38,7 +38,7 @@ function toWeb3Transaction(tx: GillTransaction): Web3Transaction {
     return web3Tx;
 }
 
-export function useTransferSolMutation({ address }: { address: Address }) {
+export function useTransferSolMutation({address}: { address: Address; }, p0: { address: any; }) {
     const { cluster } = useWalletUi();
     const rpcUrl = clusterApiUrl(cluster);
     const signer = useWalletUiSigner(rpcUrl);

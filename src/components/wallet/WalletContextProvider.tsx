@@ -6,6 +6,8 @@ import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react
 import { WalletModalProvider } from '@solana/wallet-adapter-react-ui'
 import { PhantomWalletAdapter } from '@solana/wallet-adapter-wallets'
 
+// ... le reste du code ...
+
 const NETWORK = 'devnet'
 const ENDPOINT = `https://api.${NETWORK}.solana.com`
 

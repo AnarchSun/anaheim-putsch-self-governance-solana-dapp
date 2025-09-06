@@ -1,12 +1,13 @@
 // src/components/StakingComponent.ts
-import { PublicKey } from "@solana/web3.js"
+import {PublicKey} from "@solana/web3.js"
 import React from "react"
 
 // Batch fix TS7030: Make sure ALL code paths return a value.
-// Batch fix unused function and unused variable warnings: Use or export your function, and only declare vars you use.
+// Batch fixes unused function and unused variable warnings: Use or export your function, and only declare vars you use.
 
 type StakingComponentProps = {
-    address?: string
+    address?: string,
+    accountInfo?: any
 }
 
 /**
@@ -15,7 +16,7 @@ type StakingComponentProps = {
  * and avoid unused variable warnings.
  * Exported for use elsewhere.
  */
-export function StakingComponent({ address }: StakingComponentProps) {
+export function StakingComponent({address, accountInfo}: StakingComponentProps) {
     // Validate address before using
     if (!address || !/^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(address)) {
         return <div>Adresse Solana invalide</div>
