@@ -12,7 +12,7 @@ pub use validate_post_content::*;
 // =========================================================================
 //                          PROGRAM ID
 // =========================================================================
-declare_id!("FZ1uRqV9P17MA2QP9ABmsvDP831UBjVicuc82SmrTykw");
+declare_id!("6x6jjQ7TBDEJVWaa8diQA8XVcuidNSLTB1nBnZV1a9Bt");
 
 // =========================================================================
 //                          PROGRAM LOGIC
@@ -33,142 +33,176 @@ pub mod anaheim {
         Ok(())
     }
 
-    // Mine instruction (basic counter++)
-    pub fn mine(ctx: Context<UseAnaheim>) -> Result<()> {
-        let account = &mut ctx.accounts.base.anaheim_account;
-        account.count = account.count.checked_add(1).unwrap();
-        msg!("Account mined! New count: {}", account.count);
-        Ok(())
+        pub fn create_post(
+            ctx: Context<CreatePost>,
+            title: String,
+            content: String,
+        ) -> Result<()> {
+            if content.len() > 280 {
+                return err!(ErrorCode::ContentTooLong);
+            }
+            let post = &mut ctx.accounts.post;
+            post.author = ctx.accounts.payer.key();
+            post.title = title;
+            post.content = content;
+            Ok(())
+        }
+
+        // Mine instruction (basic counter++)
+        pub fn mine(ctx: Context<UseAnaheim>) -> Result<()> {
+            let account = &mut ctx.accounts.base.anaheim_account;
+            account.count = account.count.checked_add(1).unwrap();
+            msg!("Account mined! New count: {}", account.count);
+            Ok(())
+        }
+
+        // Create stake
+        pub fn create_stake(ctx: Context<CreateStake>) -> Result<()> {
+            let stake_account = &mut ctx.accounts.stake_account;
+            stake_account.owner = ctx.accounts.user.key();
+            stake_account.amount = 0;
+            Ok(())
+        }
+
+        // Standard counter-instructions
+        pub fn increment(ctx: Context<UseAnaheim>) -> Result<()> {
+            let account = &mut ctx.accounts.base.anaheim_account;
+            account.count = account.count.checked_add(1).unwrap();
+            Ok(())
+        }
+
+        pub fn decrement(ctx: Context<UseAnaheim>) -> Result<()> {
+            let account = &mut ctx.accounts.base.anaheim_account;
+            account.count = account.count.checked_sub(1).unwrap();
+            Ok(())
+        }
+
+        pub fn set(ctx: Context<UseAnaheim>, value: u64) -> Result<()> {
+            let account = &mut ctx.accounts.base.anaheim_account;
+            account.count = value;
+            Ok(())
+        }
+
+    // =========================================================================
+    //                  INSTRUCTION CONTEXTS
+    // =========================================================================
+    #[derive(Accounts)]
+    pub struct Initialize<'info> {
+        #[account(
+            init,
+            payer = payer,
+            space = 8 + AnaheimAccount::SIZE,
+            seeds = [b"anaheim", payer.key().as_ref()],
+            bump
+        )]
+        pub anaheim_account: Account<'info, AnaheimAccount>,
+        #[account(mut)]
+        pub payer: Signer<'info>,
+        pub system_program: Program<'info, System>,
     }
 
-    // Create stake
-    pub fn create_stake(ctx: Context<CreateStake>) -> Result<()> {
-        let stake_account = &mut ctx.accounts.stake_account;
-        stake_account.owner = ctx.accounts.user.key();
-        stake_account.amount = 0;
-        Ok(())
+    #[derive(Accounts)]
+    pub struct AnaheimAuthority<'info> {
+        #[account(
+            mut,
+            has_one = authority,
+            seeds = [b"anaheim", authority.key().as_ref()],
+            bump = anaheim_account.bump
+        )]
+        pub anaheim_account: Account<'info, AnaheimAccount>,
+        pub authority: Signer<'info>,
     }
 
-    // Standard counter-instructions
-    pub fn increment(ctx: Context<UseAnaheim>) -> Result<()> {
-        let account = &mut ctx.accounts.base.anaheim_account;
-        account.count = account.count.checked_add(1).unwrap();
-        Ok(())
+    #[derive(Accounts)]
+    pub struct UseAnaheim<'info> {
+        pub base: AnaheimAuthority<'info>,
     }
 
-    pub fn decrement(ctx: Context<UseAnaheim>) -> Result<()> {
-        let account = &mut ctx.accounts.base.anaheim_account;
-        account.count = account.count.checked_sub(1).unwrap();
-        Ok(())
+    #[derive(Accounts)]
+    pub struct CreateStake<'info> {
+        #[account(
+            init,
+            payer = user,
+            space = 8 + StakeAccount::LEN,
+            seeds = [b"stake", user.key().as_ref()],
+            bump
+        )]
+        pub stake_account: Account<'info, StakeAccount>,
+
+        #[account(mut)]
+        pub user: Signer<'info>,
+        pub system_program: Program<'info, System>,
     }
 
-    pub fn set(ctx: Context<UseAnaheim>, value: u64) -> Result<()> {
-        let account = &mut ctx.accounts.base.anaheim_account;
-        account.count = value;
-        Ok(())
+    #[derive(Accounts)]
+    pub struct CloseAccount<'info> {
+        #[account(mut, close = user)]
+        pub post_account: Account<'info, PostAccount>,
+        #[account(mut)]
+        pub user: Signer<'info>,
     }
-}
+    #[derive(Accounts)]
+    pub struct CreatePost<'info> {
+        #[account(init, payer = payer, space = 8 + 280)] // Ajuste space selon fields!
+        pub post: Account<'info, Post>,
+        #[account(mut)]
+        pub payer: Signer<'info>,
+        pub system_program: Program<'info, System>,
+    }
+    // =========================================================================
+    //                         ACCOUNT STATE
+    // =========================================================================
+    #[account]
+    #[derive(Default)]
+    pub struct AnaheimAccount {
+        pub authority: Pubkey,
+        pub bump: u8,
+        pub count: u64,
+    }
 
-// =========================================================================
-//                  INSTRUCTION CONTEXTS
-// =========================================================================
-#[derive(Accounts)]
-pub struct Initialize<'info> {
-    #[account(
-        init,
-        payer = payer,
-        space = 8 + AnaheimAccount::SIZE,
-        seeds = [b"anaheim", payer.key().as_ref()],
-        bump
-    )]
-    pub anaheim_account: Account<'info, AnaheimAccount>,
-    #[account(mut)]
-    pub payer: Signer<'info>,
-    pub system_program: Program<'info, System>,
-}
+    impl AnaheimAccount {
+        pub const SIZE: usize = 32 + 1 + 8; // authority + bump + count
+    }
 
-#[derive(Accounts)]
-pub struct AnaheimAuthority<'info> {
-    #[account(
-        mut,
-        has_one = authority,
-        seeds = [b"anaheim", authority.key().as_ref()],
-        bump = anaheim_account.bump
-    )]
-    pub anaheim_account: Account<'info, AnaheimAccount>,
-    pub authority: Signer<'info>,
-}
+    #[account]
+    pub struct PostAccount {
+        pub authority: Pubkey,
+        pub content: Vec<u8>, // fixed-size content stored as bytes
+    }
 
-#[derive(Accounts)]
-pub struct UseAnaheim<'info> {
-    pub base: AnaheimAuthority<'info>,
-}
+    impl PostAccount {
+        // 4 = Vec prefix, 280 = max chars
+        pub const LEN: usize = 32 + 4 + 280;
+    }
 
-#[derive(Accounts)]
-pub struct CreateStake<'info> {
-    #[account(
-        init,
-        payer = user,
-        space = 8 + StakeAccount::LEN,
-        seeds = [b"stake", user.key().as_ref()],
-        bump
-    )]
-    pub stake_account: Account<'info, StakeAccount>,
+    #[account]
+    pub struct StakeAccount {
+        pub owner: Pubkey,
+        pub amount: u64,
+    }
 
-    #[account(mut)]
-    pub user: Signer<'info>,
-    pub system_program: Program<'info, System>,
-}
+    impl StakeAccount {
+        pub const LEN: usize = 32 + 8; // owner + amount
+    }
 
-#[derive(Accounts)]
-pub struct CloseAccount<'info> {
-    #[account(mut, close = user)]
-    pub post_account: Account<'info, PostAccount>,
-    #[account(mut)]
-    pub user: Signer<'info>,
-}
+    #[account]
+    pub struct Post {
+        pub author: Pubkey,
+        pub title: String,
+        pub content: String,
+    }
 
-// =========================================================================
-//                         ACCOUNT STATE
-// =========================================================================
-#[account]
-#[derive(Default)]
-pub struct AnaheimAccount {
-    pub authority: Pubkey,
-    pub bump: u8,
-    pub count: u64,
-}
-
-impl AnaheimAccount {
-    pub const SIZE: usize = 32 + 1 + 8; // authority + bump + count
-}
-
-#[account]
-pub struct PostAccount {
-    pub authority: Pubkey,
-    pub content: Vec<u8>, // fixed-size content stored as bytes
-}
-
-impl PostAccount {
-    // 4 = Vec prefix, 280 = max chars
-    pub const LEN: usize = 32 + 4 + 280;
-}
-
-#[account]
-pub struct StakeAccount {
-    pub owner: Pubkey,
-    pub amount: u64,
-}
-
-impl StakeAccount {
-    pub const LEN: usize = 32 + 8; // owner + amount
-}
-
-// =========================================================================
-//                         CUSTOM ERRORS
-// =========================================================================
-#[error_code]
-pub enum CustomError {
-    #[msg("This error is no longer used, but can be kept for future checks.")]
-    InvalidBump,
+    #[error_code]
+    pub enum ErrorCode {
+        #[msg("Content too long")]
+        ContentTooLong,
+    }
+    // =========================================================================
+    //                         CUSTOM ERRORS
+    // =========================================================================
+    #[error_code]
+    pub enum CustomError {
+        #[msg("This error is no longer used, but can be kept for future checks.")]
+        InvalidBump,
+    }
 }

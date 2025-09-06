@@ -6,7 +6,7 @@ async function fetchStakeActivation() {
   const pubkey = new PublicKey('9xQeWvG816bUx9EPZ2gfrzjp1edw6uX7yjzFZZLL8Mjt')
 
   try {
-    const activation = await connection.getStakeActivation(pubkey)
+    const activation = await connection.getAccountInfo(pubkey)
     console.log('Activation:', activation)
     return activation
   } catch (e) {

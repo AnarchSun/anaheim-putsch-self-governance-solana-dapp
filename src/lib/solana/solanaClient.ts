@@ -5,6 +5,7 @@ export class SolanaClient {
     connection: Connection;
     cluster: string;
     commitment: Commitment;
+    getBalance: any;
 
     constructor(cluster: Cluster = 'mainnet-beta', commitment: Commitment = 'confirmed') {
         this.cluster = cluster;

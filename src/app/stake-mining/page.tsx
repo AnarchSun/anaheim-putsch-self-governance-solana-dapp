@@ -8,7 +8,7 @@ import { useInitializeMutation } from '@/hooks/solana/useInitializeMutation';
 import { useAnaheimAccount } from '@/hooks/useAnaheimAccount';
 import MiningClient from '@/components/mining/MiningClient';
 import {StakingComponent} from "@/components/StakingComponent";
-import { StakeStatus } from '@/app/stake-mining/stake/stakeStatus'
+import { StakeStatus } from '@/components/stake/StakeStatus'
 import { StakeViewer } from '@/app/stake-mining/stake/stake-viewer'
 import { PublicKey } from '@solana/web3.js'
 
@@ -26,7 +26,10 @@ export default function StakeMiningPage() {
 
     return (
         <div className="space-y-6 text-center max-w-4xl mx-auto py-8">
-            <StakeStatus address="8RmTVazK1G3ZJ7EqYZC9FYJejFge98Vyz7T4zVdY8okX" />
+            <StakeStatus address="8RmTVazK1G3ZJ7EqYZC9FYJejFge98Vyz7T4zVdY8okX" client={undefined}
+                         initializeStakeAccount={function (): Promise<any> {
+                             throw new Error("Function not implemented.");
+                         }} />
             <StakeViewer pubkey={new PublicKey('8RmTVazK1G3ZJ7EqYZC9FYJejFge98Vyz7T4zVdY8okX')} />
             <h1 className="text-4xl md:text-5xl font-bold">Staking & Mining</h1>
             <button onClick={handleInitialize}>Initialiser mon compte Anaheim</button>

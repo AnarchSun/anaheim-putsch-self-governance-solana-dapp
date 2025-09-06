@@ -1,17 +1,18 @@
-import { StakeInfo } from '@/components/stake/stake-info'
-import { Connection } from '@solana/web3.js'
+import React from "react";
+import { useSolanaClient } from "@/hooks/solana/useSolanaClient";
+import { initializeAnaheimAccount } from "@/hooks/solana/initializeAnaheimAccount";
+import { StakeStatus } from "@/components/stake/StakeStatus";
 
-const connection = new Connection('https://api.devnet.solana.com')
-
-export default function StakePage() {
-    // Replace with your stake address
-    const stakeAddress = '9xQeWvG816bUx9EPZ2gfrzjp1edw6uX7yjzFZZLL8Mjt'
+export default function StakeMiningPage({ address, payer, signers }: { address: string, payer: any, signers: any }) {
+    const { client}: { client: any, error: any, isLoading: any } = useSolanaClient();
 
     return (
-        <main className="p-4">
-            <h1 className="text-xl font-bold">Stake Info Demo</h1>
-            <StakeInfo stakeAddress={stakeAddress} connection={connection} />
-            {/* ...other content... */}
-        </main>
-    )
+        <StakeStatus
+            address={address}
+            client={client}
+            initializeStakeAccount={(address, client) =>
+                initializeAnaheimAccount(client, address, payer, signers)
+            }
+        />
+    );
 }

@@ -1,17 +1,17 @@
-import {LAMPORTS_PER_SOL, PublicKey, SystemProgram, Transaction, TransactionSignature,} from "@solana/web3.js";
-import {useMutation, UseMutationResult, useQueryClient} from "@tanstack/react-query";
-import {useConnection, useWallet} from "@solana/wallet-adapter-react";
+// Path: src/components/solana/useTransferSolMutation.ts
+import { LAMPORTS_PER_SOL, PublicKey, SystemProgram, Transaction, TransactionSignature } from "@solana/web3.js";
+import { useMutation, UseMutationResult, useQueryClient } from "@tanstack/react-query";
+import { useWallet } from "@solana/wallet-adapter-react";
+import { useConnection } from "@/hooks/solana/useConnection";
 
 interface TransferSolInput {
     destination: string;
     amount: number; // en SOL
 }
 
-let p0: any;
 export function useTransferSolMutation(
     address: { address: any },
 ): UseMutationResult<string, Error, TransferSolInput, unknown> {
-
     const queryClient = useQueryClient();
     const { publicKey, sendTransaction } = useWallet();
     const { connection } = useConnection();
@@ -32,8 +32,6 @@ export function useTransferSolMutation(
 
             const tx = new Transaction().add(ix);
 
-
-             // ✅ Aucune option requise ici
             return await sendTransaction(tx, connection);
         },
         onSuccess: () => {

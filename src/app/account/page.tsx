@@ -1,3 +1,4 @@
+// Path: src/app/account/page.tsx
 'use client'
 
 import React, { useEffect } from 'react'
@@ -12,14 +13,15 @@ import { AccountBalance } from '@/components/account/AccountBalance'
 import { useTransferSolMutation } from '@/components/solana/useTransferSolMutation'
 import { useWalletUi } from '@/hooks/wallet/useWalletUi'
 
-// ⚑ NE JAMAIS EXPORTER DE PROVIDER ICI !
-// ⚑ Si tu veux wrapper la page dans SolanaWalletProvider, fais-le dans src/app/account/layout.tsx
-
 export default function AccountDashboardPage() {
-    const { wallet } = useWalletUi()
-    const { data, isSuccess, isError, error } = useTransferSolMutation({
-        address: wallet?.publicKey?.toBase58()
-    })
+    const { wallet, address } = useWalletUi()
+
+    const {
+        data,
+        isSuccess,
+        isError,
+        error,
+    } = useTransferSolMutation({ address })
 
     useEffect(() => {
         if (isSuccess && data) {
@@ -55,7 +57,10 @@ export default function AccountDashboardPage() {
 
             <section className="space-y-6">
                 <h2 className="text-xl font-bold">Tools & Features</h2>
-                <StakeStatus />
+                <StakeStatus address={base58Address} client={undefined}
+                             initializeStakeAccount={function (address: string, client: any): Promise<any> {
+                                 throw new Error("Function not implemented.")
+                             }} />
                 <WalletInfo />
                 <AccountListFeature />
                 <Rapper address="9xQeWvG816bUx9EPZ2gfrzjp1edw6uX7yjzFZZLL8Mjt" />

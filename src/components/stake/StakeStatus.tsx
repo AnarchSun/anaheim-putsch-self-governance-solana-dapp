@@ -1,25 +1,43 @@
-// src/components/stake/StakeStatus.tsx
-'use client'
+// Path: components/stake/StakeStatus.tsx
+// ULTRA FINAL ANARCHOPUNK PATCH: Clean, DRY, and only UI. No initializer logic here.
+// Use in any page/component as <StakeStatus address={address} client={client} />
 
-import React from 'react'
-import { useConnection, useWallet } from '@solana/wallet-adapter-react'
-import { useStakeActivationSafe } from '@/hooks/stake/useStakeActivationSafe'
+import React from "react";
 
-export function StakeStatus() {
-  const { connection } = useConnection()
-  const { publicKey } = useWallet()
+export function StakeStatus({
+                                address,
+                                client,
+                                initializeStakeAccount,
+                            }: {
+    address: string;
+    client: any;
+    initializeStakeAccount: (address: string, client: any) => Promise<any>;
+}) {
+    const [initError, setInitError] = React.useState<string | null>(null);
+    const [isLoading, setIsLoading] = React.useState(false);
 
-  const { state, loading, error } = useStakeActivationSafe(publicKey!, connection)
+    const onInit = async () => {
+        setInitError(null);
+        setIsLoading(true);
+        try {
+            await initializeStakeAccount(address, client);
+        } catch (e: any) {
+            setInitError(e.message || "Unknown error");
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
-  if (loading) return <p>Chargement de l'état du stake...</p>
-  if (error) return <p>Erreur : {error.message}</p>
-  if (!state) return <p>État du stake non disponible</p>
-
-  return (
-    <div className="text-sm text-white space-y-1">
-      <p>État : {state.state}</p>
-      <p>Actif : {state.active}</p>
-      <p>Inactif : {state.inactive}</p>
-    </div>
-  )
+    return (
+        <div>
+            {initError && (
+                <pre style={{ color: "red", whiteSpace: "pre-wrap" }}>
+          {initError}
+        </pre>
+            )}
+            <button onClick={onInit} disabled={isLoading}>
+                Initialiser mon compte Anaheim
+            </button>
+        </div>
+    );
 }

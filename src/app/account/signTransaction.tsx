@@ -20,6 +20,3 @@ export const useSignTransaction = () => {
 };
 
 export default useSignTransaction;
-
-export class singTransaction {
-}

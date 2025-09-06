@@ -12,7 +12,13 @@ interface AnchorWallet {
     signTransaction<T extends Transaction | VersionedTransaction>(transaction: T): Promise<T>;
     signAllTransactions<T extends Transaction | VersionedTransaction>(transactions: T[]): Promise<T[]>;
 }
-
+export function isValidSolanaAddress(address: string): boolean {
+    try {
+        return address.length === 44 // quick check, or use bs58 decode etc
+    } catch {
+        return false
+    }
+}
 /**
  * A simple, minimal wallet implementation that wraps a Keypair.
  * This is useful for server-side scripts or tests.
