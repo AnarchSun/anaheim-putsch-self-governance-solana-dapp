@@ -5,10 +5,12 @@ import { useAnchorWallet } from '@solana/wallet-adapter-react'
 import { useConnection } from './useConnection'
 import { toast } from 'sonner'
 import {Address} from "@solana/kit";
+import {client} from "@/lib/solana";
+import {address} from "gill";
 
 export function useTransferSol({ fromAddress }: { fromAddress: Address }) {
   const wallet = useAnchorWallet()
-  const connection = useConnection()
+  const connection = useConnection(client.toString(), address, "confirmed")
   const queryClient = useQueryClient()
 
   return useMutation({

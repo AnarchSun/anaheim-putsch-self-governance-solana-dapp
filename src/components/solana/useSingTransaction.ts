@@ -1,5 +1,9 @@
-// src/components/solana/useSingTransaction.ts
-import { LAMPORTS_PER_SOL, PublicKey, SystemProgram, Transaction, TransactionSignature } from "@solana/web3.js";
+import {
+    LAMPORTS_PER_SOL,
+    PublicKey,
+    SystemProgram,
+    Transaction,
+} from "@solana/web3.js";
 import { useMutation, UseMutationResult, useQueryClient } from "@tanstack/react-query";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 
@@ -10,15 +14,18 @@ interface TransferSolInput {
 
 // ⚑ BATCH FIX: PURE ESM ONLY — NO module.exports, NO CommonJS anywhere.
 
-export function useTransferSolMutation(
-    address: { address: any },
-): UseMutationResult<string, Error, TransferSolInput, unknown> {
+// Remove unused constant useTransferSolMutation (if you have a duplicate or unused export, delete it below).
+// Only export the main hook for usage in your components.
+
+export function useSingTransactionMutation(
+    _address: { address: any },
+): UseMutationResult<string, Error, TransferSolInput> {
     const queryClient = useQueryClient();
     const { publicKey, sendTransaction } = useWallet();
     const { connection } = useConnection();
 
-    return useMutation({
-        mutationFn: async ({ destination, amount }: TransferSolInput): Promise<TransactionSignature> => {
+    return useMutation<string, Error, TransferSolInput>({
+        mutationFn: async ({ destination, amount }: TransferSolInput): Promise<string> => {
             if (!sendTransaction || !publicKey) {
                 throw new Error("Wallet not connected");
             }
@@ -33,7 +40,7 @@ export function useTransferSolMutation(
 
             const tx = new Transaction().add(ix);
 
-            // ✅ Aucune option requise ici
+            // ✅ No options required here
             return await sendTransaction(tx, connection);
         },
         onSuccess: () => {

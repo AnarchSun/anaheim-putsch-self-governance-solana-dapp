@@ -4,7 +4,7 @@ import { initializeAnaheimAccount } from "@/hooks/solana/initializeAnaheimAccoun
 import { StakeStatus } from "@/components/stake/StakeStatus";
 
 export default function StakeMiningPage({ address, payer, signers }: { address: string, payer: any, signers: any }) {
-    const { client}: { client: any, error: any, isLoading: any } = useSolanaClient();
+    const { client}: { client: any, error: any, isLoading: any } = useSolanaClient({});
 
     return (
         <StakeStatus

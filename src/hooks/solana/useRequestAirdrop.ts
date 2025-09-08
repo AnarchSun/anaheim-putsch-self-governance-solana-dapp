@@ -6,7 +6,7 @@ import { toast } from 'sonner'
 import {Address} from "@solana/kit";
 
 export function useRequestAirdrop({ address }: { address: Address }) {
-  const connection = useConnection()
+  const connection = useConnection(client.toString(), "confirmed")
   const queryClient = useQueryClient()
 
   return useMutation({

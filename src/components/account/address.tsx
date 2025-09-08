@@ -1,8 +1,8 @@
 // src/components/account/address.tsx (ligne 1-27)
 import { PublicKey } from '@solana/web3.js'
 import { isAddress } from '@solana/kit'
-import { client } from 'jayson'
 import bs58 from 'bs58'
+import {client} from "@/lib/solana";
 
 function base64ToBase58(input: string): string {
   const decoded = Buffer.from(input, 'base64')

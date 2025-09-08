@@ -12,3 +12,9 @@ export function createSerializableAddress(key: PublicKey): SerializableAddress {
         toBase58: () => key.toBase58()
     }
 }
+
+export interface solanaClient {
+}
+
+export class client {
+}

@@ -9,13 +9,7 @@ import jayson, {
     HttpClient,
     HttpClientOptions,
     HttpsClient,
-    HttpsClientOptions,
-    TcpClient,
-    TcpClientOptions,
-    TlsClient,
-    TlsClientOptions,
-    WebsocketClient,
-    WebsocketClientOptions,
+    HttpsClientOptions, TcpClient, TcpClientOptions, TlsClient, TlsClientOptions, WebsocketClientOptions
 } from "jayson";
 import {
     Client,
@@ -26,6 +20,7 @@ import { ClientOptions } from "ws";
 import { Server } from "node:net";
 import { Address } from "@solana/kit";
 import { BaseAccount } from "gill";
+import {WebsocketClient} from "@trezor/websocket-client";
 
 // --- Mango Client Implementation ---
 export class MangoClient {
@@ -57,7 +52,7 @@ export type ClientConstructor = ConstructorOf<Client, [options: ClientOptions] |
     https(options?: HttpsClientOptions): HttpsClient;
     tcp(options?: TcpClientOptions): TcpClient;
     tls(options?: TlsClientOptions): TlsClient;
-    websocket(options?: WebsocketClientOptions): WebsocketClient;
+    websocket(options?: WebsocketClientOptions): WebsocketClient<any>;
 };
 
 // --- Account Retrieval Logic: TODO ALWAYS completed ---

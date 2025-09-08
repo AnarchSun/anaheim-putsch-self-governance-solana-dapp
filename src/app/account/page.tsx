@@ -58,7 +58,7 @@ export default function AccountDashboardPage() {
             <section className="space-y-6">
                 <h2 className="text-xl font-bold">Tools & Features</h2>
                 <StakeStatus address={base58Address} client={undefined}
-                             initializeStakeAccount={function (address: string, client: any): Promise<any> {
+                             initializeStakeAccount={function (_address: string, _client: any): Promise<any> {
                                  throw new Error("Function not implemented.")
                              }} />
                 <WalletInfo />

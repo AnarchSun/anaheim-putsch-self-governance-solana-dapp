@@ -11,7 +11,7 @@ import { initializeStakeAccount } from "@/hooks/solana/useInitializeStakeAccount
 
 // Anaheim stake status component - ONLY the real logic, no demo, no spam, no unused code!
 export function StakeStatus({ address }: { address: string }) {
-    const { client, error, isLoading } = useSolanaClient();
+    const { client, error, isLoading } = useSolanaClient({});
     const [initError, setInitError] = React.useState<string | null>(null);
 
     const onInit = async () => {

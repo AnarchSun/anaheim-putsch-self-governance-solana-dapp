@@ -15,7 +15,7 @@ import { useMemo } from 'react';
 import { NominalType } from '@solana/nominal-types';  // Clé magique
 
 export function useSubmitPostTransaction() {
-    const { connection } = useConnection();
+    const { connection } = useConnection(client.toString(), "confirmed");
     const wallet = useWallet();
 
     return useMemo(() => {

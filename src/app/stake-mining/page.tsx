@@ -1,3 +1,4 @@
+// Path: src/app/stake-mining/page.tsx
 'use client';
 
 import React from 'react';
@@ -7,16 +8,16 @@ import { useAnaheimProgram } from '@/hooks/useAnaheimProgram';
 import { useInitializeMutation } from '@/hooks/solana/useInitializeMutation';
 import { useAnaheimAccount } from '@/hooks/useAnaheimAccount';
 import MiningClient from '@/components/mining/MiningClient';
-import {StakingComponent} from "@/components/StakingComponent";
+import { StakingComponent } from "@/components/StakingComponent";
 import { StakeStatus } from '@/components/stake/StakeStatus'
 import { StakeViewer } from '@/app/stake-mining/stake/stake-viewer'
 import { PublicKey } from '@solana/web3.js'
 
 export default function StakeMiningPage() {
-    const {connected, publicKey} = useWallet();
-    const {isProgramReady} = useAnaheimProgram();
+    const { connected, publicKey } = useWallet();
+    const { isProgramReady } = useAnaheimProgram();
     const initializeMutation = useInitializeMutation();
-    const {data: accountInfo, isLoading, error} = useAnaheimAccount(publicKey);
+    const { data: accountInfo, isLoading, error } = useAnaheimAccount(publicKey);
 
     if (!isProgramReady) return <div>Connexion au wallet & chargement du programme...</div>;
 
@@ -36,7 +37,7 @@ export default function StakeMiningPage() {
 
             {!connected && (
                 <div className="flex justify-center py-4">
-                    <ClientWalletMultiButton/>
+                    <ClientWalletMultiButton />
                 </div>
             )}
 
@@ -46,8 +47,8 @@ export default function StakeMiningPage() {
 
             {connected && !isLoading && !error && accountInfo && (
                 <>
-                    <StakingComponent accountInfo={accountInfo}/>
-                    <MiningClient accountInfo={accountInfo} account={undefined} isLoading={false}/>
+                    <StakingComponent accountInfo={accountInfo} />
+                    <MiningClient accountInfo={accountInfo} account={undefined} isLoading={false} />
                 </>
             )}
 

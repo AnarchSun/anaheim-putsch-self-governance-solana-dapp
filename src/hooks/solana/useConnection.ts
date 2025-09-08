@@ -1,13 +1,14 @@
 // Path: src/hooks/solana/useConnection.ts
 import { useMemo } from 'react'
 import { Connection, clusterApiUrl, PublicKey } from '@solana/web3.js'
+import {UiWalletAccount} from "@wallet-ui/react";
 
 export interface AccountInfo {
   pda: PublicKey;
   PublicKey: PublicKey;
 }
 
-export function useConnection() {
+export function useConnection(s: string, confirmed: SolanaClient<string>, signer: unknown) {
   const endpoint = clusterApiUrl('devnet') // Use your custom endpoint with API key if needed
   const connection = useMemo(() => new Connection(endpoint, 'confirmed'), [endpoint])
 

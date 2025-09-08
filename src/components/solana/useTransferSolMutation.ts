@@ -1,23 +1,31 @@
-// Path: src/components/solana/useTransferSolMutation.ts
-import { LAMPORTS_PER_SOL, PublicKey, SystemProgram, Transaction, TransactionSignature } from "@solana/web3.js";
-import { useMutation, UseMutationResult, useQueryClient } from "@tanstack/react-query";
+import { LAMPORTS_PER_SOL, PublicKey, Transaction, SystemProgram } from "@solana/web3.js";
+import {
+    useMutation,
+    UseMutationResult,
+    useQueryClient
+} from "@tanstack/react-query";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useConnection } from "@/hooks/solana/useConnection";
+import { client } from "@/lib/solana";
 
 interface TransferSolInput {
     destination: string;
     amount: number; // en SOL
 }
 
+// Type alias for UseMutationResult (for compatibility with your legacy code)
+export type UseTransferSolMutationResult = UseMutationResult<string, Error, TransferSolInput>;
+
+// Main hook for Solana transfer mutation
 export function useTransferSolMutation(
     address: { address: any },
-): UseMutationResult<string, Error, TransferSolInput, unknown> {
+): UseTransferSolMutationResult {
     const queryClient = useQueryClient();
     const { publicKey, sendTransaction } = useWallet();
-    const { connection } = useConnection();
+    const { connection } = useConnection(client.toString(), address, "confirmed");
 
-    return useMutation({
-        mutationFn: async ({ destination, amount }: TransferSolInput): Promise<TransactionSignature> => {
+    return useMutation<string, Error, TransferSolInput>({
+        mutationFn: async ({ destination, amount }: TransferSolInput): Promise<string> => {
             if (!sendTransaction || !publicKey) {
                 throw new Error("Wallet not connected");
             }
@@ -32,9 +40,11 @@ export function useTransferSolMutation(
 
             const tx = new Transaction().add(ix);
 
+            // Returns the transaction signature
             return await sendTransaction(tx, connection);
         },
         onSuccess: () => {
+            // Invalidate account query to refetch balances etc
             void queryClient.invalidateQueries({ queryKey: ["anaheim-account"] });
         },
     });
