@@ -133,7 +133,7 @@
     "toast": "^0.5.4",
     "ts-jest": "29.3.4",
     "tw-animate-css": "^1.3.6",
-    "vite": "^6.3.5",
+    "vite": "^6.3.6",
     "vitest": "^3.2.4",
     "wallet-url": "link:@particle-network/auth/lib/types/utils/wallet-url",
     "webpack": "^5.101.0",
