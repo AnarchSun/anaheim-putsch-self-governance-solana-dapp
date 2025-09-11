@@ -1,26 +1,22 @@
 // PATH: src/app/api/accountApi.ts
-// ULTRA FINAL ANARCHOPUNK PATCH — Batch fix: Remove unused function getStakeAccountInfo
-// Lyric punk, matrix override, forbidden mirror, always batch fix, always add path and filename
+// ULTRA FINAL ANARCHOPUNK PATCH — Use config source for SOLANA_RPC_URL & PROGRAM_ID, batch fix, filename/path éternel!
 
-import {Connection, PublicKey, SendTransactionError} from '@solana/web3.js';
-import {connection} from "@/utils/solanaConnection";
-
-const SOLANA_RPC_URL =
-    process.env.NEXT_PUBLIC_SOLANA_RPC_HOST || 'https://api.devnet.solana.com';
-const PROGRAM_ID =
-    process.env.NEXT_PUBLIC_PROGRAM_ID || '83hJCMp2PeJYgUhHBRmhEbt2ofvzKayvebT9YAU8rURB';
+import { Connection, PublicKey, SendTransactionError } from '@solana/web3.js';
+import { connection } from "@/utils/solanaConnection";
+// PATCH: Import network config directly from solana.ts (the true punk source of truth!)
+import { SOLANA_CLUSTER_URL as SOLANA_RPC_URL, PROGRAM_ID } from "@/config/solana";
 
 /**
  * Get Anaheim PDA account info for a wallet public key.
  */
 export async function getAccountInfo(pubkey: string) {
-    const connection = new Connection(SOLANA_RPC_URL, 'confirmed');
+    const conn = new Connection(SOLANA_RPC_URL, 'confirmed');
     try {
         const [anaheimPDA] = PublicKey.findProgramAddressSync(
             [Buffer.from("anaheim"), new PublicKey(pubkey).toBuffer()],
             new PublicKey(PROGRAM_ID)
         );
-        return await connection.getAccountInfo(anaheimPDA); // null if not found
+        return await conn.getAccountInfo(anaheimPDA); // null if not found
     } catch (err) {
         console.error('getAccountInfo error:', err);
         return null;
@@ -48,6 +44,6 @@ export async function initializeAccount() {
 }
 
 // PATCH NOTES:
-// - Function getStakeAccountInfo removed as unused
-// - All other logic preserved
-// - Filename/path toujours!
+// - Imports SOLANA_CLUSTER_URL as SOLANA_RPC_URL and PROGRAM_ID directly from config/solana.ts (source file!)
+// - All hardcoded env/constants nuked, only import from config
+// - Filename/path éternel, batch fix grunge, matrix override!

@@ -37,7 +37,7 @@ export function useIncrementMutation() {
         },
         onSuccess: (signature) => {
             console.log("Increment successful!", signature);
-            queryClient.invalidateQueries({queryKey: ['anaheim-account', publicKey?.toBase58()]});
+            queryClient.invalidateQueries({queryKey: ['anaheim-account', publicKey?.toBase58()]}).then(() =>{} );
         },
         onError: (error: Error) => {
             console.error("Increment failed:", error);

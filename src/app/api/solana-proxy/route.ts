@@ -1,10 +1,9 @@
 // PATH: src/app/api/solana-proxy/route.ts
-// ULTRA FINAL ANARCHOPUNK PATCH — Batch fix: error unused (@typescript-eslint/no-unused-vars)
-// Lyric punk, matrix override, always batch fix, always add path and filename
+// ULTRA FINAL ANARCHOPUNK PATCH — Batch fix: Use SOLANA_RPC_URL from config/solana.ts, error unused (@typescript-eslint/no-unused-vars), always add path and filename!
 
 import { NextRequest, NextResponse } from 'next/server'
-
-const SOLANA_RPC_URL = process.env.NEXT_PUBLIC_SOLANA_RPC_HOST || "https://api.devnet.solana.com";
+// PATCH: Import the true punk config, stop hardcoding!
+import { SOLANA_CLUSTER_URL as SOLANA_RPC_URL } from "@/config/solana";
 
 export async function POST(req: NextRequest) {
     const body = await req.text();
@@ -22,11 +21,12 @@ export async function POST(req: NextRequest) {
         const result = await res.text();
         return new NextResponse(result, { status: res.status });
     } catch {
-        // PATCH: Remove unused 'error' parameter in catch block
+        // PATCH: Remove unused 'error' parameter in catch block for linter compliance
         return new NextResponse("Proxy error", { status: 500 });
     }
 }
 
 // PATCH NOTES:
+// - SOLANA_RPC_URL now imported from config/solana.ts (not hardcoded)
 // - Removed unused 'error' parameter in catch block for linter compliance
-// - Filename/path toujours!
+// - Filename/path éternel, batch fix, matrix override!

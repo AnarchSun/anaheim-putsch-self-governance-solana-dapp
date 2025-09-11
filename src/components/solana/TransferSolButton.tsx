@@ -1,4 +1,6 @@
-// FILE: src/components/solana/TransferSolButton.tsx
+// PATH: src/components/solana/TransferSolButton.tsx
+// ULTRA FINAL ANARCHOPUNK PATCH — Batch fix: Import endpoint from config/solana, never hardcode, always batch fix, filename/path éternel!
+
 'use client';
 
 import React, { useState } from 'react';
@@ -6,6 +8,8 @@ import { useWallet } from '@solana/wallet-adapter-react';
 // On utilise le type 'Address' de 'gill' pour la compatibilité avec le hook
 import { type Address } from 'gill';
 import { useTransferSolMutation } from '@/hooks/solana/useTransferSolMutation';
+// PATCH: Import endpoint from the punk config source of truth!
+import { SOLANA_CLUSTER_URL as ENDPOINT } from '@/config/solana';
 
 type CreateTransactionProps = {
     recipientAddress: Address;
@@ -16,12 +20,12 @@ export default function TransferSolButton({ recipientAddress }: CreateTransactio
     const [status, setStatus] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
 
-    // ✅ FIX : On passe l'adresse de l'expéditeur (publicKey) au hook.
-    // Le hook est appelé conditionnellement pour s'assurer que publicKey n'est pas null.
+    // PATCH: Always use imported endpoint, never hardcoded!
     const transferSol = useTransferSolMutation({
-        endpoint: "https://api.devnet.solana.com",
+        endpoint: ENDPOINT,
         address: publicKey?.toBase58() as Address
     });
+
     const handleTransfer = async () => {
         if (!publicKey) {
             setStatus('⚠️ Connecte ton wallet d’abord.');
@@ -59,3 +63,7 @@ export default function TransferSolButton({ recipientAddress }: CreateTransactio
         </div>
     );
 }
+
+// PATCH NOTES:
+// - endpoint now imported from config/solana (source file!), never hardcoded
+// - Always batch fix, always filename/path éternel, mirror forbidden!

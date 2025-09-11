@@ -29,5 +29,5 @@ jobs:
       - run: pnpm install
       - run: pnpm lint
       - run: pnpm test:@types
-      - run: pnpm build
+      - run: pnpm anchor
       - run: pnpm vitest --coverage

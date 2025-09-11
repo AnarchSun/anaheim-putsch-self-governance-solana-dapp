@@ -1,7 +1,7 @@
 import type { NextConfig } from 'next'
 
 // 🏴‍☠️ BATCH FIX: Add gill-monorepo to transpilePackages for TypeScript/JSX in node_modules
-// This ensures Next.js will transpile Gill's raw .ts/.tsx code for you, fixing build errors!
+// This ensures Next.js will transpile Gill's raw .ts/.tsx code for you, fixing anchor errors!
 
 const nextConfig: NextConfig = {
     // Transpile both your Solana SDK and Gill monorepo (add more as needed!)

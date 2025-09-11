@@ -58,7 +58,7 @@ jobs:
           node-version: ${{ matrix.node }}
 
       - run: pnpm install
-      - run: pnpm build
+      - run: pnpm anchor
 
       - name: Install package manager (if needed)
         run: |

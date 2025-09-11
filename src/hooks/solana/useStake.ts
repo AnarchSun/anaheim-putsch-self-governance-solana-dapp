@@ -8,7 +8,7 @@ import { callSolanaRpc } from "@/utils/solana/solanaRpcClient";
  * Returns the transaction result.
  */
 export async function stakeSol(amount: number, toAddress: string) {
-    // Example: build a real transaction params using amount and toAddress
+    // Example: anchor a real transaction params using amount and toAddress
     // You must fill with the actual encoded transaction for your DAO (use @solana/web3.js for full TX creation)
     const jsonRpcBody = {
         method: "sendTransaction",

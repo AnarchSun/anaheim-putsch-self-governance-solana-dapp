@@ -18,5 +18,6 @@ wallet = "~/.config/solana/id.json"
 [workspace]
 members = ["programs/anaheim"]
 
-[scripts]
-Initialize = "pnpm run Initialize"
+[idl]
+anaheim = "target/idl/anaheim.json"     # Batch fix : chemin relatif pour anchor depuis /anchor/
+

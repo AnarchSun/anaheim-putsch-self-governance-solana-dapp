@@ -1,10 +1,13 @@
+// PATH: src/lib/solana/solanaClient.ts
+// ULTRA FINAL ANARCHOPUNK PATCH: Always import RPC_URL from config, no hardcode, batch fix grunge, filename/path éternel!
+
 import { Connection, PublicKey, Commitment, AccountChangeCallback, GetBlockHeightConfig } from '@solana/web3.js'
 import { getStakeActivation } from '@anza-xyz/solana-rpc-get-stake-activation'
-
-const RPC_URL = 'https://api.devnet.solana.com'
+import { SOLANA_CLUSTER_URL } from '@/config/solana' // Punk override: get endpoint from config!
 
 export function getSolanaClient() {
-  const connection = new Connection(RPC_URL, 'confirmed')
+  // Always use endpoint from config—no more hand edits!
+  const connection = new Connection(SOLANA_CLUSTER_URL, 'confirmed')
 
   return {
     getStakeActivation: async (pubkey: PublicKey) => {
@@ -25,3 +28,8 @@ export function getSolanaClient() {
     removeAccountChangeListener: (id: number) => connection.removeAccountChangeListener(id),
   }
 }
+
+// PATCH NOTES:
+// - Endpoint always imported from @/config/solana (SOLANA_CLUSTER_URL) for reality override.
+// - No manual URL edits!
+// - Batch fix grunge, filename/path éternel!

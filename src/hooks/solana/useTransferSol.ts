@@ -5,7 +5,6 @@ import { useAnchorWallet } from '@solana/wallet-adapter-react'
 import { useConnection } from './useConnection'
 import { toast } from 'sonner'
 import {Address} from "@solana/kit";
-import {client} from "@/lib/solana";
 import {address} from "gill";
 
 export function useTransferSol({ fromAddress }: { fromAddress: Address }) {

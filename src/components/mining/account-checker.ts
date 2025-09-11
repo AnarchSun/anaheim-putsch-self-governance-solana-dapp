@@ -1,10 +1,20 @@
-import { PublicKey, Connection } from "@solana/web3.js";
+// PATH: src/components/mining/account-checker.ts
+// ULTRA FINAL ANARCHOPUNK PATCH — Imports network, cluster, programId, and walletPubkey from config, TypeScript strict, filename/path éternel, punk comments, matrix override!
 
-// L'adresse de votre programme, pas d'un portefeuille !
-const programId = new PublicKey("83hJCMp2PeJYgUhHBRmhEbt2ofvzKayvebT9YAU8rURB");
+import { PublicKey, Connection, AccountInfo } from "@solana/web3.js";
+// PATCH: Import all network, cluster, programId, AND walletPubkey constants from config
+import {
+    SOLANA_CLUSTER_URL,
+    PROGRAM_ID,
+    CLUSTER,
+    WALLET_PUBKEY, // <-- WALLET_PUBKEY imported!
+} from "@/config/solana";
 
-// L'adresse du portefeuille qui est utilisé comme seed
-const walletPubkey = new PublicKey("8RmTVazK1G3ZJ7EqYZC9FYJejFge98Vyz7T4zVdY8okX");
+// PATCH: Use imported programId as PublicKey instance
+const programId = new PublicKey(PROGRAM_ID);
+
+// PATCH: Use imported walletPubkey as PublicKey instance
+const walletPubkey = WALLET_PUBKEY;
 
 // ✅ FIX: On ajoute le 'programId' comme deuxième argument.
 const [anaheimPda] = PublicKey.findProgramAddressSync(
@@ -12,12 +22,25 @@ const [anaheimPda] = PublicKey.findProgramAddressSync(
     programId
 );
 
-async function checkAccount() {
-    const conn = new Connection("https://api.devnet.solana.com");
-    // FIX: getAccountInfo attends un PublicKey, PAS un objet.
-    const accountInfo = await conn.getAccountInfo(anaheimPda);
-    console.log("Adresse PDA vérifiée:", anaheimPda.toBase58());
-    console.log("Le compte Anaheim existe-t-il ?:", accountInfo ? "Oui" : "Non");
+async function checkAccount(): Promise<void> {
+    // PATCH: Use imported endpoint (prefer SOLANA_CLUSTER_URL or SOLANA_RPC_ENDPOINT)
+    const conn = new Connection(SOLANA_CLUSTER_URL);
+
+    // getAccountInfo attends un PublicKey, PAS un objet.
+    const accountInfo: AccountInfo<Buffer> | null = await conn.getAccountInfo(anaheimPda);
+
+    console.log("Cluster utilisé :", CLUSTER);
+    console.log("Programme ID utilisé :", programId.toBase58());
+    console.log("Wallet utilisé :", walletPubkey.toBase58());
+    console.log("RPC Endpoint utilisé :", SOLANA_CLUSTER_URL);
+    console.log("Adresse PDA vérifiée :", anaheimPda.toBase58());
+    console.log("Le compte Anaheim existe-t-il ? :", accountInfo ? "Oui" : "Non");
 }
 
-checkAccount();
+// PATCH: Run as Node script, or export if you want to use it elsewhere (React/UI)
+checkAccount().then(() =>{} );
+
+// PATCH NOTES:
+// - Imports network, cluster, programId, and walletPubkey from config as constants
+// - TypeScript strict, filename/path éternel, batch fix grunge
+// - Zéro mirage, matrix hacked, punk as fuck!

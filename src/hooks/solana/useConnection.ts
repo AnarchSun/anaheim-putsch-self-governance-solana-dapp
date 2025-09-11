@@ -3,8 +3,6 @@
 
 import { useMemo } from 'react'
 import { clusterApiUrl, Connection, PublicKey } from '@solana/web3.js'
-// PATCH: Removed unused Address import from "gill"
-// import { Address } from "gill"
 
 export interface AccountInfo {
   pda: PublicKey;

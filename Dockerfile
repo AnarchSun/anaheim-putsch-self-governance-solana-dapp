@@ -11,7 +11,7 @@ ENV SOLANA_VERSION=2.1.1 \
 
 # Install core tools
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    curl git unzip pkg-config build-essential libssl-dev \
+    curl git unzip pkg-config anchor-essential libssl-dev \
     libudev-dev clang cmake xz-utils ca-certificates \
     python3 python3-pip sudo openssh-client jq gnupg \
     && rm -rf /var/lib/apt/lists/*
@@ -37,9 +37,9 @@ RUN curl -sSfL https://release.solana.com/v${SOLANA_VERSION}/install | bash \
 WORKDIR /app
 COPY . .
 
-# Install deps and build
+# Install deps and anchor
 RUN pnpm install
-RUN pnpm build || true  # <- remplace selon ton projet
+RUN pnpm anchor || true  # <- remplace selon ton projet
 
 EXPOSE 3000
 CMD ["pnpm", "dev"]

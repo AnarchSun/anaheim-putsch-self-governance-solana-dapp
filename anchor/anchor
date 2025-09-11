@@ -1,0 +1,11 @@
+#!/bin/bash
+# Punk wrapper pour anchor — filename/path éternel
+
+# Appelle le vrai anchor CLI
+~/.cargo/bin/anchor "$@"
+
+# Si la commande est "build", lance le batch fix
+if [[ "$1" == "build" ]]; then
+  node scripts/update-program-id.js
+  echo "🌑 Batch fix punk: PROGRAM_ID updated in src/config/solana.ts!"
+fi

@@ -12,7 +12,7 @@ interface ExplorerLinkProps {
 
 /**
  * ExplorerLink
- * PATCH: Use transaction and address to build explorer link if provided.
+ * PATCH: Use transaction and address to anchor explorer link if provided.
  * - If transaction is provided, link to tx details.
  * - If address is provided (and path doesn't start with 'address/'), link to address details.
  * - Otherwise link to the raw path.

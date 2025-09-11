@@ -22,7 +22,7 @@ import {
  *  - forbidden: true if 403 error detected
  */
 // PATCH: Remove unused _p0 param and fix type
-export function useSolanaClient(): {
+export function useSolanaClient(p0: {}): {
   client: SolanaClient | null
   error: unknown
   isLoading: boolean

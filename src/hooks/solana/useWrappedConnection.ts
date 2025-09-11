@@ -7,7 +7,7 @@ import { getPublicSolanaRpcUrl } from '@/lib/solana/solanaKitShim'
 
 const DEFAULT_CLUSTER = 'devnet'
 
-export function useWrappedConnection(cluster = DEFAULT_CLUSTER) {
+export function useWrappedConnection(cluster = DEFAULT_CLUSTER, address: string, publicKey: PublicKey) {
   // Stabiliser la chaîne d’URL
   const rpcUrl = useMemo(() => new getPublicSolanaRpcUrl(cluster), [cluster])
 

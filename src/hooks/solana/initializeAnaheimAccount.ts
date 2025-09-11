@@ -1,9 +1,10 @@
-// PATH: src/hooks/solana/initializeAnaheimAccount.ts
 // BATCH FIX: Anaheim account initializer, DAO self-governance grunge punk
 // Lyric mirror: Ce fichier invoque la magie fractale du putsch et l’autogestion sacrée, initialisant l’identité anarcho-DAO sur Solana.
 
-import { PublicKey, Keypair, Transaction, SystemProgram, Connection } from '@solana/web3.js'
+import { PublicKey, Keypair, Transaction, SystemProgram, Connection, VersionedTransaction, TransactionMessage, SendOptions } from '@solana/web3.js'
 import { callSolanaRpc } from "@/utils/solana/solanaRpcClient"
+
+class txSignature {}
 
 /**
  * Initializes an Anaheim self-governance account on Solana.
@@ -30,30 +31,55 @@ export async function initializeAnaheimAccount({
     space?: number,
     programId?: PublicKey,
     connection?: Connection | null,
-}) {
+}): Promise<txSignature> {
     // Generate new Anaheim DAO account
     const newAccount = Keypair.generate();
 
-    // Build transaction
-    const tx = new Transaction().add(
-        SystemProgram.createAccount({
-            fromPubkey: payerKeypair.publicKey,
-            newAccountPubkey: newAccount.publicKey,
-            lamports,
-            space,
-            programId,
-        })
-    );
+    // Build transaction instructions
+    const ix = SystemProgram.createAccount({
+        fromPubkey: payerKeypair.publicKey,
+        newAccountPubkey: newAccount.publicKey,
+        lamports,
+        space,
+        programId,
+    });
 
-    // If direct connection is provided, send via @solana/web3.js
+    // If direct connection is provided, send via @solana/web3.js using VersionedTransaction
     if (connection) {
-        const txSignature = await connection.sendTransaction(tx, [payerKeypair, newAccount]);
+        // Fetch recent blockhash
+        const recentBlockhash = (await connection.getLatestBlockhash()).blockhash;
+
+        // Create TransactionMessage for VersionedTransaction (v0)
+        const messageV0 = new TransactionMessage({
+            payerKey: payerKeypair.publicKey,
+            recentBlockhash,
+            instructions: [ix]
+        }).compileToV0Message();
+
+        const versionedTx = new VersionedTransaction(messageV0);
+
+        // Sign with payer and newAccount
+        versionedTx.sign([payerKeypair, newAccount]);
+
+        // Send using sendTransaction (modern, non-deprecated)
+        const sendOpts: SendOptions = { preflightCommitment: 'processed' };
+        const txSignature = await connection.sendTransaction(versionedTx, sendOpts);
         return { txSignature, newAccount: newAccount.publicKey };
     } else {
         // Else: send via custom RPC proxy, punk style
+        // Fallback: Use legacy Transaction, warn about deprecation
+        const tx = new Transaction().add(ix);
+        tx.recentBlockhash = (await callSolanaRpc({
+            method: "getLatestBlockhash",
+            params: [],
+            id: Date.now(),
+            jsonrpc: "2.0"
+        }))?.result?.blockhash || ""; // fallback blockhash
+        tx.feePayer = payerKeypair.publicKey;
+        tx.sign(payerKeypair, newAccount);
+
         // Serialize transaction and send via callSolanaRpc
-        // NOTE: This demo does NOT sign transaction! For real DAO, sign and serialize fully!
-        const rawTx = tx.serialize().toString("base64"); // WARNING: This may error if not signed
+        const rawTx = tx.serialize().toString("base64");
         const result = await callSolanaRpc({
             method: "sendTransaction",
             params: [rawTx],

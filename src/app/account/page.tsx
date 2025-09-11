@@ -1,8 +1,5 @@
 // PATH: src/app/account/page.tsx
-// ULTRA FINAL ANARCHOPUNK PATCH — Batch fixes for:
-// - React Hook "useTransferSolMutation" is called conditionally. (react-hooks/rules-of-hooks)
-// - _address/_client unused variable warnings (@typescript-eslint/no-unused-vars)
-// - Always pass endpoint explicit. Batch fix eternal. Filename always at the top.
+// ULTRA FINAL ANARCHOPUNK PATCH — Batch fix: Import endpoint & programId from config/solana, never hardcode, always batch fix, filename/path éternel!
 
 'use client'
 
@@ -18,19 +15,16 @@ import { AccountBalance } from '@/components/account/AccountBalance'
 import { useTransferSolMutation } from '@/hooks/solana/useTransferSolMutation'
 import { useWalletUi } from '@/hooks/wallet/useWalletUi'
 import { Address } from 'gill'
-
-
-const DEFAULT_ENDPOINT = 'https://api.devnet.solana.com' // PATCH: Use devnet endpoint for testing!
+// PATCH: Import endpoint & programId from config/solana (source of truth!)
+import { SOLANA_CLUSTER_URL as ENDPOINT, PROGRAM_ID } from '@/config/solana'
 
 export default function AccountDashboardPage() {
     const { wallet, address } = useWalletUi()
-    // PATCH: Hooks must always be called unconditionally and in the same order
     const transferSolMutation = useTransferSolMutation({
         address: address as Address,
-        endpoint: DEFAULT_ENDPOINT,
+        endpoint: ENDPOINT, // PATCH: Use imported endpoint!
     })
 
-    // PATCH: Destructure mutation outside conditional
     const {
         data,
         isSuccess,
@@ -47,7 +41,6 @@ export default function AccountDashboardPage() {
         }
     }, [isSuccess, isError, data, error])
 
-    // PATCH: Render fallback if wallet not connected
     if (!wallet || !wallet.publicKey || !address) {
         return (
             <div className="container py-10 text-center">
@@ -73,23 +66,22 @@ export default function AccountDashboardPage() {
 
             <section className="space-y-6">
                 <h2 className="text-xl font-bold">Tools & Features</h2>
-                <StakeStatus address={base58Address} client={undefined}
-                    // PATCH: Remove unused parameter warnings by removing unused args
-                             initializeStakeAccount={function () {
-                                 throw new Error("Function not implemented.")
-                             }} />
+                <StakeStatus
+                    address={base58Address}
+                    client={undefined}
+                    initializeStakeAccount={() => { throw new Error("Function not implemented.") }}
+                />
                 <WalletInfo />
                 <AccountBalance address={base58Address} />
                 <AccountListFeature />
-                <Rapper address="83hJCMp2PeJYgUhHBRmhEbt2ofvzKayvebT9YAU8rURB" />
+                {/* PATCH: Rapper uses imported PROGRAM_ID, not hardcoded */}
+                <Rapper address={PROGRAM_ID} />
             </section>
         </main>
     )
 }
 
 // PATCH NOTES:
-// - Unconditional hook call: useTransferSolMutation always called (never inside condition)
-// - Destructuring mutation result always, no conditional destructuring
-// - Remove unused parameters from initializeStakeAccount to fix @typescript-eslint/no-unused-vars
-// - Devnet endpoint for test/dev environment
-// - Filename/path toujours!
+// - ENDPOINT and PROGRAM_ID now imported from config/solana (source file!)
+// - No hardcoded devnet endpoint or program address hanging around
+// - Always batch fix, always filename/path éternel!

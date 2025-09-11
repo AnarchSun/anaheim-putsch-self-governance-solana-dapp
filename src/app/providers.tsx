@@ -1,5 +1,5 @@
 // PATH: src/app/providers.tsx
-// ULTRA FINAL ANARCHOPUNK PATCH — Export Providers, batch fix unused SolanaProvider, matrix override, filename/path éternel!
+// ULTRA FINAL ANARCHOPUNK PATCH — Batch fix: Import endpoint from config/solana, never hardcode, mirror forbidden, filename/path éternel!
 
 'use client';
 
@@ -16,7 +16,8 @@ import {
 import { GILL_HOOK_KEY_CONFIG, GillConfig } from "gill-monorepo/packages/react/src";
 import '@solana/wallet-adapter-react-ui/styles.css';
 
-const endpoint: string = process.env.NEXT_PUBLIC_SOLANA_RPC_HOST ?? "https://api.devnet.solana.com";
+// PATCH: Import endpoint from punk config source!
+import { SOLANA_CLUSTER_URL as endpoint } from "@/config/solana";
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -51,7 +52,7 @@ export class GillProvider extends React.Component<{
     }
 }
 
-// PATCH: Rename SolanaProvider to Providers and export as default
+// PATCH: Providers exported as default, always batch fix
 export default function Providers({ children }: { children: React.ReactNode }) {
     const wallets = useMemo(
         () => [
@@ -74,7 +75,5 @@ export default function Providers({ children }: { children: React.ReactNode }) {
 }
 
 // PATCH NOTES:
-// - Renamed SolanaProvider to Providers and exported as default.
-// - Fixes "has no exported members : providers" error.
-// - Use import { Providers } from './providers' in layout.tsx.
-// - Filename/path éternel, matrix override, batch fix unused SolanaProvider!
+// - endpoint now imported from config/solana (source file!), never hardcoded, never direct env
+// - Batch fix, filename/path éternel, matrix override, mirror forbidden!

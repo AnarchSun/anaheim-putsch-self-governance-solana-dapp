@@ -3,7 +3,7 @@
 
 export const POST_ACCOUNT_SIZE = 256
 console.log('POST_ACCOUNT_SIZE =', POST_ACCOUNT_SIZE)
-
+export const PROGRAM_ID = "9xQeWvG816bUx9EPZ2gfrzjp1edw6uX7yjzFZZLL8Mjt"; // PATCH: auto-updated
 // PATCH: Removed unused constant MAX_CONTENT_LENGTH
 // export const MAX_CONTENT_LENGTH = 280
 

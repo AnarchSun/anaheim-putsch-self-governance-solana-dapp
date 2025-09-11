@@ -2,7 +2,7 @@
 import { Connection, PublicKey } from '@solana/web3.js'
 
 
-export async function fetchStakeActivation(pubkey: PublicKey) {
+export async function fetchStakeActivation(pubkey: string) {
   const connection = new Connection('https://api.devnet.solana.com')
   try {
     return await connection.getStakeActivation ( pubkey )

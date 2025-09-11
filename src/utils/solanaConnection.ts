@@ -1,10 +1,14 @@
-// Path: src/utils/solanaConnection.ts
-// ALWAYS use a public endpoint or add your API key for the mainnet!
+// PATH: src/utils/solanaConnection.ts
+// ULTRA FINAL ANARCHOPUNK PATCH: Always import endpoint from @/config/solana, auto-devnet for dev, batch fix grunge!
 
-import { Connection, clusterApiUrl } from "@solana/web3.js";
+import { Connection } from "@solana/web3.js";
+import { SOLANA_CLUSTER_URL } from "@/config/solana"; // Punk override: get endpoint from config!
 
-// DEVNET (no API key needed)
-export const connection = new Connection(clusterApiUrl('devnet'), 'confirmed');
+// Always use devnet for dev, endpoint from config—no more hand-edits!
+export const connection = new Connection(SOLANA_CLUSTER_URL, "confirmed");
 
-// MAINNET (with an API key for Helius, Triton, GenesysGo, etc.)
-export const mainnetConnection = new Connection('https://api.devnet.solana.com', 'confirmed');
+// PATCH NOTES:
+// - Endpoint always imported from @/config/solana (SOLANA_CLUSTER_URL) for reality override.
+// - No manual URL edits!
+// - Default is devnet for dev, batch fix grunge, filename/path éternel!
+// - Pour changer de cluster: modifie SOLANA_CLUSTER_URL dans src/config/solana.ts ou ton .env, jamais ici.

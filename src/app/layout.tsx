@@ -3,6 +3,7 @@
 
 'use client';
 
+import './globals.css'
 import Providers from './providers'; // PATCH: import default Providers from local providers file!
 import { AppLayout } from '@/components/app-layout';
 
