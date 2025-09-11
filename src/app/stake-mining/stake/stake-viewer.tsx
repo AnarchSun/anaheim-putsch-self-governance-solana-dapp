@@ -22,7 +22,7 @@ export function StakeViewer({ pubkey }: StakeViewerProps) {
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    const connection = new Connection('https://api.mainnet-beta.solana.com')
+    const connection = new Connection('https://api.devnet.solana.com')
 
     async function fetchStakeAccount() {
       try {

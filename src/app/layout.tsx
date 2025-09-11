@@ -1,51 +1,36 @@
-// FILE: src/app/layout.tsx
+// PATH: src/app/layout.tsx
+// ULTRA FINAL ANARCHOPUNK PATCH — Fix Providers JSX error, correct import from ./providers, matrix override, filename/path éternel!
+
 'use client';
 
-import React, { ReactNode, useMemo } from 'react';
-import './globals.css';
-import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react';
-import { WalletModalProvider } from '@solana/wallet-adapter-react-ui';
-import { PhantomWalletAdapter, SolflareWalletAdapter } from '@solana/wallet-adapter-wallets';
+import Providers from './providers'; // PATCH: import default Providers from local providers file!
 import { AppLayout } from '@/components/app-layout';
-import { ThemeProvider } from '@/components/theme-provider';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import '@/styles/solana-wallet-adapter.css';
-import { SolanaProvider } from './providers';
 
-// Removed unused import WalletMultiButton
-const queryClient = new QueryClient();
+// PATCH: Navigation links for the app — anarcho-autogestion, matrix override!
+const links = [
+    { label: 'Home', path: '/' },
+    { label: 'Account', path: '/account' },
+    { label: 'Stake & Mining', path: '/stake-mining' },
+    { label: 'Posts', path: '/posts' },
+    { label: 'Gemini-Helper', path: '/dev-helper' },
+];
 
-export default function RootLayout({ children }: { children: ReactNode }) {
-    const endpoint = process.env.NEXT_PUBLIC_SOLANA_RPC_HOST || 'https://api.devnet.solana.com';
-    const wallets = useMemo(() => [new PhantomWalletAdapter(), new SolflareWalletAdapter()], []);
-
-    const links = [
-        { label: 'Home', path: '/' },
-        { label: 'Account', path: '/account' },
-        { label: 'Stake & Mining', path: '/stake-mining' }, // <- label plus explicite
-        { label: 'Posts', path: '/posts' },
-        { label: 'Gemini-Helper', path: '/dev-helper' },
-    ];
-
+export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
         <html lang="en" suppressHydrationWarning>
         <body>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-            <SolanaProvider>
-                <ConnectionProvider endpoint={endpoint}>
-                    <WalletProvider wallets={wallets} autoConnect>
-                        <WalletModalProvider>
-                            <QueryClientProvider client={queryClient}>
-                                <AppLayout links={links}>{children}</AppLayout>
-                                <ReactQueryDevtools initialIsOpen={false} />
-                            </QueryClientProvider>
-                        </WalletModalProvider>
-                    </WalletProvider>
-                </ConnectionProvider>
-            </SolanaProvider>
-        </ThemeProvider>
+        <Providers>
+            <AppLayout links={links}>
+                {children}
+            </AppLayout>
+        </Providers>
         </body>
         </html>
     );
 }
+
+// PATCH NOTES:
+// - Fixes "Providers cannot be used as a JSX component" TS2786 error
+// - Use default export Providers from ./providers, not named export from solana-provider!
+// - All context providers (Solana, Theme, Query, etc) must be combined in ./providers
+// - Filename/path éternel, grunge matrix override!

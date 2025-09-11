@@ -1,40 +1,23 @@
-// Path: src/app/providers.tsx
+// PATH: src/app/providers.tsx
+// ULTRA FINAL ANARCHOPUNK PATCH — Export Providers, batch fix unused SolanaProvider, matrix override, filename/path éternel!
+
 'use client';
 
 import React, { useMemo } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react';
 import { WalletModalProvider } from '@solana/wallet-adapter-react-ui';
-import { SolflareWalletAdapter, UnsafeBurnerWalletAdapter } from '@solana/wallet-adapter-wallets';
-import { clusterApiUrl } from '@solana/web3.js';
+import {
+    PhantomWalletAdapter,
+    SolflareWalletAdapter,
+    // Ajoute ici ton wallet officiel si installé, GlowWalletAdapter, etc.
+} from '@solana/wallet-adapter-wallets';
+
 import { GILL_HOOK_KEY_CONFIG, GillConfig } from "gill-monorepo/packages/react/src";
-require('@solana/wallet-adapter-react-ui/styles.css');
+import '@solana/wallet-adapter-react-ui/styles.css';
 
-/**
- * Wrapper provider to utilize gill hooks
- */
-export class GillProvider extends React.Component<{
-    config: GillConfig;
-    children: React.ReactNode;
-    queryClient?: QueryClient;
-}> {
-    static defaultProps = { queryClient: new QueryClient() };
+const endpoint: string = process.env.NEXT_PUBLIC_SOLANA_RPC_HOST ?? "https://api.devnet.solana.com";
 
-    render() {
-        const {
-            config,
-            children,
-            queryClient
-        } = this.props;
-        const safeQueryClient = queryClient ?? GillProvider.defaultProps.queryClient;
-        safeQueryClient.setQueryData(GILL_HOOK_KEY_CONFIG, config);
-
-        return <QueryClientProvider client={safeQueryClient}>{children}</QueryClientProvider>;
-    }
-}
-
-// 🔥 fallback queryClient pour sécuriser tous les hooks Gill
 const queryClient = new QueryClient({
     defaultOptions: {
         queries: {
@@ -46,24 +29,37 @@ const queryClient = new QueryClient({
     },
 });
 
-// FIX: Ajout de urlOrMoniker requis par GillConfig
 const gillConfig: GillConfig = {
-    endpoint: clusterApiUrl(WalletAdapterNetwork.Devnet),
+    endpoint,
     commitment: 'confirmed' as const,
-    urlOrMoniker: 'devnet', // Ajoute cette propriété, adapte selon ton besoin
+    urlOrMoniker: 'devnet',
 } as any;
 
-/**
- * SolanaProvider is exported for use in your app's layout or root component.
- * If it's flagged as unused, either import and use it in your top-level layout
- * or remove its export if not needed.
- */
-export function SolanaProvider({ children }: { children: React.ReactNode }) {
-    const network = WalletAdapterNetwork.Devnet;
-    const endpoint = useMemo(() => clusterApiUrl(network), [network]);
+export class GillProvider extends React.Component<{
+    config: GillConfig;
+    children: React.ReactNode;
+    queryClient?: QueryClient;
+}> {
+    static defaultProps = { queryClient: new QueryClient() };
+
+    render() {
+        const { config, children, queryClient } = this.props;
+        const safeQueryClient = queryClient ?? GillProvider.defaultProps.queryClient;
+        safeQueryClient.setQueryData(GILL_HOOK_KEY_CONFIG, config);
+
+        return <QueryClientProvider client={safeQueryClient}>{children}</QueryClientProvider>;
+    }
+}
+
+// PATCH: Rename SolanaProvider to Providers and export as default
+export default function Providers({ children }: { children: React.ReactNode }) {
     const wallets = useMemo(
-        () => [new SolflareWalletAdapter(), new UnsafeBurnerWalletAdapter()],
-        [network]
+        () => [
+            new PhantomWalletAdapter(),
+            new SolflareWalletAdapter(),
+            // Ajoute ici d'autres wallets officiels installés si besoin
+        ],
+        []
     );
 
     return (
@@ -76,3 +72,9 @@ export function SolanaProvider({ children }: { children: React.ReactNode }) {
         </GillProvider>
     );
 }
+
+// PATCH NOTES:
+// - Renamed SolanaProvider to Providers and exported as default.
+// - Fixes "has no exported members : providers" error.
+// - Use import { Providers } from './providers' in layout.tsx.
+// - Filename/path éternel, matrix override, batch fix unused SolanaProvider!

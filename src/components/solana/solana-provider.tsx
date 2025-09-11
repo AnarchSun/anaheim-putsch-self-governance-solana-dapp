@@ -1,5 +1,6 @@
-// FILE: src/components/solana/solana-provider.tsx
-// VERSION FINALE ET CORRECTE
+// PATH: src/components/solana/solana-provider.tsx
+// ULTRA FINAL ANARCHOPUNK PATCH — Batch fix require() import, unnecessary useMemo deps, matrix override!
+
 'use client';
 
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
@@ -9,14 +10,14 @@ import { SolflareWalletAdapter, PhantomWalletAdapter } from '@solana/wallet-adap
 import { clusterApiUrl } from '@solana/web3.js';
 import { useMemo, type ReactNode } from 'react';
 
-// N'oubliez pas d'importer les styles CSS du portefeuille !
-require('@solana/wallet-adapter-react-ui/styles.css');
+// PATCH: Use ESM import for CSS, never require()
+import '@solana/wallet-adapter-react-ui/styles.css';
 
 // Voici le composant que votre application essaie d'importer !
 export function SolanaProvider({ children }: { children: ReactNode }) {
     // Choisissez le réseau : devnet, testnet, ou mainnet-beta
     const network = WalletAdapterNetwork.Devnet;
-    const endpoint = useMemo(() => clusterApiUrl(network), [network]);
+    const endpoint = useMemo(() => clusterApiUrl(network), []); // PATCH: no need for [network] dep, network is constant
 
     // Initialisez ici les portefeuilles que vous voulez supporter
     const wallets = useMemo(
@@ -24,7 +25,7 @@ export function SolanaProvider({ children }: { children: ReactNode }) {
             new PhantomWalletAdapter(),
             new SolflareWalletAdapter(),
         ],
-        [network]
+        [] // PATCH: no need for [network] dep, network is constant
     );
 
     return (
@@ -36,4 +37,11 @@ export function SolanaProvider({ children }: { children: ReactNode }) {
             </WalletProvider>
         </ConnectionProvider>
     );
+}
+
+// PATCH NOTES:
+// - No more require() import, replaced with ESM import (fixes @typescript-eslint/no-require-imports)
+// - Removed unnecessary useMemo dependencies ([network]), since network is constant (fixes react-hooks/exhaustive-deps)
+// - Filename/path toujours, matrix override!
+export class Providers {
 }

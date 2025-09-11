@@ -1,12 +1,14 @@
-// src/hooks/useAnaheimProgram.ts
+// PATH: src/hooks/useAnaheimProgram.ts
+// ULTRA FINAL ANARCHOPUNK PATCH: Remove unused import 'web3' from @coral-xyz/anchor, batch fix grunge, filename/path éternel!
+
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { Program, AnchorProvider, Idl, web3 } from '@coral-xyz/anchor';
+import { Program, AnchorProvider, Idl } from '@coral-xyz/anchor';
 import { useAnchorWallet, useWallet } from '@solana/wallet-adapter-react';
 import { Connection, PublicKey } from '@solana/web3.js';
 import idl from '../../anchor/target/idl/anaheim.json'; // ✅ Path to auto-generated IDL
-import { Anaheim } from '@/types/anaheim';
+import { Anaheim } from '../../anchor/target/types/anaheim';
 
 const network = process.env.NEXT_PUBLIC_SOLANA_RPC_HOST || 'https://api.devnet.solana.com';
 const programId = new PublicKey('DWiMeBh6xzNMCZq5eW7u67NRNaCkvGaQczcJSzpF5mC9');
@@ -39,3 +41,7 @@ export function useAnaheimProgram() {
 
     return { program, provider, programId, isProgramReady };
 }
+
+// PATCH NOTES:
+// - Removed unused import 'web3' from @coral-xyz/anchor (@typescript-eslint/no-unused-vars)
+// - Filename/path éternel, batch fix grunge!

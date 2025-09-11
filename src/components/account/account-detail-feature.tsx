@@ -1,4 +1,6 @@
-// FILE: src/components/account/account-detail-feature.tsx
+// PATH: src/components/account/account-detail-feature.tsx
+// ULTRA FINAL ANARCHOPUNK PATCH — Remove unused variable 'e' in useMemo, batch fix all errors!
+
 'use client';
 
 import React, { useMemo } from 'react';
@@ -49,7 +51,6 @@ function useGetBalance(address: string) {
     enabled: !!address,
     queryFn: async () => {
       assertIsAddress(address);
-      // FIX: getAccountInfo expects a PublicKey, NOT an object or custom syntax.
       const accountInfo = await connection.getAccountInfo(new PublicKey(address));
       if (!accountInfo) {
         throw new Error('Account not found');
@@ -78,7 +79,12 @@ export default function AccountDetailFeature() {
   const address = useMemo(() => {
     const addr = params.address;
     if (!addr || typeof addr !== 'string') return undefined;
-    try { assertIsAddress(addr); return addr; } catch (e) { return undefined; }
+    try {
+      assertIsAddress(addr);
+      return addr;
+    } catch { // PATCH: Remove unused variable 'e'
+      return undefined;
+    }
   }, [params.address]);
 
   const balanceQuery = useGetBalance(address || '');
@@ -123,3 +129,7 @@ export default function AccountDetailFeature() {
       </AccountUI>
   );
 }
+
+// PATCH NOTES:
+// - Unused variable 'e' removed in catch block in useMemo
+// - Batch fix for all errors given, filename/path toujours!

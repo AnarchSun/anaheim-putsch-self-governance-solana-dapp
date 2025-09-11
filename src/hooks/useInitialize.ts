@@ -1,4 +1,6 @@
-// FILE: src/hooks/useInitialize.ts
+// PATH: src/hooks/useInitialize.ts
+// ULTRA FINAL ANARCHOPUNK PATCH: Remove unused parameters 'signature' (onSuccess), 'r' (then), batch fix grunge, filename/path éternel!
+
 'use client';
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -26,7 +28,7 @@ export function useInitializeMutation() {
                     anaheimAccount: pda,
                     payer: publicKey,
                     systemProgram: SystemProgram.programId,
-                }as any)
+                } as any)
                 .rpc();
 
             // ✅ THE FIX for the 'confirmTransaction' error.
@@ -40,12 +42,17 @@ export function useInitializeMutation() {
 
             return signature;
         },
-        onSuccess: (signature) => {
+        onSuccess: () => {
             toast.success('Program initialized successfully!');
-            queryClient.invalidateQueries({queryKey: ['anaheim-account', publicKey?.toBase58()]}).then(r =>{});
+            queryClient.invalidateQueries({queryKey: ['anaheim-account', publicKey?.toBase58()]}).then(() =>{} );
         },
         onError: (error: Error) => {
             toast.error('Initialization failed!', { description: error.message });
         },
     });
 }
+
+// PATCH NOTES:
+// - Removed unused parameter 'signature' in onSuccess
+// - Removed unused parameter 'r' in then callback
+// - Filename/path éternel, batch fix grunge!

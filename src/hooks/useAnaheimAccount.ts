@@ -1,4 +1,6 @@
-// FILE: src/hooks/useAnaheimAccount.ts
+// PATH: src/hooks/useAnaheimAccount.ts
+// ULTRA FINAL ANARCHOPUNK PATCH: Remove unused parameter 'error' in catch block, batch fix grunge, filename/path éternel!
+
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
@@ -30,7 +32,7 @@ async function getAnaheimAccount(
         // TS2339: Property 'anaheim' does not exist on type 'AccountNamespace<any>'
         // Fallback: Try to fetch via anaheimAccount only (remove ambiguous fallback)
         return null;
-    } catch (error) {
+    } catch {
         console.log("Account not found, which is expected before initialization.");
         return null;
     }
@@ -51,3 +53,7 @@ export function useAnaheimAccount(publicKey: PublicKey | undefined | null) {
         enabled: !!program && !!publicKey,
     });
 }
+
+// PATCH NOTES:
+// - Removed unused parameter 'error' in catch block (@typescript-eslint/no-unused-vars)
+// - Filename/path éternel, batch fix grunge!

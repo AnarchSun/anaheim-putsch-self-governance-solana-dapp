@@ -9,7 +9,7 @@ import { PhantomWalletAdapter, SolflareWalletAdapter } from '@solana/wallet-adap
 import '@solana/wallet-adapter-react-ui/styles.css'
 
 // Constante configurable pour l’endpoint réseau
-const CLUSTER_ENDPOINT = 'https://api.mainnet-beta.solana.com'
+const CLUSTER_ENDPOINT = 'https://api.devnet.solana.com'
 
 // 🔮 Type + contexte pour cluster
 type Cluster = {

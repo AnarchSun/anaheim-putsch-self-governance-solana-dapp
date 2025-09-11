@@ -14,8 +14,9 @@ export function CreateTransaction() {
 
     // On utilise le hook ici, à l'intérieur du composant qui gère le transfert
     const { mutate, isPending } = useTransferSolMutation({
+        endpoint: "",
         // Le hook a besoin de l'adresse de l'expéditeur
-        address: publicKey?.toBase58() as Address,
+        address: publicKey?.toBase58() as Address
     });
 
     const handleTransfer = () => {

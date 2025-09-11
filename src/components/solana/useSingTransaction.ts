@@ -1,3 +1,6 @@
+// PATH: src/components/solana/useSingTransaction.ts
+// ULTRA FINAL ANARCHOPUNK PATCH — Remove unused _address param, batch fix grunge, filename/path éternel!
+
 import {
     LAMPORTS_PER_SOL,
     PublicKey,
@@ -14,12 +17,8 @@ interface TransferSolInput {
 
 // ⚑ BATCH FIX: PURE ESM ONLY — NO module.exports, NO CommonJS anywhere.
 
-// Remove unused constant useTransferSolMutation (if you have a duplicate or unused export, delete it below).
-// Only export the main hook for usage in your components.
-
-export function useSingTransactionMutation(
-    _address: { address: any },
-): UseMutationResult<string, Error, TransferSolInput> {
+// PATCH: Remove unused _address param from hook signature
+export function useSingTransactionMutation(): UseMutationResult<string, Error, TransferSolInput> {
     const queryClient = useQueryClient();
     const { publicKey, sendTransaction } = useWallet();
     const { connection } = useConnection();
@@ -48,3 +47,8 @@ export function useSingTransactionMutation(
         },
     });
 }
+
+// PATCH NOTES:
+// - Removed unused parameter '_address' from hook signature
+// - No more @typescript-eslint/no-unused-vars warning
+// - Always batch fix, always filename/path éternel, matrix override!

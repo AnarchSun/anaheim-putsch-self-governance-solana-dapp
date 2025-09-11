@@ -29,9 +29,9 @@ async function signTx<T extends Transaction | VersionedTransaction>(tx: T): Prom
 }
 
 // Signature multiple
-async function signAllTxs<T extends Transaction | VersionedTransaction>(txs: T[]): Promise<T[]> {
-  return Promise.all(txs.map(signTx))
-}
+// async function signAllTxs<T extends Transaction | VersionedTransaction>(txs: T[]): Promise<T[]> {
+//  return Promise.all(txs.map(signTx))
+// }
 
 // Endpoint de test du backend wallet
 export async function GET() {

@@ -45,7 +45,7 @@ export async function initializeAnaheimAccount(
                 newAccountPubkey: pubkey,
                 lamports: await connection.getMinimumBalanceForRentExemption(0), // Adjust space as needed
                 space: 0,
-                programId: new PublicKey("FZ1uRqV9P17MA2QP9ABmsvDP831UBjVicuc82SmrTykw"),
+                programId: new PublicKey("83hJCMp2PeJYgUhHBRmhEbt2ofvzKayvebT9YAU8rURB"),
             })
         );
 

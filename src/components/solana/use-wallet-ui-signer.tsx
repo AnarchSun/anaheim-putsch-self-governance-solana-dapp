@@ -1,8 +1,12 @@
+// PATH: src/components/solana/use-wallet-ui-signer.tsx
+// ULTRA FINAL ANARCHOPUNK PATCH — Remove unused getBase58Decoder import, batch fix grunge, filename/path éternel!
+
 import { useWallet } from '@solana/wallet-adapter-react';
 import {
   address as toGillAddress,
   BaseTransactionSignerConfig,
-  getBase58Decoder,
+  // PATCH: Removed unused getBase58Decoder
+  // getBase58Decoder,
   signature,
   Transaction,
 } from 'gill';
@@ -33,7 +37,8 @@ export function useWalletUiSigner(rpcUrl: string): {
 
   const { publicKey, signTransaction, signAllTransactions, sendTransaction } = wallet;
   const connection = new Connection(rpcUrl, 'confirmed');
-  const decoder = getBase58Decoder();
+  // PATCH: Removed unused decoder
+  // const decoder = getBase58Decoder();
 
   return {
     address: toGillAddress(publicKey.toBase58()),
@@ -62,3 +67,7 @@ export function useWalletUiSigner(rpcUrl: string): {
     },
   };
 }
+
+// PATCH NOTES:
+// - Removed unused getBase58Decoder import and variable (TS6133)
+// - Filename/path éternel, matrix override, batch fix grunge!

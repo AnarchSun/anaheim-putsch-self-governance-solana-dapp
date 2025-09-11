@@ -1,7 +1,7 @@
 import { PublicKey, Connection } from "@solana/web3.js";
 
 // L'adresse de votre programme, pas d'un portefeuille !
-const programId = new PublicKey("EMKno4tmR5KgB9L1QqFwfARkjksgdUoFrPDAaCFBCmXa");
+const programId = new PublicKey("83hJCMp2PeJYgUhHBRmhEbt2ofvzKayvebT9YAU8rURB");
 
 // L'adresse du portefeuille qui est utilisé comme seed
 const walletPubkey = new PublicKey("8RmTVazK1G3ZJ7EqYZC9FYJejFge98Vyz7T4zVdY8okX");

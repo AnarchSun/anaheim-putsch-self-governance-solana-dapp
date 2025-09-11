@@ -7,4 +7,4 @@ import { Connection, clusterApiUrl } from "@solana/web3.js";
 export const connection = new Connection(clusterApiUrl('devnet'), 'confirmed');
 
 // MAINNET (with an API key for Helius, Triton, GenesysGo, etc.)
-export const mainnetConnection = new Connection('https://api.helius.xyz/?api-key=TON_API_KEY', 'confirmed');
+export const mainnetConnection = new Connection('https://api.devnet.solana.com', 'confirmed');

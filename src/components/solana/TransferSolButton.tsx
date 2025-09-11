@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import { useWallet } from '@solana/wallet-adapter-react';
 // On utilise le type 'Address' de 'gill' pour la compatibilité avec le hook
 import { type Address } from 'gill';
-import { useTransferSolMutation } from './useTransferSolMutation';
+import { useTransferSolMutation } from '@/hooks/solana/useTransferSolMutation';
 
 type CreateTransactionProps = {
     recipientAddress: Address;
@@ -19,9 +19,9 @@ export default function TransferSolButton({ recipientAddress }: CreateTransactio
     // ✅ FIX : On passe l'adresse de l'expéditeur (publicKey) au hook.
     // Le hook est appelé conditionnellement pour s'assurer que publicKey n'est pas null.
     const transferSol = useTransferSolMutation({
+        endpoint: "https://api.devnet.solana.com",
         address: publicKey?.toBase58() as Address
     });
-
     const handleTransfer = async () => {
         if (!publicKey) {
             setStatus('⚠️ Connecte ton wallet d’abord.');

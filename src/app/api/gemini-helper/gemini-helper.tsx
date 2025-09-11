@@ -58,7 +58,7 @@ const styles: { [key: string]: CSSProperties } = {
 };
 
 
-const DevHelperPage: React.FC = () => {
+const DevHelperPage: () => void = () => {
     const [idlInput, setIdlInput] = useState<string>('');
     const [programName, setProgramName] = useState<string>('');
     const [analysis, setAnalysis] = useState<string>('');
@@ -81,13 +81,15 @@ const DevHelperPage: React.FC = () => {
         setIsLoading(true);
         setAnalysis('');
 
+// PATCH: handle locally, no need to `throw` if immediately caught
+
         try {
             const response = await fetch('/api/gemini-helper', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ programIdl: parsedIdl, programName }),
+                body: JSON.stringify({programIdl: parsedIdl, programName}),
             });
 
             const data = await response.json();
@@ -95,57 +97,56 @@ const DevHelperPage: React.FC = () => {
             if (response.ok) {
                 setAnalysis(data.analysis);
             } else {
-                // The error object from our API route has a specific shape
-                throw new Error(data.error || 'Something went wrong');
+                // PATCH: Instead of throw, setAnalysis directly for errors
+                setAnalysis(`Error: ${data.error || 'Something went wrong'}`);
             }
-        } catch (error: any) {
-            setAnalysis(`Error: ${error.message}`);
+        } catch (err: any) {
+            setAnalysis(`Error: ${err.message}`);
         } finally {
             setIsLoading(false);
         }
+
+        return (
+            <div style={styles.container}>
+                <h1>Solana Program Analyzer (Powered by Gemini)</h1>
+                <p>
+                    Paste your program's IDL JSON below to get a detailed analysis.
+                    Start by pasting the "anaheim" or "journal" object from your IDL.
+                </p>
+
+                <input
+                    type="text"
+                    placeholder="Enter program name (e.g., anaheim)"
+                    value={programName}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setProgramName(e.target.value)}
+                    style={styles.input}
+                />
+
+                <textarea
+                    style={styles.textarea}
+                    value={idlInput}
+                    onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setIdlInput(e.target.value)}
+                    placeholder='// Paste your program IDL JSON here... (e.g., the "anaheim": { ... } object)'
+                />
+
+                <button
+                    onClick={handleAnalyze}
+                    disabled={isLoading}
+                    style={{...styles.button, ...(isLoading ? styles.buttonDisabled : {})}}
+                >
+                    {isLoading ? 'Analyzing...' : 'Analyze Program'}
+                </button>
+
+                {analysis && (
+                    <div>
+                        <h2>Analysis Result:</h2>
+                        <div style={styles.output}>{analysis}</div>
+                        {/* For richer formatting, uncomment the line below after installing react-markdown */}
+                        {/* <ReactMarkdown>{analysis}</ReactMarkdown> */}
+                    </div>
+                )}
+            </div>
+        );
     };
-
-    return (
-        <div style={styles.container}>
-            <h1>Solana Program Analyzer (Powered by Gemini)</h1>
-    <p>
-    Paste your program's IDL JSON below to get a detailed analysis.
-    Start by pasting the "anaheim" or "journal" object from your IDL.
-    </p>
-
-    <input
-    type="text"
-    placeholder="Enter program name (e.g., anaheim)"
-    value={programName}
-    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setProgramName(e.target.value)}
-    style={styles.input}
-    />
-
-    <textarea
-    style={styles.textarea}
-    value={idlInput}
-    onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setIdlInput(e.target.value)}
-    placeholder='// Paste your program IDL JSON here... (e.g., the "anaheim": { ... } object)'
-    />
-
-    <button
-        onClick={handleAnalyze}
-    disabled={isLoading}
-    style={{ ...styles.button, ...(isLoading ? styles.buttonDisabled : {}) }}
->
-    {isLoading ? 'Analyzing...' : 'Analyze Program'}
-    </button>
-
-    {analysis && (
-        <div>
-            <h2>Analysis Result:</h2>
-    <div style={styles.output}>{analysis}</div>
-        {/* For richer formatting, uncomment the line below after installing react-markdown */}
-        {/* <ReactMarkdown>{analysis}</ReactMarkdown> */}
-        </div>
-    )}
-    </div>
-);
-};
-
-export default DevHelperPage;
+}
+    export default DevHelperPage;

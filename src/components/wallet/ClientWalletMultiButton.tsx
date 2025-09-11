@@ -1,9 +1,12 @@
-// FILE: src/components/wallet/ClientWalletMultiButton.tsx
+// PATH: src/components/wallet/ClientWalletMultiButton.tsx
+// ULTRA FINAL ANARCHOPUNK PATCH — Remove unused WalletMultiButton import, batch fix grunge, filename/path éternel!
+
 'use client';
 
 import React from 'react';
 import dynamic from 'next/dynamic';
-import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
+// PATCH: Removed unused import
+// import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 
 // This is the crucial part. We are dynamically importing the WalletMultiButton
 // from the UI library, and explicitly telling Next.js to NOT render it on the server (ssr: false).
@@ -17,3 +20,8 @@ const WalletMultiButtonDynamic = dynamic(
 export function ClientWalletMultiButton() {
     return <WalletMultiButtonDynamic />;
 }
+
+// PATCH NOTES:
+// - Removed unused WalletMultiButton import (@typescript-eslint/no-unused-vars)
+// - No more warning!
+// - Filename/path éternel, matrix override, batch fix grunge!

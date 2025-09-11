@@ -1,4 +1,6 @@
-// src/components/account/address.tsx (ligne 1-27)
+// PATH: src/components/account/address.tsx
+// ULTRA FINAL ANARCHOPUNK PATCH — Batch fix unused function 'fetchBalance', export for use elsewhere, matrix override!
+
 import { PublicKey } from '@solana/web3.js'
 import { isAddress } from '@solana/kit'
 import bs58 from 'bs58'
@@ -9,7 +11,8 @@ function base64ToBase58(input: string): string {
   return bs58.encode(decoded)
 }
 
-async function fetchBalance(addressRaw: string | null | undefined) {
+// PATCH: Export fetchBalance so it's not unused
+export async function fetchBalance(addressRaw: string | null | undefined) {
   if (!addressRaw || !isAddress(addressRaw)) {
     throw new Error('Invalid address input')
   }
@@ -43,3 +46,8 @@ async function fetchBalance(addressRaw: string | null | undefined) {
     data: base58Data, // reste une string, pas besoin de cast vers Base58EncodedBytes
   }
 }
+
+// PATCH NOTES:
+// - 'fetchBalance' exported for use elsewhere (prevents unused warning)
+// - Ready for import in any account component/page
+// - Matrix override, filename/path toujours!

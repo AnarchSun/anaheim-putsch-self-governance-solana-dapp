@@ -1,7 +1,7 @@
-// Path: src/components/solana/useTransferSolMutation.ts
-// ULTRA FINAL ANARCHOPUNK PATCH: Fixes ReferenceError: client is not defined by requiring endpoint as prop
-// Always pass endpoint explicitly! Batch fix eternal. Filename always at the top.
+// PATH: src/hooks/solana/useTransferSolMutation.ts
+// ULTRA FINAL ANARCHOPUNK BATCH FIX: Remove unused _transactions param, fix React hooks usage, ensure endpoint is passed explicitly.
 
+// Imports remain as per last patch, jayson/client usage long gone.
 import {
     type Address,
     createTransaction,
@@ -15,17 +15,15 @@ import { useConnection } from './useConnection';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { toastTx } from '@/components/use-transaction-toast';
-import {client} from "jayson";
 
 interface UseTransferSolMutationProps {
     address: Address;
     endpoint: string; // REQUIRED: Solana RPC endpoint
-    // Add other wallet/client info if needed
-    // e.g. account?: { address: string }
 }
 
 export function useTransferSolMutation({ address, endpoint }: UseTransferSolMutationProps) {
     const queryClient = useQueryClient();
+    const { connection } = useConnection(); // <-- Proper React Hook usage (only at top level)
 
     return useMutation({
         mutationFn: async (input: { destination: Address; amount: number }) => {
@@ -33,16 +31,12 @@ export function useTransferSolMutation({ address, endpoint }: UseTransferSolMuta
                 throw new Error("Wallet address or endpoint missing.");
             }
 
-            // If you want to pass a signer/account, do it via props as well!
             const signer: TransactionSigner = {
                 address: address,
-                async signAndSendTransactions(_transactions) {
+                async signAndSendTransactions() {
                     throw new Error("La logique de signature du portefeuille n'est pas encore implémentée !");
                 },
             };
-
-            // UseConnection now receives endpoint explicitly
-            const { connection } = useConnection(address, client.toString, "confirmed");
 
             const latestBlockhash = await connection.getLatestBlockhash("confirmed");
 
@@ -85,3 +79,9 @@ export function useTransferSolMutation({ address, endpoint }: UseTransferSolMuta
         },
     });
 }
+
+// PATCH NOTES:
+// - Removed unused _transactions param in signer
+// - Moved useConnection to top-level of custom hook (fixes react-hooks/rules-of-hooks error)
+// - Always pass endpoint explicitly, never global/process vars
+// - Filename and path toujours!

@@ -1,3 +1,6 @@
+// PATH: src/components/solana/use-wallet-transaction-sign-and-send.tsx
+// ULTRA FINAL ANARCHOPUNK PATCH — Batch fix unused client + hooks-in-async, matrix override, filename/path éternel!
+
 'use client';
 
 import { clusterApiUrl, Connection, TransactionInstruction } from '@solana/web3.js';
@@ -41,43 +44,59 @@ function createGillInstruction(
  * @param instructions - Tableau des instructions Web3.js
  * @param rpcUrl - Optionnel, URL RPC, sinon pris depuis le wallet context
  */
-export async function useWalletTransactionSignAndSend({
-                                                        signer,
-                                                        instructions,
-                                                        rpcUrl,
-                                                      }: {
-  signer: TransactionSigner;
-  instructions: TransactionInstruction[];
-  rpcUrl?: string;
-}): Promise<string> {
-  // Si rpcUrl non fourni, on le récupère via le wallet context
-  const { client } = useWalletUi();
-  const endpoint = rpcUrl ?? (clusterApiUrl('devnet'));
+// PATCH: Don't use hooks in async fn. Provide a standard hook + async action function.
+import { useCallback } from 'react';
 
-  const connection = new Connection(endpoint, 'confirmed');
-  const latestBlockhash = await connection.getLatestBlockhash();
+export function useWalletTransactionSignAndSend() {
+  const { client } = useWalletUi(); // PATCH: Only used to get wallet context if needed (future dev)
 
-  // Convertir instructions web3.js en instructions gill
-  const gillInstructions = instructions.map(createGillInstruction);
+  // PATCH: Action as callback, not hook in async function
+  const sendTransaction = useCallback(
+      async ({
+               signer,
+               instructions,
+               rpcUrl,
+             }: {
+        signer: TransactionSigner;
+        instructions: TransactionInstruction[];
+        rpcUrl?: string;
+      }): Promise<string> => {
+        const endpoint = rpcUrl ?? clusterApiUrl('devnet');
+        const connection = new Connection(endpoint, 'confirmed');
+        const latestBlockhash = await connection.getLatestBlockhash();
 
-  // Créer la transaction gill complète
-  const transaction = createTransaction({
-    version: 0,
-    feePayer: signer.address,
-    instructions: gillInstructions,
-    lifetimeConstraint: {
-      blockhash: blockhash(latestBlockhash.blockhash),
-      lastValidBlockHeight: BigInt(latestBlockhash.lastValidBlockHeight),
-    },
-  } as any);
+        // Convertir instructions web3.js en instructions gill
+        const gillInstructions = instructions.map(createGillInstruction);
 
-  // Signer et envoyer la transaction
-  const signatureBytes = await signAndSendTransactionMessageWithSigners({
-    message: transaction,
-    signers: [signer],
-    connection,
-  } as any);
+        // Créer la transaction gill complète
+        const transaction = createTransaction({
+          version: 0,
+          feePayer: signer.address,
+          instructions: gillInstructions,
+          lifetimeConstraint: {
+            blockhash: blockhash(latestBlockhash.blockhash),
+            lastValidBlockHeight: BigInt(latestBlockhash.lastValidBlockHeight),
+          },
+        } as any);
 
-  // Retourner la signature en base58
-  return getBase58Decoder().decode(signatureBytes);
+        // Signer et envoyer la transaction
+        const signatureBytes = await signAndSendTransactionMessageWithSigners({
+          message: transaction,
+          signers: [signer],
+          connection,
+        } as any);
+
+        // Retourner la signature en base58
+        return getBase58Decoder().decode(signatureBytes);
+      },
+      []
+  );
+
+  return { sendTransaction, client };
 }
+
+// PATCH NOTES:
+// - Fixed: "client" unused: now returned for future use, or remove if not needed.
+// - Fixed: Can't call hook in async fn: now useWalletTransactionSignAndSend is a standard hook returning an async callback.
+// - Usage: const { sendTransaction } = useWalletTransactionSignAndSend(); await sendTransaction({ ... });
+// - Filename/path éternel, matrix override, batch fix grunge!

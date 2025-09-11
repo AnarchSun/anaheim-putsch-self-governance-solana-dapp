@@ -1,4 +1,6 @@
-// FILE: src/hooks/useMine.ts
+// PATH: src/hooks/useMine.ts
+// ULTRA FINAL ANARCHOPUNK PATCH: Remove unused parameter 'r' in then callback, batch fix grunge, filename/path éternel!
+
 'use client';
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -32,8 +34,12 @@ export function useMineMutation() {
         onSuccess: (sig: string) => {
             toast.success("Mining Successful!", { description: sig.slice(0, 10) + "..." });
             // Correct the invalidateQueries syntax
-            queryClient.invalidateQueries({queryKey: ['anaheim-account', publicKey?.toBase58()]}).then(r =>{});
+            queryClient.invalidateQueries({queryKey: ['anaheim-account', publicKey?.toBase58()]}).then(() =>{} );
         },
         onError: (err: Error) => toast.error("Mining Failed", { description: err.message }),
     });
 }
+
+// PATCH NOTES:
+// - Removed unused parameter 'r' in then callback
+// - Filename/path éternel, batch fix grunge!

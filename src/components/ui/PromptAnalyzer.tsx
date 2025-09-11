@@ -1,4 +1,5 @@
-// FILE: src/components/ui/PromptAnalyzer.tsx
+// PATH: src/components/ui/PromptAnalyzer.tsx
+// ULTRA FINAL ANARCHOPUNK PATCH — Escape apostrophes for react/no-unescaped-entities, batch fix grunge, filename/path éternel!
 
 'use client';
 
@@ -81,7 +82,7 @@ export const PromptAnalyzer: React.FC<PromptAnalyzerProps> = ({ onAnalyze, isLoa
         <div style={styles.container}>
             <h1>Solana Program Analyzer (Powered by Gemini)</h1>
             <p>
-                Paste your program's IDL JSON, then press <b>Enter</b> to analyze.
+                Paste your program&apos;s IDL JSON, then press <b>Enter</b> to analyze.
                 <br />
                 Use <b>Shift+Enter</b> for a new line.
             </p>
@@ -99,7 +100,7 @@ export const PromptAnalyzer: React.FC<PromptAnalyzerProps> = ({ onAnalyze, isLoa
                 value={idlInput}
                 onChange={(e) => setIdlInput(e.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder='// Paste your program IDL JSON here and press Enter...'
+                placeholder={'// Paste your program IDL JSON here and press Enter...'}
             />
 
             <button
@@ -112,7 +113,7 @@ export const PromptAnalyzer: React.FC<PromptAnalyzerProps> = ({ onAnalyze, isLoa
 
             {analysis && (
                 <div>
-                    <h2>Gemini's Analysis:</h2>
+                    <h2>Gemini&apos;s Analysis:</h2>
                     <div style={styles.output}>
                         <ReactMarkdown>{analysis}</ReactMarkdown>
                     </div>
@@ -121,3 +122,7 @@ export const PromptAnalyzer: React.FC<PromptAnalyzerProps> = ({ onAnalyze, isLoa
         </div>
     );
 };
+
+// PATCH NOTES:
+// - Escaped apostrophes to &apos; in all JSX to fix react/no-unescaped-entities error (lines 84 & 115 and anywhere else needed).
+// - Filename/path éternel, batch fix grunge, matrix override!

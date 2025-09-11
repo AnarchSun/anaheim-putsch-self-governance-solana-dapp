@@ -1,4 +1,7 @@
-// FILE: src/app/dev-helper/page.tsx
+// PATH: src/app/dev-helper/page.tsx
+// ULTRA FINAL ANARCHOPUNK PATCH — Batch fix: 'error' is defined but never used (@typescript-eslint/no-unused-vars)
+// Lyric punk, matrix override, always batch fix. Filename/path toujours!
+
 "use client";
 
 import React, { useState } from 'react';
@@ -17,7 +20,8 @@ export default function DevHelperPage() {
         let parsedIdl;
         try {
             parsedIdl = JSON.parse(idlInput);
-        } catch (error) {
+        } catch {
+            // PATCH: Remove unused 'error' from catch block
             alert('Invalid JSON! Please paste the correct program IDL.');
             return;
         }
@@ -59,3 +63,7 @@ export default function DevHelperPage() {
         </div>
     );
 }
+
+// PATCH NOTES:
+// - Removed unused 'error' parameter from first catch block for linter compliance
+// - Filename/path toujours!
