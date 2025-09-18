@@ -29,7 +29,7 @@ export function useAnaheimInitialize(pubkey?: string) {
         setLoading(true);
         setError(null);
         try {
-            await initializeAccount(pubkey);
+            await initializeAccount();
             fetchAccount();
         } catch (err: any) {
             setError('Erreur d’init: ' + (err?.message || 'Unknown'));

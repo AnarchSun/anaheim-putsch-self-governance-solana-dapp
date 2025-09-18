@@ -4,12 +4,13 @@ import { PublicKey, SystemProgram, Transaction, LAMPORTS_PER_SOL } from '@solana
 import { useAnchorWallet } from '@solana/wallet-adapter-react'
 import { useConnection } from './useConnection'
 import { toast } from 'sonner'
-import {Address} from "@solana/kit";
-import {address} from "gill";
+import { Address } from "@solana/kit"
+import { SOLANA_CLUSTER_URL } from '@/config/solana' // <-- Ajouté
 
 export function useTransferSol({ fromAddress }: { fromAddress: Address }) {
   const wallet = useAnchorWallet()
-  const connection = useConnection(client.toString(), address, "confirmed")
+  // Correction : un seul argument pour useConnection
+  const connection = useConnection()
   const queryClient = useQueryClient()
 
   return useMutation({

@@ -1,13 +1,10 @@
-// PATH: src/hooks/solana/useWrappedConnection.ts
-// ULTRA FINAL ANARCHOPUNK PATCH: Remove unused parameters (_address, unknown, any) from useWrappedConnection, batch fix grunge, filename/path éternel!
-
 import { useMemo } from 'react'
 import { ConfirmedSignatureInfo, Connection, PublicKey } from '@solana/web3.js'
 import { getPublicSolanaRpcUrl } from '@/lib/solana/solanaKitShim'
 
 const DEFAULT_CLUSTER = 'devnet'
 
-export function useWrappedConnection(cluster = DEFAULT_CLUSTER, address: string, publicKey: PublicKey) {
+export function useWrappedConnection(cluster = DEFAULT_CLUSTER) {
   // Stabiliser la chaîne d’URL
   const rpcUrl = useMemo(() => new getPublicSolanaRpcUrl(cluster), [cluster])
 
@@ -31,8 +28,3 @@ export function useWrappedConnection(cluster = DEFAULT_CLUSTER, address: string,
     rpc: undefined,
   }
 }
-
-// PATCH NOTES:
-// - Removed unused parameters '_address', 'unknown', 'any' from useWrappedConnection
-// - No more @typescript-eslint/no-unused-vars warnings
-// - Filename/path éternel, batch fix grunge!

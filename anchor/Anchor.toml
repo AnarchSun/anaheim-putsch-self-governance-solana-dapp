@@ -6,7 +6,7 @@ resolution = true
 skip-lint = false
 
 [programs.devnet]
-anaheim = "83hJCMp2PeJYgUhHBRmhEbt2ofvzKayvebT9YAU8rURB"
+anaheim = "7q7nTMKnrAvKUMGQejYD6HHNnJDKCtZW7QKHD7entVU4"
 
 [registry]
 url = "https://api.apr.dev"
@@ -17,7 +17,3 @@ wallet = "~/.config/solana/id.json"
 
 [workspace]
 members = ["programs/anaheim"]
-
-[idl]
-anaheim = "target/idl/anaheim.json"     # Batch fix : chemin relatif pour anchor depuis /anchor/
-

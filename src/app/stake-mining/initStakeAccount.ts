@@ -1,10 +1,4 @@
 // Path: src/app/stake-mining/stake/initStakeAccount.ts
-// ULTRA FINAL ANARCHOPUNK BATCH PATCH:
-// - "throw" replaced by early return
-// - simulateTransaction deprecated: removed/simulateTransactionV0 not used (just do existence check)
-// - usage clarified so function not unused
-// - all errors batch fixed, all types explicit, filename ALWAYS at top, matrix hacked
-
 import { PublicKey, Connection, Transaction, SystemProgram, TransactionSignature, SendOptions, Signer, sendAndConfirmTransaction } from "@solana/web3.js";
 
 /**
@@ -14,12 +8,12 @@ import { PublicKey, Connection, Transaction, SystemProgram, TransactionSignature
  * Early returns for missing signers avoid deprecated simulation.
  */
 export async function initializeAnaheimAccount(
-    connection: Connection,
-    accountAddress: string,
-    payer: PublicKey,
-    transaction?: Transaction | null,
-    signers?: Signer[] | undefined,
-    sendOptions?: SendOptions,
+  connection: Connection,
+  accountAddress: string,
+  payer: PublicKey,
+  transaction?: Transaction | null,
+  signers?: Signer[] | undefined,
+  sendOptions?: SendOptions,
 ): Promise<{ status: string; logs?: string[]; error?: string }> {
     // Defensive: check signers before executing
     if (!signers || signers.length === 0) {
@@ -30,7 +24,7 @@ export async function initializeAnaheimAccount(
         };
     }
     try {
-        // Check if account exists
+        // Check if an account exists
         const pubkey = new PublicKey(accountAddress);
         const accountInfo = await connection.getAccountInfo(pubkey);
 
@@ -40,23 +34,23 @@ export async function initializeAnaheimAccount(
 
         // Create account transaction
         const tx = transaction ?? new Transaction().add(
-            SystemProgram.createAccount({
-                fromPubkey: payer,
-                newAccountPubkey: pubkey,
-                lamports: await connection.getMinimumBalanceForRentExemption(0), // Adjust space as needed
-                space: 0,
-                programId: new PublicKey("83hJCMp2PeJYgUhHBRmhEbt2ofvzKayvebT9YAU8rURB"),
-            })
+          SystemProgram.createAccount({
+              fromPubkey: payer,
+              newAccountPubkey: pubkey,
+              lamports: await connection.getMinimumBalanceForRentExemption(0), // Adjust space as needed
+              space: 0,
+              programId: new PublicKey("83hJCMp2PeJYgUhHBRmhEbt2ofvzKayvebT9YAU8rURB"),
+          })
         );
 
         // Skipping simulation: simulateTransaction deprecated, just rely on the existence check above
 
         // Send and confirm the transaction
         const txid: TransactionSignature = await sendAndConfirmTransaction(
-            connection,
-            tx,
-            signers,
-            sendOptions
+          connection,
+          tx,
+          signers,
+          sendOptions
         );
         return { status: "Initialisation réussie", logs: [`Transaction ID: ${txid}`] };
     } catch (err: any) {

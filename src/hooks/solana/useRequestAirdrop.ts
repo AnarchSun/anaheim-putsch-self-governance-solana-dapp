@@ -3,11 +3,12 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { PublicKey, LAMPORTS_PER_SOL } from '@solana/web3.js'
 import { useConnection } from './useConnection'
 import { toast } from 'sonner'
-import {Address} from "@solana/kit";
-import {client} from "jayson";
+import { Address } from "@solana/kit"
+import { client } from "jayson"
 
 export function useRequestAirdrop({ address }: { address: Address }) {
-  const connection = useConnection(client.toString(), address,  "confirmed")
+  // Correction : un seul argument pour useConnection
+  const connection = useConnection()
   const queryClient = useQueryClient()
 
   return useMutation({

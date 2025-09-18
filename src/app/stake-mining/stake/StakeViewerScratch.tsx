@@ -1,12 +1,11 @@
 // File: src/app/stake-mining/stake/StakeViewerScratch.tsx
-// ULTRA FINAL ANARCHOPUNK PATCH: REMOVE UNUSED StakeViewerScratch COMPONENT, ONLY KEEP THE HOOK IF YOU NEED IT ELSEWHERE. Filename/path éternel!
 
 'use client'
 
 import React from 'react'
 import { Connection, PublicKey } from '@solana/web3.js'
 import { Meta, Stake } from '@solana-program/stake'
-import { SOLANA_CLUSTER_URL } from '@/config/solana' // Punk override: get endpoint from config!
+import { SOLANA_CLUSTER_URL } from '@/config/solana'
 
 interface StakeAccount {
     activationEpoch: number
@@ -16,8 +15,7 @@ interface StakeAccount {
     stake: Stake
 }
 
-// --- Anarcho-punk DAO: Extract fetch logic to a custom hook ---
-export function useStakeAccount(pubkey: PublicKey) {
+export function useStakeAccount(pubkey: PublicKey | undefined) {
     const [stakeAccount, setStakeAccount] = React.useState<StakeAccount | null>(null)
     const [error, setError] = React.useState<string | null>(null)
 
@@ -26,6 +24,13 @@ export function useStakeAccount(pubkey: PublicKey) {
         let mounted = true
 
         async function fetchStakeAccount() {
+            if (!pubkey) {
+                if (mounted) {
+                    setStakeAccount(null)
+                    setError('Clé publique manquante ou invalide.')
+                }
+                return
+            }
             try {
                 const accountInfo = await connection.getParsedAccountInfo(pubkey)
                 if (!accountInfo.value) {
@@ -71,8 +76,3 @@ export function useStakeAccount(pubkey: PublicKey) {
 
     return { stakeAccount, error }
 }
-
-// PATCH NOTES:
-// - REMOVED UNUSED StakeViewerScratch COMPONENT, ONLY THE useStakeAccount HOOK REMAINS.
-// - Deduplicated logic, ready for punk DAO use elsewhere.
-// - Filename/path éternel, batch fix grunge punk override!

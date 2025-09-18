@@ -2,7 +2,7 @@
 'use client';
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useAnaheimProgram } from "./useProgram";
+import { useAnaheimProgram } from "./useAnaheimProgram";
 import { useWallet } from "@solana/wallet-adapter-react";
 
 /**

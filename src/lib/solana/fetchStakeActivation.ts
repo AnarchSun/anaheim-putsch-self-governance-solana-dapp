@@ -1,11 +1,9 @@
-// src/lib/solana/fetchStakeActivation.ts
 import { Connection, PublicKey } from '@solana/web3.js'
-
 
 export async function fetchStakeActivation(pubkey: string) {
   const connection = new Connection('https://api.devnet.solana.com')
   try {
-    return await connection.getStakeActivation ( pubkey )
+    return await connection.getStakeActivation(new PublicKey(pubkey))
   } catch (e) {
     console.error('Erreur lors de l’activation:', e)
     return null
