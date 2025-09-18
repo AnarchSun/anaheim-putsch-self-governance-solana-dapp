@@ -1,40 +1,32 @@
-// PATH: src/lib/stake/stakeHelpers.ts
-// ULTRA FINAL ANARCHOPUNK PATCH: Remove unused function fetchStakeState, batch fix grunge, filename/path éternel!
+// src/lib/stake/stakeHelpers.ts
+import { Connection, PublicKey, Transaction, SystemProgram, sendAndConfirmTransaction, Signer } from "@solana/web3.js";
 
-import { getStakeActivation } from '@anza-xyz/solana-rpc-get-stake-activation'
-import { Connection, PublicKey } from '@solana/web3.js'
-
-export type StakeState = {
-  state: string
-  active: number
-  inactive: number
-}
-
-/**
- * Safe wrapper that always returns a full StakeState object
- */
-export async function getStakeActivationSafe(
+export async function createStakeAccountIfNotExists(
     connection: Connection,
-    pubkey: PublicKey
-): Promise<StakeState | null> {
+    newAccountPubkey: PublicKey,
+    payer: Signer,
+    signers: Signer[],
+    programId: PublicKey,
+    lamports: number,
+    space: number
+): Promise<{ status: string; error?: string; logs?: string[] }> {
+  const accountInfo = await connection.getAccountInfo(newAccountPubkey);
+  if (accountInfo) {
+    return { status: "Compte déjà initialisé", error: "Le compte existe déjà." };
+  }
   try {
-    const result = await getStakeActivation(connection, pubkey) as unknown as {
-      state: string
-      active: number
-      inactive: number
-    }
-
-    return {
-      state: result.state ?? "unknown",
-      active: result.active ?? 0,
-      inactive: result.inactive ?? 0,
-    }
-  } catch (e) {
-    console.error('getStakeActivationSafe error:', e)
-    return null
+    const tx = new Transaction().add(
+        SystemProgram.createAccount({
+          fromPubkey: payer.publicKey,
+          newAccountPubkey,
+          lamports,
+          space,
+          programId,
+        })
+    );
+    const txid = await sendAndConfirmTransaction(connection, tx, [payer, ...signers]);
+    return { status: "Initialisation réussie", logs: [`Transaction ID: ${txid}`] };
+  } catch (err: any) {
+    return { status: "Initialisation échouée", error: err.message, logs: err.logs || [] };
   }
 }
-
-// PATCH NOTES:
-// - Removed unused function fetchStakeState
-// - Filename/path éternel, batch fix grunge!

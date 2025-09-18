@@ -13,80 +13,6 @@
   <component name="ChangeListManager">
     <list default="true" id="4810219b-60ff-4b11-905a-547b78f825c7" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anchor/Anchor.toml" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/Anchor.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anchor/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/Cargo.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anchor/programs/anaheim/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/programs/anaheim/src/lib.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anchor/target/idl/anaheim.json" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/target/idl/anaheim.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/.fingerprint/anaheim-5e1b5427db68f5e5/dep-lib-anaheim" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/.fingerprint/anaheim-5e1b5427db68f5e5/dep-lib-anaheim" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/.fingerprint/anaheim-5e1b5427db68f5e5/lib-anaheim" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/.fingerprint/anaheim-5e1b5427db68f5e5/lib-anaheim" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/.fingerprint/anaheim-5e1b5427db68f5e5/lib-anaheim.json" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/.fingerprint/anaheim-5e1b5427db68f5e5/lib-anaheim.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/anaheim.d" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/anaheim.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/anaheim.so" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/anaheim.so" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/build/ahash-43ae99666b130264/root-output" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/build/ahash-43ae99666b130264/root-output" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/build/borsh-f18ff0e832962156/root-output" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/build/borsh-f18ff0e832962156/root-output" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/build/bv-de1b08e9a62c7b56/root-output" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/build/bv-de1b08e9a62c7b56/root-output" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/build/generic-array-01d5df784544380c/root-output" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/build/generic-array-01d5df784544380c/root-output" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/build/memoffset-de68d7fa90f857f4/root-output" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/build/memoffset-de68d7fa90f857f4/root-output" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/build/num-traits-0a3eb25be82cc7cc/root-output" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/build/num-traits-0a3eb25be82cc7cc/root-output" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/build/thiserror-2c2572466ffd7fd6/root-output" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/build/thiserror-2c2572466ffd7fd6/root-output" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/build/thiserror-6c1336268dc362d7/root-output" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/build/thiserror-6c1336268dc362d7/root-output" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/build/typenum-2ae45b99d76baaa7/root-output" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/build/typenum-2ae45b99d76baaa7/root-output" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/build/zerocopy-259498755f0d2dfc/root-output" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/build/zerocopy-259498755f0d2dfc/root-output" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/deps/ahash-c7fe686871cf9b28.d" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/deps/ahash-c7fe686871cf9b28.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/deps/anaheim.d" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/deps/anaheim.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/deps/anaheim.so" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/deps/anaheim.so" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/deps/block_buffer-52254351f52aa801.d" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/deps/block_buffer-52254351f52aa801.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/deps/crypto_common-4103e70bb1a3decf.d" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/deps/crypto_common-4103e70bb1a3decf.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/deps/digest-e807e605041a9a1c.d" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/deps/digest-e807e605041a9a1c.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/deps/five8-74403611e671580f.d" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/deps/five8-74403611e671580f.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/deps/five8_const-7cbce827ff02137e.d" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/deps/five8_const-7cbce827ff02137e.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/deps/generic_array-55da9a66f3ead199.d" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/deps/generic_array-55da9a66f3ead199.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/deps/hashbrown-ccab3d57ece48f97.d" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/deps/hashbrown-ccab3d57ece48f97.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/deps/libanaheim.rlib" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/deps/libanaheim.rlib" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/deps/memoffset-0d7f4178aae9efb3.d" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/deps/memoffset-0d7f4178aae9efb3.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/deps/num_traits-8d1f577538311a11.d" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/deps/num_traits-8d1f577538311a11.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/deps/sha2-d1d3157c4885bb20.d" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/deps/sha2-d1d3157c4885bb20.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/deps/sha3-0afe1a7f9136fdb6.d" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/deps/sha3-0afe1a7f9136fdb6.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/deps/solana_big_mod_exp-26c778fb66123b13.d" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/deps/solana_big_mod_exp-26c778fb66123b13.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/deps/solana_decode_error-73f28eecf4ef960d.d" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/deps/solana_decode_error-73f28eecf4ef960d.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/deps/solana_secp256k1_recover-f6ea3a54abdb26ef.d" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/deps/solana_secp256k1_recover-f6ea3a54abdb26ef.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/deps/thiserror-3d25dd4e77b79864.d" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/deps/thiserror-3d25dd4e77b79864.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/deps/thiserror-4a3c022d094a8582.d" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/deps/thiserror-4a3c022d094a8582.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/deps/typenum-9b6e33e596ac9d3c.d" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/deps/typenum-9b6e33e596ac9d3c.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/deps/zerocopy-21da4cefe420b278.d" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/deps/zerocopy-21da4cefe420b278.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/libanaheim.d" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/libanaheim.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/libanaheim.rlib" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/target/sbpf-solana-solana/release/libanaheim.rlib" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anchor/target/types/anaheim.ts" beforeDir="false" afterPath="$PROJECT_DIR$/anchor/target/types/anaheim.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pnpm-lock.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pnpm-lock.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rust-toolchain.toml" beforeDir="false" afterPath="$PROJECT_DIR$/rust-toolchain.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/solana-403-overide-matrix.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/solana-wallet-struck-connecting.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/solana-wallet-stuck-connecting.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/@types/tokenAccountInfo.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/@types/tokenAccountInfo.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/api/gemini-helper/gemini-helper.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/api/gemini-helper/gemini-helper.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/api/program-info/route.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/api/program-info/route.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/stake-mining/initStakeAccount.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/stake-mining/initStakeAccount.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/stake-mining/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/stake-mining/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/stake-mining/stake/StakeViewerScratch.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/stake-mining/stake/StakeViewerScratch.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/stake-mining/stake/initializeAccount.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/stake-mining/stake/initializeAccount.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/stake-mining/stake/stake-page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/stake-mining/stake/stake-page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/MonComposantMystique.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/MonComposantMystique.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/account/AccountBalance.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/account/AccountBalance.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/account/account-signatures.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/account/account-signatures.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/solana/solana-provider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/solana/solana-provider.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/hooks/solana/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/solana/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/hooks/solana/useRequestAirdrop.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/solana/useRequestAirdrop.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/hooks/solana/useSolanaClient.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/solana/useSolanaClient.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/hooks/solana/useTransferSol.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/solana/useTransferSol.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/hooks/solana/useWrappedConnection.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/solana/useWrappedConnection.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/hooks/stake/useStakeActivationSafe.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/stake/useStakeActivationSafe.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/hooks/stake/useStakeMutation.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/stake/useStakeMutation.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/hooks/useAnaheimInitialize.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/useAnaheimInitialize.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/hooks/useAnaheimProgram.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/useAnaheimProgram.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/hooks/useProgram.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/useProgram.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/solana/fetchStakeActivation.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/solana/fetchStakeActivation.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -203,6 +129,7 @@
       <workItem from="1758163283486" duration="72000" />
       <workItem from="1758163386975" duration="2968000" />
       <workItem from="1758172080098" duration="1697000" />
+      <workItem from="1758173792052" duration="1461000" />
     </task>
     <servers />
   </component>

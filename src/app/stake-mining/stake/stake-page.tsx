@@ -2,7 +2,7 @@
 import './globals.css'
 import { PublicKey } from "@solana/web3.js";
 import { useStakeAccount } from "./StakeViewerScratch";
-import { useStakeMutation } from "@/hooks/stake/useStakeMutation"; // Ajout de l'import
+import { useStakeMutation } from "@/hooks/stake/useStakeMutation";
 
 export default function StakeMiningPage({ address }: { address: string }) {
     let pubkey: PublicKey | undefined = undefined;
@@ -15,26 +15,28 @@ export default function StakeMiningPage({ address }: { address: string }) {
     }
 
     const { stakeAccount, error } = useStakeAccount(pubkey);
-    const { createStake } = useStakeMutation(); // Utilisation du hook
+    const { createStake } = useStakeMutation();
 
     if (invalidAddress) {
         return <p>Clé publique invalide&nbsp;: {address}</p>;
     }
 
     return (
-      <div>
-          <h2>Compte Stake</h2>
-          {error && <div className="text-red-500">Erreur: {error}</div>}
-          {!stakeAccount && !error && <p>Chargement du compte de stake...</p>}
-          {stakeAccount && (
-            <div>
-                <p>Activation Epoch: {stakeAccount.activationEpoch}</p>
-                <p>Delegated Stake: {stakeAccount.delegatedStake}</p>
-            </div>
-          )}
-          <button onClick={createStake} className="btn">
-              Créer un compte de stake
-          </button>
-      </div>
+        <div>
+            <h2>Compte Stake</h2>
+            {error && <div className="text-red-500">Erreur: {error}</div>}
+            {!stakeAccount && !error && <p>Chargement du compte de stake...</p>}
+            {stakeAccount && (
+                <div>
+                    <p>Activation Epoch: {stakeAccount.activationEpoch}</p>
+                    <p>Delegated Stake: {stakeAccount.delegatedStake}</p>
+                </div>
+            )}
+            {!stakeAccount && !error && (
+                <button onClick={createStake} className="btn">
+                    Créer un compte de stake
+                </button>
+            )}
+        </div>
     );
 }

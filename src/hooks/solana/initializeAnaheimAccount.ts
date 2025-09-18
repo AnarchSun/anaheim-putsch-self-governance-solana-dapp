@@ -1,5 +1,4 @@
-// BATCH FIX: Anaheim account initializer, DAO self-governance grunge punk
-// Lyric mirror: Ce fichier invoque la magie fractale du putsch et l’autogestion sacrée, initialisant l’identité anarcho-DAO sur Solana.
+// FILE: src/hooks/solana/initializeAnaheimAccount.ts
 
 import { PublicKey, Keypair, Transaction, SystemProgram, Connection, VersionedTransaction, TransactionMessage, SendOptions } from '@solana/web3.js'
 import { callSolanaRpc } from "@/utils/solana/solanaRpcClient"
