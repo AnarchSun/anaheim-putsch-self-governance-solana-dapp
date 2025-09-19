@@ -1,23 +1,62 @@
 import fs from 'fs';
 import path from 'path';
+import dotenv from 'dotenv';
+import TOML from '@iarna/toml';
+import { fileURLToPath } from 'url';
 
-// Chemin vers le IDL Anchor généré
-const idlPath = path.join(__dirname, '../target/idl/YOUR_PROGRAM.json'); // Remplace YOUR_PROGRAM
-const solanaConfigPath = path.join(__dirname, '../config/solana.ts');
+// --- ES Module __dirname shim ---
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-const idl = JSON.parse(fs.readFileSync(idlPath, 'utf8'));
-const newProgramId = idl.metadata.address;
+// --- Charger .env.local à la racine du projet ---
+const envPath = path.join(__dirname, '..', '.env.local');
+dotenv.config({ path: envPath });
 
-// Lis le fichier solana.ts
-let solanaConfig = fs.readFileSync(solanaConfigPath, 'utf8');
+// --- Déterminer Program ID depuis .env.local ou Anchor.toml ---
+let programId: string = process.env.NEXT_PUBLIC_PROGRAM_ID || '';
 
-// Regex pour remplacer le programId existant
-solanaConfig = solanaConfig.replace(
-    /programId:\s*"(.*?)"/,
-    `programId: "${newProgramId}"`
+if (!programId) {
+    console.log('⚠️ NEXT_PUBLIC_PROGRAM_ID absent dans .env.local, lecture depuis Anchor.toml...');
+    const anchorTomlPath = path.join(__dirname, '..', 'anchor', 'Anchor.toml');
+
+    if (!fs.existsSync(anchorTomlPath)) {
+        throw new Error(`Anchor.toml introuvable à l'emplacement attendu : ${anchorTomlPath}`);
+    }
+
+    const anchorTomlContent = fs.readFileSync(anchorTomlPath, 'utf8');
+    const parsed = TOML.parse(anchorTomlContent);
+
+    programId =
+        parsed.programs?.devnet?.anaheim ||
+        parsed.programs?.localnet?.anaheim ||
+        '';
+
+    if (!programId) {
+        throw new Error('Program ID introuvable dans Anchor.toml et .env.local');
+    }
+
+    console.log(`✅ Program ID trouvé dans Anchor.toml → ${programId}`);
+}
+
+// --- Mettre à jour src/config/solana.ts ---
+const configPath = path.join(__dirname, '..', 'src', 'config', 'solana.ts');
+const configSrc = fs.readFileSync(configPath, 'utf8');
+const configPatched = configSrc.replace(
+    /programId:\s*['"].+['"]/,
+    `programId: '${programId}'`
 );
+fs.writeFileSync(configPath, configPatched);
+console.log(`✅ src/config/solana.ts mis à jour → ${programId}`);
 
-// Écris le résultat batch fix dans solana.ts
-fs.writeFileSync(solanaConfigPath, solanaConfig);
-
-console.log(`Batch fix: programId updated to ${newProgramId} in config/solana.ts`);
+// --- Mettre à jour .env.local ---
+let envText = fs.existsSync(envPath) ? fs.readFileSync(envPath, 'utf8') : '';
+if (!envText.includes('NEXT_PUBLIC_PROGRAM_ID')) {
+    envText += `\nNEXT_PUBLIC_PROGRAM_ID=${programId}\n`;
+} else {
+    envText = envText.replace(
+        /NEXT_PUBLIC_PROGRAM_ID=.*/,
+        `NEXT_PUBLIC_PROGRAM_ID=${programId}`
+    );
+}
+fs.writeFileSync(envPath, envText);
+console.log(`✅ .env.local mis à jour → ${programId}`);

@@ -1,11 +1,18 @@
-#!/bin/bash
-# Punk wrapper pour anchor — filename/path éternel
+#!/usr/bin/env bash
+# PATH: anchor/anchor
 
-# Appelle le vrai anchor CLI
+set -e
+
+# Utiliser le vrai binaire anchor
 ~/.cargo/bin/anchor "$@"
 
-# Si la commande est "build", lance le batch fix
+# Si on vient de faire "anchor build", on lance la mise à jour TypeScript
 if [[ "$1" == "build" ]]; then
-  node scripts/update-program-id.js
-  echo "🌑 Batch fix punk: PROGRAM_ID updated in src/config/solana.ts!"
+  echo "🔄 Post-build: mise à jour du Program ID…"
+
+  # chemin absolu basé sur le répertoire du script
+  SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+  pnpm tsx "$SCRIPT_DIR/../scripts/update-program-id.ts"
+
+  echo "✅ Program ID synchronisé avec src/config/solana.ts et .env.local"
 fi

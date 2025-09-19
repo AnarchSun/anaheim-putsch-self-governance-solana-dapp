@@ -32,10 +32,14 @@ export default function StakeMiningPage({ address }: { address: string }) {
                     <p>Delegated Stake: {stakeAccount.delegatedStake}</p>
                 </div>
             )}
-            {!stakeAccount && !error && (
+            {!stakeAccount && !error ? (
                 <button onClick={createStake} className="btn">
                     Créer un compte de stake
                 </button>
+            ) : (
+                <p className="text-green-500">
+                    Compte de stake déjà initialisé à {address}
+                </p>
             )}
         </div>
     );

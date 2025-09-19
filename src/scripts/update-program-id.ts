@@ -1,4 +1,4 @@
-// PATH: scripts/update-program-id.js
+// PATH: scripts/update-program-id.ts
 // ULTRA FINAL ANARCHOPUNK PATCH — Batch fix TS2451, matrix override, progid auto-sync!
 
 'use strict'

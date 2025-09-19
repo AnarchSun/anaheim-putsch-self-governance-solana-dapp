@@ -15,7 +15,7 @@ pub use validate_post_content::*;
 //                          PROGRAM ID
 // =========================================================================
 // PATCH: Update program ID for matrix override and sync with frontend/scripts!
-declare_id!("7q7nTMKnrAvKUMGQejYD6HHNnJDKCtZW7QKHD7entVU4");
+declare_id!("7NunQoZv1noZpPWzGvW2rkNcf4nT8ue5xt7x8jGKwGhS");
 
 // =========================================================================
 //                          PROGRAM LOGIC
@@ -119,13 +119,13 @@ pub mod anaheim {
     #[derive(Accounts)]
     pub struct CreateStake<'info> {
         #[account(
-            init,
-            payer = user,
-            space = 8 + StakeAccount::LEN,
-            seeds = [b"stake", user.key().as_ref()],
-            bump
+        init_if_needed,           // crée si absent
+        payer = user,
+        space = 8 + StakeAccount::LEN, // ← utiliser le vrai type
+        seeds = [b"stake", user.key().as_ref()],
+        bump
         )]
-        pub stake_account: Account<'info, StakeAccount>,
+        pub stake_account: Account<'info, StakeAccount>,  // ← nom cohérent avec ctx.accounts
         #[account(mut)]
         pub user: Signer<'info>,
         pub system_program: Program<'info, System>,
