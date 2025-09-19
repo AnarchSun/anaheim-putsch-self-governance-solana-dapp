@@ -1,4 +1,4 @@
-// FILE: anchor/programs/anaheim/src/contexts/initialize.rs
+// FILE: anchor/programs/anaheim-old/src/contexts/initialize.rs
 use anchor_lang::prelude::*;
 use crate::state::anaheim_account::AnaheimAccount;
 
@@ -7,7 +7,7 @@ pub struct Initialize<'info> {
     #[account(
         init,
         payer = payer,
-        seeds = [b"anaheim", payer.key().as_ref()],
+        seeds = [b"anaheim-old", payer.key().as_ref()],
         bump,
         space = 8 + std::mem::size_of::<AnaheimAccount>()
     )]

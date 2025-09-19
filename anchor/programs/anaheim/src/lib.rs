@@ -1,4 +1,4 @@
-// PATH: anchor/programs/anaheim/src/lib.rs
+// PATH: anchor/programs/anaheim-old/src/lib.rs
 #![allow(deprecated)]
 #![allow(unexpected_cfgs)]
 #[cfg(test)]
@@ -87,7 +87,7 @@ pub struct Initialize<'info> {
         init,
         payer = payer,
         space = AnaheimAccount::SIZE,
-        seeds = [b"anaheim", payer.key().as_ref()],
+        seeds = [b"anaheim-old", payer.key().as_ref()],
         bump
   )]
   pub anaheim: Account<'info, AnaheimAccount>,

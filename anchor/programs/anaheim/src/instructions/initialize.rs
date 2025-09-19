@@ -1,4 +1,4 @@
-// FILE: anchor/programs/anaheim/src/instructions/initialize.rs
+// FILE: anchor/programs/anaheim-old/src/instructions/initialize.rs
 use anchor_lang::prelude::*;
 use crate::contexts::initialize::Initialize;
 

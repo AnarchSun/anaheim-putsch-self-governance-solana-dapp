@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import { AnchorProvider, Program } from '@coral-xyz/anchor';
 import { useConnection, useWallet } from '@solana/wallet-adapter-react';
 import IDL from '@/lib/idl/anaheim.json';
-import { Anaheim } from '@/../anchor/target/types/anaheim';
+import { Anaheim } from '@/../anchor/target/types/anaheim-old';
 import { ANAHEIM_PROGRAM_ID } from '@/lib/anaheim-program';
 
 export function useAnaheimProgram() {

@@ -1,4 +1,4 @@
-// anchor/programs/anaheim/src/state/anaheim_account.rs
+// anchor/programs/anaheim-old/src/state/anaheim_account.rs
 use anchor_lang::prelude::*;
 
 #[account]

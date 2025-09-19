@@ -1,4 +1,4 @@
-// anaheim-init.ts
+// anaheim-old-init.ts
 import { POST_ACCOUNT_SIZE } from '@/constants/account'
 
 console.log('TAILLE POST ACCOUNT:', POST_ACCOUNT_SIZE)

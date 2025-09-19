@@ -17,7 +17,7 @@ import { AppAlert } from '../app-alert';
 function useAnaheimAccountQuery() {
     const { connection } = useConnection();
     return useQuery({
-        queryKey: ['anaheim-account'],
+        queryKey: ['anaheim-old-account'],
         queryFn: () => getAnaheimAccount(connection),
     });
 }
@@ -40,7 +40,7 @@ function useIncrementMutation() {
             return signature;
         },
         onSuccess: () => {
-            return queryClient.invalidateQueries({ queryKey: ['anaheim-account'] });
+            return queryClient.invalidateQueries({ queryKey: ['anaheim-old-account'] });
         },
         onError: (error: Error) => console.error('Increment failed:', error),
     });

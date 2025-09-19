@@ -1,4 +1,4 @@
-// anarcrypt.sol/anaheim-putsch-self-governance-solana-dapp/anchor/src/defined.rs
+// anarcrypt.sol/anaheim-old-putsch-self-governance-solana-dapp/anchor/src/defined.rs
 use std::path::PathBuf;
 use anyhow::{anyhow, Result};
 

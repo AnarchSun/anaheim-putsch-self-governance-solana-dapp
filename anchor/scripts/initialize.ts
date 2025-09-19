@@ -1,6 +1,6 @@
 // FILE: anchor/tests/initialize.ts
 import { AnchorProvider, Program, Wallet, web3 } from "@coral-xyz/anchor";
-import { Anaheim } from "../target/types/anaheim";
+import { Anaheim } from "../target/types/anaheim-old";
 import { resolve, dirname } from "path";
 import { readFileSync } from "fs";
 import os from "os";
@@ -22,7 +22,7 @@ function loadKeypair(keypairPath: string): web3.Keypair {
 }
 
 // Constants
-const IDL_PATH = resolve(__dirname, "../target/idl/anaheim.json");
+const IDL_PATH = resolve(__dirname, "../target/idl/anaheim-old.json");
 const WALLET_KEYPATH = resolve(os.homedir(), ".config/solana/id.json");
 
 const idl = loadJson(IDL_PATH);

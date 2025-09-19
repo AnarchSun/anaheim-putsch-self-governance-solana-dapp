@@ -1,7 +1,7 @@
 // FILE: anchor/tests/initialize.ts
 import * as anchor from "@coral-xyz/anchor";
 import { Program } from "@coral-xyz/anchor";
-import { Anaheim } from "../target/types/anaheim";
+import { Anaheim } from "../target/types/anaheim-old";
 
 // This is an IIFE (Immediately Invoked Function Expression)
 // It allows us to use async/await at the top level of a script.
@@ -33,7 +33,7 @@ import { Anaheim } from "../target/types/anaheim";
         console.log("Your Anaheim Account Public Key is:", anaheimAccount.publicKey.toBase58());
         console.log("================================================================");
         console.log("COPY THIS PUBLIC KEY AND PASTE IT INTO YOUR FRONTEND CODE.");
-        console.log("Location: src/lib/anaheim-program.ts -> ANAHEIM_ACCOUNT_PUBKEY");
+        console.log("Location: src/lib/anaheim-old-program.ts -> ANAHEIM_ACCOUNT_PUBKEY");
 
     } catch (err) {
         console.error("Initialization failed:", err);

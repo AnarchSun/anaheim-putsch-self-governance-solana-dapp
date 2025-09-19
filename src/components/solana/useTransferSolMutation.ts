@@ -33,7 +33,7 @@ export function useTransferSolMutation() {
             return await sendTransaction(tx, connection);
         },
         onSuccess: () => {
-            void queryClient.invalidateQueries({ queryKey: ["anaheim-account"] });
+            void queryClient.invalidateQueries({ queryKey: ["anaheim-old-account"] });
         },
     });
 }

@@ -2,7 +2,7 @@
 import { AnchorProvider, Program } from '@coral-xyz/anchor'
 import { useAnchorWallet } from '@solana/wallet-adapter-react'
 import { Connection } from '@solana/web3.js'
-import AnaheimIDL from '@/../anchor/target/idl/anaheim.json'
+import AnaheimIDL from '@/../anchor/target/idl/anaheim-old.json'
 import { dummyWallet } from '@/lib/solana/dummyWallet'
 
 const connection = new Connection('https://api.devnet.solana.com', 'confirmed')

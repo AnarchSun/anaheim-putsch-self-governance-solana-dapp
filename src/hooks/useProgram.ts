@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { AnchorProvider, Program } from '@coral-xyz/anchor';
 import { useWallet, useConnection } from '@solana/wallet-adapter-react';
-import { Anaheim } from '@/../anchor/target/types/anaheim';
+import { Anaheim } from '@/../anchor/target/types/anaheim-old';
 import IDL from '@/lib/idl/anaheim.json';
 import { ANAHEIM_PROGRAM_ID } from '@/lib/anaheim-program';
 
