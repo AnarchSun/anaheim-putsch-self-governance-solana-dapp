@@ -1,18 +1,41 @@
-// File: src/hooks/useAnaheimProgram.ts
-import { useAnchorWallet, useConnection } from '@solana/wallet-adapter-react'
-import { AnchorProvider } from '@coral-xyz/anchor'
-import {getAnaheimProgram} from "../../packages/anchor-client/src/getAnaheimProgram";
+// anchor/src/anaheim-exports.ts
+import { useEffect, useMemo, useState } from 'react';
+import { Program, AnchorProvider, Idl } from '@coral-xyz/anchor';
+import { useAnchorWallet, useWallet } from '@solana/wallet-adapter-react';
+import { Connection, PublicKey } from '@solana/web3.js';
+import idl from '../../anchor/target/idl/anaheim.json';
+import { Anaheim } from '../../anchor/target/types/anaheim';
+import { PROGRAM_ID } from '@/config/solana';
+import { SOLANA_CLUSTER_URL } from "../../src/config/solana";
 
+const network = SOLANA_CLUSTER_URL;
+const programId = new PublicKey(PROGRAM_ID);
 
 export function useAnaheimProgram() {
-  const wallet = useAnchorWallet()
-  const { connection } = useConnection()
+  const wallet = useAnchorWallet();
+  const { connected, publicKey } = useWallet();
+  const [isProgramReady, setIsProgramReady] = useState(false);
 
-  if (!wallet) return null
+  const provider = useMemo(() => {
+    if (!wallet) return null;
+    const connection = new Connection(network, 'processed');
+    return new AnchorProvider(connection, wallet, { preflightCommitment: 'processed' });
+  }, [wallet]);
 
-  const provider = new AnchorProvider(connection, wallet, {
-    commitment: 'confirmed',
-  })
+  const program = useMemo(() => {
+    if (!provider) return null;
+    return new Program<Anaheim>(idl as Idl, provider);
+  }, [provider]);
 
-  return getAnaheimProgram(provider)
+  useEffect(() => {
+    if (connected && publicKey && program) {
+      console.log(`✅ Program loaded for wallet ${publicKey.toBase58()}`);
+      setIsProgramReady(true);
+    } else {
+      console.log('⏳ Waiting for wallet connection & program...');
+      setIsProgramReady(false);
+    }
+  }, [connected, publicKey, program]);
+
+  return { program, provider, programId, isProgramReady };
 }

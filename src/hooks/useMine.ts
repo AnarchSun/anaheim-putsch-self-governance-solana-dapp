@@ -6,7 +6,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { PublicKey } from '@solana/web3.js';
-import { useAnaheimProgram } from './useAnaheimProgram'; // Corrected path
+import { useAnaheimProgram } from '../../anchor/src/anaheim-exports';
 import { toast } from 'sonner';
 
 export function useMineMutation() {

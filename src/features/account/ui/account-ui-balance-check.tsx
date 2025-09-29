@@ -1,7 +1,7 @@
 import { Address } from 'gill'
 import { AppAlert } from '@/components/app-alert'
 import { Button } from '@/components/ui/button'
-import { useSolana } from '@/components/solana/use-solana'
+import useSolana from '@/components/solana/use-solana'
 import { useRequestAirdropMutation } from '../data-access/use-request-airdrop-mutation'
 import { useGetBalanceQuery } from '../data-access/use-get-balance-query'
 

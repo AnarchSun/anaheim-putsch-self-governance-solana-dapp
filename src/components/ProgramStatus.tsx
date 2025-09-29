@@ -1,7 +1,7 @@
 // src/components/ProgramStatus.tsx
 'use client';
 
-import { useAnaheimProgram } from '@/hooks/useAnaheimProgram';
+import {useAnaheimProgram} from "../../anchor/src";
 
 export function ProgramStatus() {
     const { isProgramReady } = useAnaheimProgram();

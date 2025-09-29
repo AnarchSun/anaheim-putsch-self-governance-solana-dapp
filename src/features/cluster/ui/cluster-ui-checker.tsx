@@ -1,30 +1,67 @@
-import { ReactNode } from 'react'
-import { Button } from '@/components/ui/button'
-import { AppAlert } from '@/components/app-alert'
-import { useSolana } from '@/components/solana/use-solana'
-import { useClusterVersion } from '../data-access/use-cluster-version'
+// src/features/cluster/ui/cluster-ui-checker.tsx
+"use client";
 
-export function ClusterUiChecker({ children }: { children: ReactNode }) {
-  const { cluster } = useSolana()
-  const query = useClusterVersion()
+import React, { useEffect, useState } from "react";
+import { Connection } from "@solana/web3.js";
 
-  if (query.isLoading) {
-    return null
-  }
+const CLUSTER_URL = process.env.NEXT_PUBLIC_SOLANA_CLUSTER_URL || "https://api.devnet.solana.com";
 
-  if (query.isError || !query.data) {
-    return (
-      <AppAlert
-        action={
-          <Button variant="outline" onClick={() => query.refetch()}>
-            Refresh
-          </Button>
-        }
-        className="mb-4"
-      >
-        Error connecting to cluster <span className="font-bold">{cluster.label}</span>.
-      </AppAlert>
-    )
-  }
-  return children
+export function ClusterUiChecker() {
+    const [status, setStatus] = useState<
+        "connected" | "error" | "connecting"
+    >("connecting");
+
+    useEffect(() => {
+        const connection = new Connection(CLUSTER_URL, "processed");
+        connection
+            .getEpochInfo()
+            .then(() => setStatus("connected"))
+            .catch(() => setStatus("error"));
+    }, []);
+
+    if (status === "connecting") {
+        return (
+            <div
+                style={{
+                    color: "#fccb06",
+                    background: "#222",
+                    padding: "8px",
+                    borderRadius: "6px",
+                }}
+            >
+                Checking Solana cluster connection...
+            </div>
+        );
+    }
+    if (status === "error") {
+        return (
+            <div
+                style={{
+                    color: "#fccb06",
+                    background: "#222",
+                    padding: "8px",
+                    borderRadius: "6px",
+                    fontWeight: "bold",
+                }}
+            >
+                ⚠️ Cannot connect to Solana cluster.<br />
+                <button
+                    onClick={() => window.location.reload()}
+                    style={{
+                        color: "#222",
+                        background: "#fccb06",
+                        border: "none",
+                        borderRadius: "4px",
+                        padding: "4px 12px",
+                        marginTop: "8px",
+                        cursor: "pointer",
+                        fontWeight: "bold",
+                    }}
+                >
+                    Refresh
+                </button>
+            </div>
+        );
+    }
+    return null;
 }

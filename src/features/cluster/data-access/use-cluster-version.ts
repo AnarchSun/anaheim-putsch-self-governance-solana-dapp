@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { useSolana } from '@/components/solana/use-solana'
+import useSolana from '@/components/solana/use-solana'
 
 export function useClusterVersion() {
   const { client, cluster } = useSolana()

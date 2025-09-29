@@ -2,7 +2,7 @@
 import { AnchorProvider, Program } from '@coral-xyz/anchor'
 import { PublicKey } from '@solana/web3.js'
 import AnaheimIDL from '../../../anchor/target/idl/anaheim.json'
-import type { Anaheim } from '../../../anchor/target/types/anaheim'
+import type { Anaheim } from '../../../anchor/target/types/anaheim.ts'
 
 export function getAnaheimProgram(provider: AnchorProvider, address?: PublicKey) {
   return new Program<Anaheim>(

@@ -95,3 +95,16 @@ contre-infrastructure, un territoire autonome, un réseau de vérité.
 🜃 Réveille-toi. Miner c’est gouverner. Anaheim c’est toi.
 
 © 2025 - AnarCoin Collective
+---
+
+<p align="center">
+  💥 Powered by <a href="https://anarcrypt.org">Anarcrypt.org</a> •
+  <a href="https://discord.gg/Dt7zvuFPGf">Discord</a> •
+  <a href="https://t.me/ChaoticFractalAttrakThor">Telegram</a> •
+  <a href="https://x.com/AnarcoinCollect">X/Twitter</a> •
+  <a href="https://solscan.io/token/GETtSamgoHWLdrQv7nEzWrtPXNQxvbtPjv8eABZgHNTU">Solscan</a>
+</p>
+
+<p align="center">
+  <sub>© 2025 Chaotic Fractal AttraKThor DAO – Liberate with code.</sub>
+</p>

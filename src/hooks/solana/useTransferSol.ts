@@ -1,44 +1,45 @@
-// hooks/useTransferSol.ts
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { PublicKey, SystemProgram, Transaction, LAMPORTS_PER_SOL } from '@solana/web3.js'
-import { useAnchorWallet } from '@solana/wallet-adapter-react'
-import { useConnection } from './useConnection'
-import { toast } from 'sonner'
-import { Address } from "@solana/kit"
-import { SOLANA_CLUSTER_URL } from '@/config/solana' // <-- Ajouté
+// FILE: src/components/solana/use-wallet-transaction-sign-and-send.tsx
+import { Connection } from '@solana/web3.js'
+import type { Instruction, TransactionSendingSigner, Blockhash } from 'gill'
+import { createTransaction, getBase58Decoder, signAndSendTransactionMessageWithSigners } from 'gill'
+import type { UiWalletAccount, UiWalletHandle } from '@wallet-standard/ui-core'
+import useSolana from "@/components/solana/use-solana"
 
-export function useTransferSol({ fromAddress }: { fromAddress: Address }) {
-  const wallet = useAnchorWallet()
-  // Correction : un seul argument pour useConnection
-  const connection = useConnection()
-  const queryClient = useQueryClient()
+// ✅ Définir le symbol correctement
+const uiWalletHandleSymbol: unique symbol = Symbol('~uiWalletHandle')
 
-  return useMutation({
-    mutationKey: ['transfer-sol', fromAddress],
-    mutationFn: async ({ to, amount }: { to: Address; amount: number }) => {
-      if (!wallet?.publicKey || !wallet.signTransaction) throw new Error('Wallet not connected')
-      const toPubkey = new PublicKey(to)
+function toWalletHandle(account: UiWalletAccount): UiWalletHandle {
+  return {
+    ...account,
+    [uiWalletHandleSymbol]: uiWalletHandleSymbol, // TS-safe
+    features: account.features ?? [],
+  }
+}
 
-      const transaction = new Transaction().add(
-        SystemProgram.transfer({
-          fromPubkey: wallet.publicKey,
-          toPubkey,
-          lamports: amount * LAMPORTS_PER_SOL,
-        }),
-      )
+export function useWalletTransactionSignAndSend() {
+  const { client, account } = useSolana()
+  const connection = typeof client === 'string' ? new Connection(client) : client
 
-      const signed = await wallet.signTransaction(transaction)
-      return await connection.sendRawTransaction(signed.serialize())
-    },
-    onSuccess: (signature) => {
-      toast.success(`Transfer successful: ${signature}`)
-      return Promise.all([
-        queryClient.invalidateQueries({ queryKey: ['get-balance', fromAddress] }),
-        queryClient.invalidateQueries({ queryKey: ['get-signatures', fromAddress] }),
-      ])
-    },
-    onError: (err) => {
-      toast.error(`Transfer failed: ${err}`)
-    },
-  })
+  return async (ix: Instruction | Instruction[], signer?: TransactionSendingSigner) => {
+    if (!signer && account) {
+      signer = toWalletHandle(account) as unknown as TransactionSendingSigner
+    }
+
+    const x = await connection.getLatestBlockhash('processed')
+    const latestBlockhash: Blockhash = x.blockhash as unknown as Blockhash
+
+    const transaction = createTransaction({
+      feePayer: signer!,
+      version: 0,
+      latestBlockhash: {
+        blockhash: latestBlockhash,
+        lastValidBlockHeight: BigInt(x.lastValidBlockHeight),
+      },
+      instructions: Array.isArray(ix) ? ix : [ix],
+    })
+
+    const signature = await signAndSendTransactionMessageWithSigners(transaction)
+
+    return getBase58Decoder().decode(signature)
+  }
 }

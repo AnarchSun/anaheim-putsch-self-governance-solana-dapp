@@ -1,102 +1,62 @@
-// PATH: src/components/solana/use-wallet-transaction-sign-and-send.tsx
-// ULTRA FINAL ANARCHOPUNK PATCH — Batch fix unused client + hooks-in-async, matrix override, filename/path éternel!
+// FILE: src/components/solana/use-wallet-transaction-sign-and-send.tsx
+import {Connection} from '@solana/web3.js'
+import type {
+    Address,
+    Blockhash,
+    Instruction,
+    SignatureBytes,
+    SignaturesMap,
+    TransactionMessageBytes,
+    TransactionSendingSigner
+} from 'gill'
+import {createTransaction, getBase58Decoder, signAndSendTransactionMessageWithSigners} from 'gill'
+import useSolana from './use-solana'
 
-'use client';
-
-import { clusterApiUrl, Connection, TransactionInstruction } from '@solana/web3.js';
-import {
-  createTransaction,
-  signAndSendTransactionMessageWithSigners,
-  address,
-  blockhash,
-  getBase58Decoder,
-  AccountRole,
-  type Instruction,
-  type TransactionSigner,
-  type AccountMeta as GillAccountMeta,
-} from 'gill';
-import { useWalletUi } from '@wallet-ui/react';
-
-// --- Conversion Web3.js Instruction => Gill Instruction ---
-function createGillInstruction(
-    ix: TransactionInstruction
-): Instruction<string, GillAccountMeta<string>[]> {
-  const mappedAccounts: GillAccountMeta<string>[] = ix.keys.map((meta) => ({
-    address: address(meta.pubkey.toBase58()),
-    role: meta.isSigner
-        ? AccountRole.WRITABLE_SIGNER
-        : meta.isWritable
-            ? AccountRole.WRITABLE
-            : AccountRole.READONLY,
-  }));
-
-  return {
-    programAddress: address(ix.programId.toBase58()),
-    accounts: mappedAccounts,
-    data: ix.data,
-  };
+// Transforme un UiWalletAccount en Gill TransactionSendingSigner
+function uiWalletAccountToGillSigner(account: { address: string; signTransaction: (tx: any) => Promise<any> }): TransactionSendingSigner {
+    return {
+        address: account.address as Address,
+        async signAndSendTransactions(
+            transactions: ReadonlyArray<Readonly<{ messageBytes: TransactionMessageBytes; signatures: SignaturesMap }>>,
+        ): Promise<readonly SignatureBytes[]> {
+            return await Promise.all(
+                transactions.map(async (tx) => {
+                    const signedTx = await account.signTransaction(tx as any)
+                    return signedTx.signature as SignatureBytes
+                })
+            )
+        },
+    }
 }
-
-/**
- * Hook principal d'envoi de transaction avec signature.
- *
- * @param signer - Le TransactionSigner (wallet)
- * @param instructions - Tableau des instructions Web3.js
- * @param rpcUrl - Optionnel, URL RPC, sinon pris depuis le wallet context
- */
-// PATCH: Don't use hooks in async fn. Provide a standard hook + async action function.
-import { useCallback } from 'react';
 
 export function useWalletTransactionSignAndSend() {
-  const { client } = useWalletUi(); // PATCH: Only used to get wallet context if needed (future dev)
+    const { client, account } = useSolana()
 
-  // PATCH: Action as callback, not hook in async function
-  const sendTransaction = useCallback(
-      async ({
-               signer,
-               instructions,
-               rpcUrl,
-             }: {
-        signer: TransactionSigner;
-        instructions: TransactionInstruction[];
-        rpcUrl?: string;
-      }): Promise<string> => {
-        const endpoint = rpcUrl ?? clusterApiUrl('devnet');
-        const connection = new Connection(endpoint, 'confirmed');
-        const latestBlockhash = await connection.getLatestBlockhash();
+    // 🔧 assure toujours un Connection
+    const connection: Connection =
+        (client as unknown as Connection)
 
-        // Convertir instructions web3.js en instructions gill
-        const gillInstructions = instructions.map(createGillInstruction);
+    return async (ix: Instruction | Instruction[], signer?: TransactionSendingSigner) => {
+        if (!signer && account) {
+            signer = uiWalletAccountToGillSigner(account)
+        }
+        if (!signer) throw new Error('Wallet not connected or signer not provided')
 
-        // Créer la transaction gill complète
+        const x = await connection.getLatestBlockhash('processed')
+        const latestBlockhash: Blockhash = x.blockhash as unknown as Blockhash
+
         const transaction = createTransaction({
-          version: 0,
-          feePayer: signer.address,
-          instructions: gillInstructions,
-          lifetimeConstraint: {
-            blockhash: blockhash(latestBlockhash.blockhash),
-            lastValidBlockHeight: BigInt(latestBlockhash.lastValidBlockHeight),
-          },
-        } as any);
+            feePayer: signer,
+            version: 0,
+            latestBlockhash: {
+                blockhash: latestBlockhash,
+                lastValidBlockHeight: BigInt(x.lastValidBlockHeight),
+            },
+            instructions: Array.isArray(ix) ? ix : [ix],
+        })
 
-        // Signer et envoyer la transaction
-        const signatureBytes = await signAndSendTransactionMessageWithSigners({
-          message: transaction,
-          signers: [signer],
-          connection,
-        } as any);
-
-        // Retourner la signature en base58
-        return getBase58Decoder().decode(signatureBytes);
-      },
-      []
-  );
-
-  return { sendTransaction, client };
+        const signature = await signAndSendTransactionMessageWithSigners(transaction)
+        return getBase58Decoder().decode(signature)
+    }
 }
 
-// PATCH NOTES:
-// - Fixed: "client" unused: now returned for future use, or remove if not needed.
-// - Fixed: Can't call hook in async fn: now useWalletTransactionSignAndSend is a standard hook returning an async callback.
-// - Usage: const { sendTransaction } = useWalletTransactionSignAndSend(); await sendTransaction({ ... });
-// - Filename/path éternel, matrix override, batch fix grunge!

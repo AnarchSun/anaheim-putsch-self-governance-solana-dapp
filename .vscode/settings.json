@@ -5,7 +5,9 @@
   "search.exclude": {
     "**/backups": true
   },
-  "typescript.tsdk": "./node_modules/typescript/lib",
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "javascript.preferences.importModuleSpecifier": "shortest",
+  "typescript.preferences.importModuleSpecifier": "shortest",
   "eslint.validate": ["json"],
   "rust-analyzer.cargo.features": ["anchor"],
   "rust-analyzer.procMacro.enable": true,

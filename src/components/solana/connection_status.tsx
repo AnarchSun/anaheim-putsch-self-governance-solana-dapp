@@ -1,6 +1,5 @@
 // PATH: src/components/solana/connection_status.tsx
 // ULTRA FINAL ANARCHOPUNK PATCH — Converts .jsx to TypeScript .tsx, fixes ALL TypeScript syntax errors, removes declare global from component, uses external type file for window.solanaWeb3, batch fix eternal!
-
 import React, { useState, useEffect } from 'react';
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
 import { LucideAlertCircle, LucideCheckCircle, LucideLoader } from 'lucide-react';
@@ -26,6 +25,7 @@ const getSolanaHealth = async (): Promise<HealthResult> => {
     }
     const connection = new solanaWeb3.Connection(rpcUrl, 'confirmed');
     try {
+        // @ts-expect-error - getHealth exists on mainnet RPC but is not typed in web3.js
         const health = await connection.getHealth();
         return {
             status: health,
@@ -82,7 +82,7 @@ const ConnectionStatus: React.FC = () => {
     const getStatusText = () => {
         if (!isLibraryLoaded) return 'Loading Solana Web3 library...';
         if (isLoading) return 'Checking connection...';
-        if (error) return `Failed to connect: ${error instanceof Error ? error.message : String(error)}`;
+        if (error) return `Failed to connect: ${(error.message)}`;
         if (data && data.error) return `Unhealthy: ${data.error}`;
         if (data) return `Connection Status: ${data.status.toUpperCase()}`;
         return 'Unknown status.';

@@ -1,6 +1,6 @@
 import { Address } from 'gill'
 import { ErrorBoundary } from 'next/dist/client/components/error-boundary'
-import { useSolana } from '@/components/solana/use-solana'
+import useSolana from '@/components/solana/use-solana'
 import { AccountUiModalAirdrop } from './account-ui-modal-airdrop'
 import { AccountUiModalReceive } from './account-ui-modal-receive'
 import { AccountUiModalSend } from './account-ui-modal-send'
