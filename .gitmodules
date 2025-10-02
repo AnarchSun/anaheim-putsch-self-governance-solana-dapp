@@ -1,3 +1,9 @@
 [submodule "src/gill"]
 	path = src/gill
 	url = git@github.com:codebender828/gill.git
+[submodule "tools/mpl-candy-machine"]
+	path = tools/mpl-candy-machine
+	url = git@github.com:metaplex-foundation/mpl-candy-machine.git
+[submodule "governance"]
+	path = governance
+	url = git@github.com:Mythic-Project/governance-ui.git
