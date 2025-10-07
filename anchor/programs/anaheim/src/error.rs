@@ -41,5 +41,8 @@ pub enum ErrorCode {
   MissingBump,
 
   #[msg("Empty Content.")]
-  EmptyContent
+  EmptyContent,
+
+  #[msg("Not a DAO member")]
+  NotDaoMember,
 }
