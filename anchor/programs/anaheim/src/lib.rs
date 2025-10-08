@@ -27,7 +27,7 @@ pub use instructions::*;
 pub mod post;
 pub use state::*;
 pub use utils::*;
-declare_id!("DzSr3g6JfuN6nigqsX4AXLomPMVGZ6kJUqchB74H7gwt");
+declare_id!("2rzag4UQiUsbw475uJtRzSfrZHRSBRGYiobR7bK9MdGw");
 
 pub const ANAHEIM_IDL_ID: Pubkey = Pubkey::new_from_array([
   132, 157, 218, 39, 146, 184, 154, 229, 157, 208, 222, 217, 179, 105, 214, 114,
