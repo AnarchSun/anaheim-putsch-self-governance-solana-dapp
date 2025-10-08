@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 // FILE: src/components/anaheim/PostCard.tsx
+=======
+// FILE: src/components/anaheim-old/PostCard.tsx
+>>>>>>> main
 
 "use client";
 

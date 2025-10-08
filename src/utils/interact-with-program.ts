@@ -5,7 +5,11 @@ import { describe, it, expect } from 'vitest'
 import * as anchor from '@coral-xyz/anchor'
 import { Program } from '@coral-xyz/anchor'
 import { Keypair } from '@solana/web3.js'
+<<<<<<< HEAD
 import { Anaheim } from '../../target/types/anaheim'
+=======
+import { Anaheim } from '../../target/types/anaheim-old'
+>>>>>>> main
 
 const provider = anchor.AnchorProvider.env()
 anchor.setProvider(provider)

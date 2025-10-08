@@ -49,7 +49,7 @@ pub mod anaheim {
     use super::*;
 
     pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
-        handlers::initialize_handler::handle_initialize(ctx)
+        handlers::initialize_handler::handle_initialize(_ctx)
     }
 
     pub fn create_user(ctx: Context<CreateUser>, username: String) -> Result<()> {

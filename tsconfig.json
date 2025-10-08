@@ -2,9 +2,6 @@
 
 {
   "compilerOptions": {
-    // ==================================================================
-    // Your existing settings are preserved below.
-    // ==================================================================
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
@@ -17,22 +14,12 @@
     "noImplicitReturns": true,
     "strictFunctionTypes": true,
     "module": "ESNext",
-
-    // ==================================================================
-    // THIS IS THE ONLY CHANGE.
-    // Changing "Node" to "bundler" allows TypeScript to find modern
-    // library type definitions, like those used by Tailwind CSS.
-    // This will resolve the TS2307 error.
-    // ==================================================================
     "moduleResolution": "bundler",
-
-    // ==================================================================
-    // The rest of your settings are preserved.
-    // ==================================================================
     "target": "ESNext",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
+    "allowArbitraryExtensions": true,
     "types": ["vitest/globals", "node"],
     "baseUrl": ".",
     "paths": {

@@ -6,8 +6,13 @@ resolution = true
 skip-lint = false
 
 [programs.devnet]
+<<<<<<< HEAD
 anaheim = "2Mva4MMAcZJM5dP851ijcdeUHpju4MdQPevhV5SnvATM"
 journal = "vdcyELsX9MQW6Lc8dZx7BerZB3zjec5ZLwuqSFjPcpc"
+=======
+anaheim = "DzSr3g6JfuN6nigqsX4AXLomPMVGZ6kJUqchB74H7gwt"
+journal = "nxR5cyDfF6qfRgcCgVXzUkZxZjC6HL7StnkEs5M1xqv"
+>>>>>>> main
 
 [registry]
 url = "https://api.apr.dev"
@@ -20,4 +25,8 @@ wallet = "~/.config/solana/id.json"
 members = ["programs/anaheim", "programs/journal"]
 
 [scripts]
+<<<<<<< HEAD
 initialize = "pnpm run initialize"
+=======
+Initialize = "pnpm run Initialize"
+>>>>>>> main

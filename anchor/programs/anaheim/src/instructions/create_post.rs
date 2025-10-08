@@ -1,5 +1,6 @@
 use anchor_lang::prelude::*;
 
+<<<<<<< HEAD
 use crate::state::post_account::PostAccount;
 use crate::constants::MAX_CONTENT_LENGTH;
 #[derive(Accounts)]
@@ -16,6 +17,11 @@ pub struct CreatePost<'info> {
 
   pub system_program: Program<'info, System>,
 }
+=======
+use crate::contexts::create_post::CreatePost;
+
+
+>>>>>>> main
 pub fn handler(_ctx: Context<CreatePost>) -> Result<()> {
   // handler logic (exemple)
   Ok(())

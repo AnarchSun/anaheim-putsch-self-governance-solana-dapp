@@ -10,8 +10,16 @@ export const WalletButton = () => {
 
     return (
         <div>
+<<<<<<< HEAD
             {/* These buttons need client-side JS to function */}
             {connected ? <WalletDisconnectButton /> : <WalletModalButton />}
         </div>
     );
 };
+=======
+            {/* Ces boutons nécessitent du JS côté client pour fonctionner */}
+            {connected ? <WalletDisconnectButton /> : <WalletModalButton />}
+        </div>
+    );
+};
+>>>>>>> main

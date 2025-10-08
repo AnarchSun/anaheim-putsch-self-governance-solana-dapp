@@ -32,7 +32,16 @@ pub enum ErrorCode {
 
   #[msg("Unauthorized action.")]
   Unauthorized,
+<<<<<<< HEAD
 
   #[msg("Invalid authority on post.")]
   InvalidAuthority,
+=======
+  
+  #[msg("Invalid authority on post.")]
+  InvalidAuthority,
+
+  #[msg("Bump not found in context.")]
+  MissingBump
+>>>>>>> main
 }

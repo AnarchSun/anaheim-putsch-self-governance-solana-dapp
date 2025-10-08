@@ -1,7 +1,11 @@
 import * as anchor from '@coral-xyz/anchor'
 import { Program, AnchorError } from '@coral-xyz/anchor'
 import { Keypair } from '@solana/web3.js'
+<<<<<<< HEAD
 import type { Anaheim } from '../target/types/anaheim'
+=======
+import type { Anaheim } from '../target/types/anaheim-old'
+>>>>>>> main
 
 describe('anaheim', () => {
   const provider = anchor.AnchorProvider.env()

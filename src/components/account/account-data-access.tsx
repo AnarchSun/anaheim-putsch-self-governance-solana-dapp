@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+// src/components/account/account-data-access.tsx
+>>>>>>> main
 import { TOKEN_2022_PROGRAM_ADDRESS, TOKEN_PROGRAM_ADDRESS } from 'gill/programs/token'
 import { getTransferSolInstruction } from 'gill/programs'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
@@ -7,14 +11,24 @@ import {
   airdropFactory,
   createTransaction,
   getBase58Decoder,
+<<<<<<< HEAD
   lamports,
+=======
+  GetSignatureStatusesApi,
+  lamports, RequestAirdropApi,
+>>>>>>> main
   signAndSendTransactionMessageWithSigners,
   type SolanaClient,
 } from 'gill'
 import { toast } from 'sonner'
+<<<<<<< HEAD
 import { toastTx } from '@/components/toast-tx'
 import { useWalletUiSigner } from '@/components/solana/use-wallet-ui-signer'
 
+=======
+
+
+>>>>>>> main
 function useGetBalanceQueryKey({ address }: { address: Address }) {
   const { cluster } = useWalletUi()
 
@@ -58,11 +72,16 @@ export function useGetSignaturesQuery({ address }: { address: Address }) {
 
   return useQuery({
     queryKey: useGetSignaturesQueryKey({ address }),
+<<<<<<< HEAD
     queryFn: () => client.rpc.getSignaturesForAddress(address).send(),
+=======
+    queryFn: () => client.getSignaturesForAddress(address).send(),
+>>>>>>> main
   })
 }
 
 async function getTokenAccountsByOwner(
+<<<<<<< HEAD
   rpc: SolanaClient['rpc'],
   { address, programId }: { address: Address; programId: Address },
 ) {
@@ -70,6 +89,15 @@ async function getTokenAccountsByOwner(
     .getTokenAccountsByOwner(address, { programId }, { commitment: 'confirmed', encoding: 'jsonParsed' })
     .send()
     .then((res) => res.value ?? [])
+=======
+    rpc: SolanaClient['rpc'],
+    { address, programId }: { address: Address; programId: Address },
+) {
+  return await rpc
+      .getTokenAccountsByOwner(address, { programId }, { commitment: 'confirmed', encoding: 'jsonParsed' })
+      .send()
+      .then((res) => res.value ?? [])
+>>>>>>> main
 }
 
 export function useGetTokenAccountsQuery({ address }: { address: Address }) {
@@ -78,6 +106,7 @@ export function useGetTokenAccountsQuery({ address }: { address: Address }) {
   return useQuery({
     queryKey: ['get-token-accounts', { cluster, address }],
     queryFn: async () =>
+<<<<<<< HEAD
       Promise.all([
         getTokenAccountsByOwner(client.rpc, { address, programId: TOKEN_PROGRAM_ADDRESS }),
         getTokenAccountsByOwner(client.rpc, { address, programId: TOKEN_2022_PROGRAM_ADDRESS }),
@@ -85,6 +114,19 @@ export function useGetTokenAccountsQuery({ address }: { address: Address }) {
   })
 }
 
+=======
+        Promise.all([
+          getTokenAccountsByOwner(client["rpc"], { address, programId: TOKEN_PROGRAM_ADDRESS }),
+          getTokenAccountsByOwner(client["rpc"], { address, programId: TOKEN_2022_PROGRAM_ADDRESS }),
+        ]).then(([tokenAccounts, token2022Accounts]) => [...tokenAccounts, ...token2022Accounts]),
+  })
+}
+
+function useWalletUiSigner() {
+  // TODO ORION
+}
+
+>>>>>>> main
 export function useTransferSolMutation({ address }: { address: Address }) {
   const { client } = useWalletUi()
   const signer = useWalletUiSigner()
@@ -94,7 +136,11 @@ export function useTransferSolMutation({ address }: { address: Address }) {
   return useMutation({
     mutationFn: async (input: { destination: Address; amount: number }) => {
       try {
+<<<<<<< HEAD
         const { value: latestBlockhash } = await client.rpc.getLatestBlockhash({ commitment: 'confirmed' }).send()
+=======
+        const { value: latestBlockhash } = await client["rpc"].getLatestBlockhash({ commitment: 'confirmed' }).send()
+>>>>>>> main
 
         const transaction = createTransaction({
           feePayer: signer,
@@ -130,6 +176,7 @@ export function useTransferSolMutation({ address }: { address: Address }) {
   })
 }
 
+<<<<<<< HEAD
 export function useRequestAirdropMutation({ address }: { address: Address }) {
   const { client } = useWalletUi()
   const invalidateBalanceQuery = useInvalidateGetBalanceQuery({ address })
@@ -143,6 +190,22 @@ export function useRequestAirdropMutation({ address }: { address: Address }) {
         recipientAddress: address,
         lamports: lamports(BigInt(Math.round(amount * 1_000_000_000))),
       }),
+=======
+export function useRequestAirdropMutation({address}: { address: Address }, rpcSubscriptions, Rpc) {
+  const { client } = useWalletUi()
+  const invalidateBalanceQuery = useInvalidateGetBalanceQuery({ address })
+  const invalidateSignaturesQuery = useInvalidateGetSignaturesQuery({ address })
+  const airdrop = airdropFactory( {rpc: Rpc<GetSignatureStatusesApi & RequestAirdropApi> & {"~cluster"?: "devnet"}}
+): AirdropFunction
+
+  return useMutation({
+    mutationFn: async (amount: number = 1) =>
+        airdrop({
+          commitment: 'confirmed',
+          recipientAddress: address,
+          lamports: lamports(BigInt(Math.round(amount * 1_000_000_000))),
+        }),
+>>>>>>> main
     onSuccess: async (tx) => {
       toastTx(tx)
       await Promise.all([invalidateBalanceQuery(), invalidateSignaturesQuery()])

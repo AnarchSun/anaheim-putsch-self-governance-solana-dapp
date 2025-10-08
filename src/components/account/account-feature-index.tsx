@@ -1,6 +1,14 @@
+<<<<<<< HEAD
 import { ReactNode } from 'react'
 import { useWalletUi } from '@wallet-ui/react'
 import { WalletButton } from '@/components/solana/solana-provider'
+=======
+// src/components/account/account-feature-index.tsx
+import { ReactNode } from 'react'
+import { useWalletUi } from '@wallet-ui/react'
+import {WalletButton} from "@/components/wallet/wallet-button";
+
+>>>>>>> main
 
 export default function AccountFeatureIndex({ redirect }: { redirect: (path: string) => ReactNode }) {
   const { account } = useWalletUi()

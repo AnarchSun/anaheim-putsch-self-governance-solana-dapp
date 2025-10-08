@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 // FILE: anchor/programs/anaheim/src/handlers/handle_create_user
+=======
+// handlers/handle_create_user.rs
+>>>>>>> main
 use anchor_lang::prelude::*;
 use crate::contexts::create_user::CreateUser;
 use crate::error::ErrorCode;

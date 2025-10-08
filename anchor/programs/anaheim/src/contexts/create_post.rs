@@ -1,6 +1,12 @@
 // ===================== contexts/create_post.rs =====================
 use anchor_lang::prelude::*;
+<<<<<<< HEAD
 use crate::state::post_account::PostAccount;
+=======
+
+use crate::state::PostAccount;
+
+>>>>>>> main
 #[derive(Accounts)]
 pub struct CreatePost<'info> {
   #[account(
