@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query'
 import { type Address, airdropFactory, lamports } from 'gill'
-import { useSolana } from '@/components/solana/use-solana'
+import useSolana from '@/components/solana/use-solana'
 import { toastTx } from '@/components/toast-tx'
 import { useInvalidateGetBalanceQuery } from './use-invalidate-get-balance-query'
 import { useInvalidateGetSignaturesQuery } from './use-invalidate-get-signatures-query'

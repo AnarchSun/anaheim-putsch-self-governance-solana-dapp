@@ -1,5 +1,3 @@
-// FILE: tsconfig.json
-
 {
   "compilerOptions": {
     "moduleResolution": "node",
@@ -33,7 +31,6 @@
     },
     "plugins": [{ "name": "next" }]
   },
-  // Your "include" and "exclude" arrays are preserved exactly as they were.
   "include": [
     "next-env.d.ts",
     "**/*.ts",

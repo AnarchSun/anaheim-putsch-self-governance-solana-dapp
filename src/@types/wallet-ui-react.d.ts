@@ -18,6 +18,10 @@ declare module '@wallet-ui/react' {
   }
 
   export function useWalletUi(): {
+    connected: any;
+    wallet: any;
+    copy: MouseEventHandler<HTMLDivElement> | undefined;
+    disconnect: MouseEventHandler<HTMLDivElement> | undefined;
     signer: any;
     cluster: any;
     client: string;

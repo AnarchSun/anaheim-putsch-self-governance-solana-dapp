@@ -6,8 +6,8 @@
 // - All errors batch fixed, filename ALWAYS at top, matrix hacked
 
 import React, { useState } from "react";
-import { initializeAnaheimAccount } from "./initStakeAccount";
 import { Connection, Keypair } from "@solana/web3.js";
+import {initializeAnaheimAccount} from "@/hooks/solana/initializeAnaheimAccount";
 
 type StakeInitStatusProps = {
     connection: Connection;
@@ -29,8 +29,7 @@ export function StakeInitStatus({ connection, accountAddress, payer }: StakeInit
             connection,
             accountAddress,
             payer.publicKey,
-            undefined,
-            [payer] // Keypair as Signer
+            [payer, new Keypair] // Keypair as Signer
         );
         setStatus(result.status);
         setError(result.error || "");

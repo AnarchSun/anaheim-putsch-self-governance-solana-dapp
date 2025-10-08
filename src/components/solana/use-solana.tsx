@@ -1,14 +1,23 @@
+// src/components/solana/use-solana.tsx
 import { useWalletUi } from '@wallet-ui/react'
+import { useMemo } from 'react'
+import {SOLANA_RPC_ENDPOINT, PROGRAM_ID, WALLET_PUBKEY, SOLANA_CLUSTER_URL} from '@/config/solana';
+import { createRpc, createSolanaRpcApi } from '@solana/rpc'   // ⚡ importer la factory runtime
+import { createHttpTransport } from '@solana/rpc-transport-http'
 
-/**
- * Custom hook to abstract Wallet UI and related functionality from your app.
- *
- * This is a great place to add custom shared Solana logic or clients.
- */
-export function useSolana() {
-  const walletUi = useWalletUi()
+function useSolana() {
+    const walletUi = useWalletUi()
 
-  return {
-    ...walletUi,
-  }
+    const client = useMemo(
+        () =>
+            createRpc({
+                api: createSolanaRpcApi(),                           // ✅ ici on passe une valeur runtime
+                transport: createHttpTransport({ url: SOLANA_RPC_ENDPOINT }),
+            }),
+        []
+    )
+    return { ...walletUi,  WALLET_PUBKEY , client, cluster: SOLANA_CLUSTER_URL, PROGRAM_ID }
+
 }
+
+export default useSolana

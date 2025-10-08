@@ -1,94 +1,82 @@
 // FILE: src/hooks/solana/initializeAnaheimAccount.ts
+import { PublicKey, Keypair, SystemProgram, Connection, VersionedTransaction, TransactionMessage, SendOptions } from '@solana/web3.js'
 
-import { PublicKey, Keypair, Transaction, SystemProgram, Connection, VersionedTransaction, TransactionMessage, SendOptions } from '@solana/web3.js'
-import { callSolanaRpc } from "@/utils/solana/solanaRpcClient"
-
-class txSignature {}
+export type InitAnaheimResult = {
+    status: string;
+    error?: string;
+    logs?: string[];
+    txSignature?: string;
+    newAccount?: PublicKey;
+};
 
 /**
- * Initializes an Anaheim self-governance account on Solana.
- * - Generates Keypair if none provided
- * - Sends a transaction to create account (SystemProgram.createAccount)
- * - Returns tx signature, new account publicKey, and result
- *
- * @param payerKeypair Keypair funding the account creation
- * @param lamports Amount to fund the new account (in lamports)
- * @param space Space (bytes) to allocate for the account, default: 0 (for system account)
- * @param programId Program ID for Anaheim (default: SystemProgram.programId)
- * @param connection
- * @returns { txSignature: string, newAccount: PublicKey }
+ * Initialize an Anaheim self-governance account on Solana
  */
-export async function initializeAnaheimAccount({
-                                                   payerKeypair,
-                                                   lamports = 1000000,
-                                                   space = 0,
-                                                   programId = SystemProgram.programId,
-                                                   connection = null,
-                                               }: {
-    payerKeypair: Keypair,
-    lamports?: number,
-    space?: number,
-    programId?: PublicKey,
-    connection?: Connection | null,
-}): Promise<txSignature> {
-    // Generate new Anaheim DAO account
-    const newAccount = Keypair.generate();
+export async function initializeAnaheimAccount(
+    connection: Connection,
+    accountAddress: string,
+    payerPubkey: PublicKey,
+    payerKeypair: (Keypair | Keypair)[], // must sign the tx
+    signers: Keypair[] = [],
+): Promise<InitAnaheimResult> {
 
-    // Build transaction instructions
-    const ix = SystemProgram.createAccount({
-        fromPubkey: payerKeypair.publicKey,
-        newAccountPubkey: newAccount.publicKey,
-        lamports,
-        space,
-        programId,
-    });
+    try {
+        // Generate new Anaheim DAO account
+        const newAccount = Keypair.generate();
 
-    // If direct connection is provided, send via @solana/web3.js using VersionedTransaction
-    if (connection) {
-        // Fetch recent blockhash
-        const recentBlockhash = (await connection.getLatestBlockhash()).blockhash;
+        // TODO: set lamports, space, programId according to your program
+        const space = 128;
+        const lamports = await connection.getMinimumBalanceForRentExemption(space);
+        const programId = new PublicKey(accountAddress); // adjust if needed
 
-        // Create TransactionMessage for VersionedTransaction (v0)
+        // Build instruction
+        const ix = SystemProgram.createAccount({
+            fromPubkey: payerPubkey,
+            newAccountPubkey: newAccount.publicKey,
+            lamports,
+            space,
+            programId,
+        });
+
+        // Prepare versioned transaction
+        const { blockhash, lastValidBlockHeight } = await connection.getLatestBlockhash('processed');
         const messageV0 = new TransactionMessage({
-            payerKey: payerKeypair.publicKey,
-            recentBlockhash,
-            instructions: [ix]
+            payerKey: payerPubkey,
+            recentBlockhash: blockhash,
+            instructions: [ix],
         }).compileToV0Message();
 
         const versionedTx = new VersionedTransaction(messageV0);
+        versionedTx.sign([payerKeypair, newAccount, ...signers]);
 
-        // Sign with payer and newAccount
-        versionedTx.sign([payerKeypair, newAccount]);
+        // Send transaction
+        const txSignature = await connection.sendTransaction(versionedTx, { preflightCommitment: 'processed' } as SendOptions);
 
-        // Send using sendTransaction (modern, non-deprecated)
-        const sendOpts: SendOptions = { preflightCommitment: 'processed' };
-        const txSignature = await connection.sendTransaction(versionedTx, sendOpts);
-        return { txSignature, newAccount: newAccount.publicKey };
-    } else {
-        // Else: send via custom RPC proxy, punk style
-        // Fallback: Use legacy Transaction, warn about deprecation
-        const tx = new Transaction().add(ix);
-        tx.recentBlockhash = (await callSolanaRpc({
-            method: "getLatestBlockhash",
-            params: [],
-            id: Date.now(),
-            jsonrpc: "2.0"
-        }))?.result?.blockhash || ""; // fallback blockhash
-        tx.feePayer = payerKeypair.publicKey;
-        tx.sign(payerKeypair, newAccount);
-
-        // Serialize transaction and send via callSolanaRpc
-        const rawTx = tx.serialize().toString("base64");
-        const result = await callSolanaRpc({
-            method: "sendTransaction",
-            params: [rawTx],
-            id: Date.now(),
-            jsonrpc: "2.0"
+        // Confirm transaction safely (versioned tx compatible)
+        await connection.confirmTransaction({
+            signature: txSignature,
+            blockhash,
+            lastValidBlockHeight,
         });
+
+        // Fetch logs from versioned transaction
+        const confirmedTx = await connection.getTransaction(txSignature, {
+            maxSupportedTransactionVersion: 0,
+        });
+        const logs = confirmedTx?.meta?.logMessages || [];
+
         return {
-            txSignature: result?.result || null,
+            status: "Initialisation réussie",
+            txSignature,
             newAccount: newAccount.publicKey,
-            rpcResult: result,
+            logs,
+        };
+
+    } catch (err: any) {
+        return {
+            status: "Erreur lors de l'initialisation",
+            error: err.message,
+            logs: [],
         };
     }
 }

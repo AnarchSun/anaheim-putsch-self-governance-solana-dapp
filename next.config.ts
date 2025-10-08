@@ -1,30 +1,28 @@
-import type { NextConfig } from 'next'
+import path from 'path';
 
-// 🏴‍☠️ BATCH FIX: Add gill-monorepo to transpilePackages for TypeScript/JSX in node_modules
-// This ensures Next.js will transpile Gill's raw .ts/.tsx code for you, fixing anchor errors!
-
-const nextConfig: NextConfig = {
-    // Transpile both your Solana SDK and Gill monorepo (add more as needed!)
-    transpilePackages: ["salmon-adapter-sdk", "gill-monorepo"],
-
-    productionBrowserSourceMaps: true,
-    reactStrictMode: true,
-    experimental: {
-        serverActions: {
-            bodySizeLimit: '1mb',
-            allowedOrigins: ['https://anarcrypt.sol']
-        }
-    },
-
-    webpack(config, { isServer }) {
-        if (!isServer) {
-            config.resolve.fallback = {
-                ...config.resolve.fallback,
-                fs: false,
-            };
-        }
+module.exports = {
+    webpack: (config: any) => {
+        config.resolve.extensions = ['.ts', '.tsx', '.js', '.json'];
+        config.module.rules.push({
+            test: /\.(ts|tsx)$/,
+            include: [
+                path.resolve(__dirname, 'node_modules/gill-monorepo'),
+                path.resolve(__dirname, 'node_modules/.pnpm/gill-monorepo@https+++codeload.github.com+codebender828+gill+tar.gz+00ff51501ff0bd141bcefa40a992059b51c98a1c/node_modules/gill-monorepo'),
+            ],
+            use: [
+                {
+                    loader: 'babel-loader',
+                    options: {
+                        presets: [
+                            'next/babel',
+                            '@babel/preset-typescript',
+                        ],
+                    },
+                },
+            ],
+        });
+        config.resolve.alias['@'] = path.resolve(__dirname, 'src');
+        // ... autres alias
         return config;
-    }
+    },
 };
-
-export default nextConfig;

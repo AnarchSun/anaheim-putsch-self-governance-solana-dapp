@@ -4,7 +4,6 @@ import { PublicKey, LAMPORTS_PER_SOL } from '@solana/web3.js'
 import { useConnection } from './useConnection'
 import { toast } from 'sonner'
 import { Address } from "@solana/kit"
-import { client } from "jayson"
 
 export function useRequestAirdrop({ address }: { address: Address }) {
   // Correction : un seul argument pour useConnection

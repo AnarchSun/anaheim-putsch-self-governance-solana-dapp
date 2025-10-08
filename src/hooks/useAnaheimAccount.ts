@@ -5,7 +5,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { PublicKey } from '@solana/web3.js';
-import { useAnaheimProgram } from './useAnaheimProgram';
+import { useAnaheimProgram } from '@/../anchor/src/anaheim-exports';
 import { Program } from '@coral-xyz/anchor';
 
 // Helper function to fetch account data. It returns null if not found.

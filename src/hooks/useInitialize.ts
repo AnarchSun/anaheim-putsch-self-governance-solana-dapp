@@ -7,7 +7,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { PublicKey, SystemProgram } from '@solana/web3.js';
 import { toast } from 'sonner';
-import { useAnaheimProgram } from './useAnaheimProgram';
+import { useAnaheimProgram } from '@/../anchor/src/anaheim-exports';
 
 export function useInitializeMutation() {
     const queryClient = useQueryClient();

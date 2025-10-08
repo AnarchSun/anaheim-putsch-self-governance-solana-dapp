@@ -15,7 +15,7 @@ pub use validate_post_content::*;
 //                          PROGRAM ID
 // =========================================================================
 // PATCH: Update program ID for matrix override and sync with frontend/scripts!
-declare_id!("7NunQoZv1noZpPWzGvW2rkNcf4nT8ue5xt7x8jGKwGhS");
+declare_id!("9sYXLc1kpKdvJ4HUv16EcLB99eaeHTnK28LdGTNFpxBz");
 
 // =========================================================================
 //                          PROGRAM LOGIC
