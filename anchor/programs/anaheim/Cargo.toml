@@ -1,11 +1,12 @@
 [package]
 name = "anaheim"
 version = "0.1.0"
+description = "Created with Anchor"
 edition = "2021"
 
 [lib]
-name = "anaheim"
 crate-type = ["cdylib", "lib"]
+name = "anaheim"
 
 [features]
 default = []
@@ -18,3 +19,4 @@ idl-build = ["anchor-lang/idl-build"]
 
 [dependencies]
 anchor-lang = { version = "0.31.1", features = ["init-if-needed"] }
+

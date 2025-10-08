@@ -1,78 +1,96 @@
-// PATH: src/components/mining/MiningClient.tsx
-// ULTRA FINAL ANARCHOPUNK PATCH — Batch fixes:
-// - Use accountInfo to avoid unused var warning
-// - Escape apostrophe in JSX for react/no-unescaped-entities
-// - Filename/path toujours!
-
+// FILE: src/components/mining/MiningClient.tsx
 'use client';
 
 import React from 'react';
+import { useConnection, useWallet } from '@solana/wallet-adapter-react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+    ANAHEIM_ACCOUNT_PUBKEY,
+    createAnaheimProgram,
+    getAnaheimAccount
+} from '@/lib/anaheim-program';
 import { Button } from '@/components/ui/button';
-import { useInitializeMutation } from '@/hooks/useInitialize';
-import { useMineMutation } from '@/hooks/useMine';
+import { AppAlert } from '../app-alert';
 
-// ✅ This component now receives its data as props. It does NOT fetch its own data.
-export default function MiningClient({account, isLoading, accountInfo}: {
-    account: any,
-    isLoading: boolean,
-    accountInfo?: any
-}) {
-    const initializeMutation = useInitializeMutation();
-    const mineMutation = useMineMutation();
+// --- HOOKS ---
 
-    if (isLoading) {
-        return <p className="text-center p-4">Chargement du compte du programme...</p>;
-    }
+function useAnaheimAccountQuery() {
+    const { connection } = useConnection();
+    return useQuery({
+        queryKey: ['anaheim-account'],
+        queryFn: () => getAnaheimAccount(connection),
+    });
+}
 
-    // If the account data (passed as a prop) does not exist, show the "Initialize" button.
-    if (!account) {
+function useIncrementMutation() {
+    const { connection } = useConnection();
+    const wallet = useWallet();
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: async () => {
+            if (!wallet.connected || !wallet.publicKey) { throw new Error('Wallet not connected'); }
+            const program = createAnaheimProgram(connection, wallet);
+            const signature = await program.methods
+                .increment()
+                .accounts({ anaheim: ANAHEIM_ACCOUNT_PUBKEY! })
+                .rpc();
+            const latestBlockhash = await connection.getLatestBlockhash();
+            await connection.confirmTransaction({ signature, ...latestBlockhash });
+            return signature;
+        },
+        onSuccess: () => {
+            return queryClient.invalidateQueries({ queryKey: ['anaheim-account'] });
+        },
+        onError: (error: Error) => console.error('Increment failed:', error),
+    });
+}
+
+// ===================================================================
+// THIS IS THE DEFINITIVE FIX.
+// The broken `useInitializeMutation` hook has been completely REMOVED.
+// The frontend UI should NEVER be responsible for initialization.
+// ===================================================================
+
+// --- MAIN COMPONENT ---
+export default function MiningClient() {
+    const { data: anaheimAccount, isLoading } = useAnaheimAccountQuery();
+    const incrementMutation = useIncrementMutation();
+
+    if (isLoading) return <p className="text-center">Loading on-chain data...</p>;
+
+    if (!anaheimAccount) {
         return (
-            <div className="p-4 border rounded-lg bg-card text-center">
-                <h3 className="text-lg font-bold text-red-500">Programme Non Initialisé</h3>
-                {/* PATCH: Escape apostrophe */}
-                <p className="text-muted-foreground mb-4">Votre compte n&apos;existe pas. Cliquez pour le créer.</p>
-                {/* PATCH: Show accountInfo for debug/info and avoid unused var warning */}
-                {accountInfo && (
-                    <div className="my-2 text-xs bg-gray-50 border rounded px-2 py-1">
-                        <b>Infos du compte:</b> {JSON.stringify(accountInfo)}
-                    </div>
-                )}
-                <Button
-                    onClick={() => initializeMutation.mutate()}
-                    disabled={initializeMutation.isPending}
-                >
-                    {initializeMutation.isPending ? 'Création en cours...' : 'Créer le Compte'}
-                </Button>
-            </div>
+            <AppAlert action={null}>
+                <div className="text-center font-semibold text-red-500">
+                    <h3 className="text-lg font-bold">Program Not Initialized</h3>
+                    <p className="text-sm text-muted-foreground mt-2">
+                        Main program account not found. Run:
+                    </p>
+                    <pre className="mt-2 p-2 bg-gray-800 text-white rounded font-mono text-xs">
+                        pnpm tsx anchor/scripts/initialize.ts
+                    </pre>
+                </div>
+            </AppAlert>
         );
     }
 
-    // If the account data exists, show the dashboard.
+    const currentCount = anaheimAccount.count.toNumber();
+
     return (
-        <div className="p-6 border rounded-xl bg-card">
-            <h2 className="text-2xl font-bold">Tableau de Bord Minier</h2>
-            {/* PATCH: Show accountInfo for debug/info and avoid unused var warning */}
-            {accountInfo && (
-                <div className="my-2 text-xs bg-gray-50 border rounded px-2 py-1">
-                    <b>Infos du compte:</b> {JSON.stringify(accountInfo)}
-                </div>
-            )}
-            <div className="text-center my-4">
-                <p>Compte Actuel:</p>
-                <p className="text-6xl font-bold">{account.count.toString()}</p>
+        <div className="p-6 border rounded-xl bg-card text-card-foreground max-w-sm mx-auto">
+            <h2 className="text-xl font-bold text-center">Community Counter</h2>
+            <div className="text-center">
+                <p className="text-muted-foreground">Current Count:</p>
+                <p className="text-5xl font-bold font-mono animate-pulse">{currentCount}</p>
             </div>
             <Button
-                className="w-full"
-                onClick={() => mineMutation.mutate()}
-                disabled={mineMutation.isPending}
+                className="w-full text-lg py-6"
+                onClick={() => incrementMutation.mutate()}
+                disabled={incrementMutation.isLoading}
             >
-                {mineMutation.isPending ? 'Minage en cours...' : '⛏️ Miner'}
+                {incrementMutation.isLoading ? 'Incrementing...' : 'Increment Count'}
             </Button>
         </div>
     );
 }
-
-// PATCH NOTES:
-// - accountInfo now used/visible, avoids unused var warning
-// - Apostrophe in JSX escaped with &apos;
-// - Filename/path toujours, matrix override!

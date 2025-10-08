@@ -1,4 +1,4 @@
-//
+// src/hooks/solana/useGetBalance.ts
 import { useQuery } from '@tanstack/react-query'
 import { PublicKey } from '@solana/web3.js'
 import { useSolanaClient } from 'gill-react'
@@ -11,12 +11,17 @@ export function useGetBalance(address?: string) {
     queryKey: ['solana', 'balance', address],
     enabled: !!address,
     queryFn: async () => {
-      // Always validate the address!
-      if (!address || !/^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(address)) throw new Error('Adresse manquante ou invalide')
+      if (!address) throw new Error('Adresse manquante')
       const pubkey = new PublicKey(address)
+
+      // Cast string en Address (brandé)
       const brandedAddress = pubkey.toBase58() as unknown as Address
+
       const account = await client.rpc.getAccountInfo(brandedAddress).send()
+
       if (!account?.value) throw new Error('Compte introuvable')
+
+      // Cast Lamports en number pour calcul
       return Number(account.value.lamports) / 1e9
     },
   })

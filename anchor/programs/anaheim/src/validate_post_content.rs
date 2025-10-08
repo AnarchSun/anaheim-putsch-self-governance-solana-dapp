@@ -1,6 +1,6 @@
 use crate::constants::MAX_MESSAGE_LENGTH;
 
-/// anarcrypt.sol/anaheim-putsch-self-governance-solana-dapp/anchor/programs/anaheim/src/validate_post_content.rs
+/// anarcrypt.sol/anaheim-old-putsch-self-governance-solana-dapp/anchor/programs/anaheim-old/src/validate_post_content.rs
 /// Vérifie que `content` n'est pas vide et ne dépasse pas la longueur max.
 /// Retourne `Ok(())` ou une chaîne d'erreur statique.
 #[allow(dead_code)]
