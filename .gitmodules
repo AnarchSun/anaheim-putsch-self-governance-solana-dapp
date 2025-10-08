@@ -1,9 +1,0 @@
-[submodule "src/gill"]
-	path = src/gill
-	url = git@github.com:codebender828/gill.git
-[submodule "tools/mpl-candy-machine"]
-	path = tools/mpl-candy-machine
-	url = git@github.com:AnarchSun/mpl-candy-machine.git
-[submodule "governance"]
-	path = governance
-	url = git@github.com:AnarchSun/governance-ui.git
