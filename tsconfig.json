@@ -1,7 +1,6 @@
-// FILE: tsconfig.json
-
 {
   "compilerOptions": {
+    "moduleResolution": "node",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
@@ -14,13 +13,12 @@
     "noImplicitReturns": true,
     "strictFunctionTypes": true,
     "module": "ESNext",
-    "moduleResolution": "bundler",
     "target": "ESNext",
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "resolveJsonModule": true,
     "allowArbitraryExtensions": true,
     "types": ["vitest/globals", "node"],
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
     "paths": {
       "anchor/*": ["../../anchor/*"],
@@ -33,7 +31,6 @@
     },
     "plugins": [{ "name": "next" }]
   },
-  // Your "include" and "exclude" arrays are preserved exactly as they were.
   "include": [
     "next-env.d.ts",
     "**/*.ts",
@@ -41,7 +38,16 @@
     ".next/types/**/*.ts",
     "node_modules/.pnpm/vitest@3.2.3_@types+node@24.0.10/node_modules/vitest/globals.d.ts",
     "node_modules/.pnpm/vitest@3.2.3_@types+node@24.0.10/node_modules/vitest/globals.d.ts",
-    "node_modules/.pnpm/vitest@3.2.3_@types+node@24.0.10/node_modules/vitest/globals.d.ts"
+    "node_modules/.pnpm/vitest@3.2.3_@types+node@24.0.10/node_modules/vitest/globals.d.ts",
+    "src/lib/ethereumjs-monorepo/packages/ethereum-tests/src/Templates/TestEachOpcode/testOpcodesGen.js",
+    "src/lib/ethereumjs-monorepo/packages/ethereum-tests/src/Templates/TestEachOpcode/testOpcodesGen.js",
+    "node_modules/.pnpm/@types+node@24.2.1/node_modules/@types/node/buffer.d.ts",
+    "node_modules/.pnpm/hash.js@1.1.7/node_modules/hash.js/lib/hash.d.ts",
+    "node_modules/.pnpm/hash.js@1.1.7/node_modules/hash.js/lib/hash.d.ts",
+    "node_modules/.pnpm/hash.js@1.1.7/node_modules/hash.js/lib/hash.d.ts",
+    "node_modules/.pnpm/hash.js@1.1.7/node_modules/hash.js/lib/hash.d.ts",
+    "node_modules/.pnpm/hash.js@1.1.7/node_modules/hash.js/lib/hash.d.ts",
+    "node_modules/.pnpm/hash.js@1.1.7/node_modules/hash.js/lib/hash.d.ts"
   ],
   "exclude": ["node_modules"]
 }

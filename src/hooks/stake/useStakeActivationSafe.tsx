@@ -2,8 +2,13 @@
 import { useEffect, useState } from 'react'
 import { Connection, PublicKey } from '@solana/web3.js'
 import { getStakeActivationSafe } from './getStakeActivationSafe'
-import {StakeActivationState} from "@/components/wallet/wallet-connect-button";
 
+// Définition du type attendu pour le state
+export type StakeActivationState = {
+  state: "active" | "inactive" | "activating" | "deactivating"
+  active: number
+  inactive: number
+}
 
 export function useStakeActivationSafe(pubkey: PublicKey, connection: Connection) {
   const [state, setState] = useState<StakeActivationState | null>(null)

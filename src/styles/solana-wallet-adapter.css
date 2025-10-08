@@ -1,0 +1,69 @@
+/* PATCH ULTRA FINAL — STYLE Wallet Adapter V0.9+ — anarcho-punk grunge edition */
+.wallet-adapter-button-trigger,
+.wallet-adapter-button,
+.wallet-adapter-modal,
+.wallet-adapter-modal-list,
+.wallet-adapter-modal-list-item,
+.wallet-adapter-modal-list-item-selected,
+.wallet-adapter-modal-list-item:hover,
+.wallet-adapter-modal-list-item-wallet {
+    font-family: 'Roboto Mono', 'Menlo', 'Monaco', 'Consolas', monospace;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #fff;
+    background: #23272a;
+    border: 1px solid #333;
+    padding: 0.75em 1.2em;
+    border-radius: 0.5em;
+    cursor: pointer;
+    transition: background 0.2s, border 0.2s;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+    letter-spacing: 0.05em;
+}
+
+.wallet-adapter-button:hover,
+.wallet-adapter-modal-list-item:hover {
+    background: #444;
+    border-color: #666;
+    color: #ffecb3;
+}
+
+.wallet-adapter-button[aria-disabled='true'],
+.wallet-adapter-button:disabled {
+    background: #555;
+    color: #bbb;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.wallet-adapter-modal {
+    background: #23272a;
+    border: 1px solid #333;
+    border-radius: 1em;
+    padding: 1.5em;
+    box-shadow: 0 1px 8px rgba(0,0,0,0.3);
+}
+
+.wallet-adapter-modal-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.wallet-adapter-modal-list-item {
+    padding: 0.8em 1em;
+    border-bottom: 1px solid #333;
+    cursor: pointer;
+    background: #23272a;
+    color: #fff;
+}
+
+.wallet-adapter-modal-list-item-selected {
+    background: #444;
+    font-weight: bold;
+    color: #ffecb3;
+}
+
+.wallet-adapter-modal-list-item:last-child {
+    border-bottom: none;
+}

@@ -1,17 +1,13 @@
 // src/components/wallet/wallet-button.tsx
-'use client'; // <-- MUST BE THE FIRST LINE
+'use client';
 
 import { useWallet } from '@solana/wallet-adapter-react';
-import { WalletDisconnectButton, WalletModalButton } from '@solana/wallet-adapter-react-ui';
-import React from 'react';
+import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 
-export const WalletButton = () => {
-    const { connected } = useWallet();
+export function WalletButton() {
+    const { connected, connecting, publicKey } = useWallet();
 
-    return (
-        <div>
-            {/* Ces boutons nécessitent du JS côté client pour fonctionner */}
-            {connected ? <WalletDisconnectButton /> : <WalletModalButton />}
-        </div>
-    );
-};
+    if (connecting) return <span>🔄 Connecting...</span>;
+    if (!connected) return <WalletMultiButton />;
+    return <span>✅ Connected: {publicKey?.toBase58().slice(0, 6)}...</span>;
+}

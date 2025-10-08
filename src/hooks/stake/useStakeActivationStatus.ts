@@ -1,8 +1,10 @@
-// src/hooks/stake/useStakeActivationStatus.ts
+// PATH: src/hooks/stake/useStakeActivationStatus.ts
+// ULTRA FINAL ANARCHOPUNK PATCH: Remove unused constant pubkeyStr, batch fix grunge, filename/path éternel!
+
 'use client'
 
-import { Connection, PublicKey } from '@solana/web3.js'
-import { useEffect, useState, useMemo } from 'react'
+import { PublicKey } from '@solana/web3.js'
+import { useEffect, useState } from 'react'
 
 // Typage clair et strict
 export type StakeActivationStatus = {
@@ -26,30 +28,28 @@ export function useStakeActivationStatus(pubkey: PublicKey, connection: any) {
   const [error, setError] = useState<Error | null>(null)
   const [loading, setLoading] = useState(true)
 
-  const pubkeyStr = useMemo(() => pubkey.toBase58(), [pubkey])
-
   useEffect(() => {
     if (!pubkey || !connection) return
 
     setLoading(true)
 
     getStakeActivationSafe()
-      .then((result) => {
-        const normalized: StakeActivationStatus = {
-          state: result.state as StakeActivationStatus['state'],
-          active: result.active,
-          inactive: result.inactive,
-        }
-        setStatus(normalized)
-      })
-      .catch((err: unknown) => {
-        if (err instanceof Error) setError(err)
-        else setError(new Error('Unknown error'))
-      })
-      .finally(() => {
-        setLoading(false)
-      })
-  }, [pubkeyStr, connection]) // ✅ propre
+        .then((result) => {
+          const normalized: StakeActivationStatus = {
+            state: result.state as StakeActivationStatus['state'],
+            active: result.active,
+            inactive: result.inactive,
+          }
+          setStatus(normalized)
+        })
+        .catch((err: unknown) => {
+          if (err instanceof Error) setError(err)
+          else setError(new Error('Unknown error'))
+        })
+        .finally(() => {
+          setLoading(false)
+        })
+  }, [pubkey, connection]) // PATCH: dependency array clean
 
   return {
     status,
@@ -58,3 +58,7 @@ export function useStakeActivationStatus(pubkey: PublicKey, connection: any) {
     state: status?.state,
   }
 }
+
+// PATCH NOTES:
+// - Removed unused constant pubkeyStr
+// - Filename/path éternel, batch fix grunge!

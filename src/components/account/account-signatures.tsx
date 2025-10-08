@@ -1,10 +1,11 @@
-// src/components/account/account-signatures.tsx
+// PATH: src/components/account/account-signatures.tsx
+
 'use client'
 
 import React, { useEffect, useMemo, useState } from 'react'
 import { useWrappedConnection } from '@/hooks/solana/useWrappedConnection'
 import { ConfirmedSignatureInfo, PublicKey } from '@solana/web3.js'
-import { connection } from 'next/server'
+import { SOLANA_CLUSTER_URL } from '@/config/solana'
 
 interface AccountSignaturesProps {
   address: string
@@ -12,7 +13,8 @@ interface AccountSignaturesProps {
 
 export default function AccountSignatures({ address }: AccountSignaturesProps) {
   const publicKey = useMemo(() => new PublicKey(address), [address])
-  const wrappedConnection = useWrappedConnection('https://api.devnet.solana.com', address, publicKey, connection)
+  // Correction : n'utiliser qu'un seul argument
+  const wrappedConnection = useWrappedConnection(SOLANA_CLUSTER_URL)
 
   const [signatures, setSignatures] = useState<ConfirmedSignatureInfo[] | null>(null)
 

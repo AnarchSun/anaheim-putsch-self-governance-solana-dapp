@@ -9,7 +9,7 @@ export function useWalletUi() {
   const connection = useConnection()
 
   const address = wallet.publicKey?.toBase58() || null
-  const cluster = connection?.rpcEndpoint || null
+  const cluster = connection?address || null: 'devnet'
 
   return {
     wallet,

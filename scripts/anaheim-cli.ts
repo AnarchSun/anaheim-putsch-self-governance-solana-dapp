@@ -19,7 +19,7 @@ async function main() {
   if (action === 'start') {
     execSync('pnpm dev', { stdio: 'inherit' })
   } else if (action === 'build') {
-    execSync('pnpm build', { stdio: 'inherit' })
+    execSync('pnpm anchor', { stdio: 'inherit' })
   } else {
     console.log('À bientôt, camarade anarcho-développeur.')
     process.exit(0)

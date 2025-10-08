@@ -1,11 +1,9 @@
-// FILE: src/app/posts/page.tsx
-
 import PostCard from '@/components/anaheim/PostCard';
-import { Key } from 'react';
+import {Key} from 'react';
 
 // This is a placeholder for your actual data fetching logic.
 async function getPostsFromChain() {
-    const mockPosts = [
+    return [
         {
             author: '5x...yZ',
             content: 'This is a short post. No button should appear here.',
@@ -17,15 +15,9 @@ async function getPostsFromChain() {
             timestamp: Date.now()
         }
     ];
-
-    // ===================================================================
-    // THIS IS THE FIX.
-    // By adding `return`, the function now correctly returns a Promise
-    // that resolves to an array, fixing the TypeScript error.
-    // =================================g==================================
-    return mockPosts;
 }
 
+// FIX: Use `export default` with ESM syntax, NOT `module.exports` or `exports.*`
 export default async function PostsPage() {
     const posts = (await getPostsFromChain()) || [];
 

@@ -1,0 +1,9 @@
+version: "3"
+tunnels:
+  anaheim:
+    proto: http
+    addr: 3001
+    inspect: true
+    hostname: chaospunk.ngrok.app
+agent:
+  authtoken: 32Rvttz7Hx5g81E8oJ8a6opJcME_6cHUkufMMoJ5kf9ndCxEN

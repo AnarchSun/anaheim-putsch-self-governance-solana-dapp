@@ -1,6 +1,6 @@
 // src/constants/constants.ts
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 export const POST_ACCOUNT_SIZE = 256
 console.log('POST_ACCOUNT_SIZE =', POST_ACCOUNT_SIZE)
 

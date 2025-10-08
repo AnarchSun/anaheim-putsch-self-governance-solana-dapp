@@ -1,7 +1,7 @@
-// FILE: src/components/app-layout.tsx
+// PATH: src/app/layout.tsx
 import type { Metadata } from 'next'
 import './globals.css'
-import { AppProviders } from '@/components/app-providers'
+import Providers from './providers'
 import { AppLayout } from '@/components/app-layout'
 import React from 'react'
 
@@ -11,25 +11,26 @@ export const metadata: Metadata = {
 }
 
 const links: { label: string; path: string }[] = [
-    // More links...
     { label: 'Home', path: '/' },
     { label: 'Account', path: '/account' },
-    { label: 'Mining', path: '/mining' },
-    { label: 'Staking', path: '/stake' },
+    { label: 'Stake & Mining', path: '/stake-mining' },
+    { label: 'Posts', path: '/posts' },
+    { label: 'Gemini-Helper', path: '/dev-helper' },
 ]
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
     return (
         <html lang="en" suppressHydrationWarning>
-        <body className={`antialiased`}>
-        <AppProviders>
+        <body className="antialiased">
+        <Providers>
             <AppLayout links={links}>{children}</AppLayout>
-        </AppProviders>
+        </Providers>
         </body>
         </html>
     )
 }
-// Patch BigInt so we can log it using JSON.stringify without any errors
+
+// Patch BigInt so we can log it using JSON.stringify without errors
 declare global {
     interface BigInt {
         toJSON(): string

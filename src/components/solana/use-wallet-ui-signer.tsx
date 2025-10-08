@@ -1,17 +1,19 @@
-// FILE: src/components/solana/use-wallet-ui-signer.tsx
-import { useWallet } from '@solana/wallet-adapter-react'
-import { TransactionSigner } from 'gill'
+// src/components/solana/use-wallet-ui-signer.tsx
+import {
+  UiWalletAccount,
+} from '@wallet-standard/ui-core'
+import useSolana from '@/components/solana/use-solana'
+import { useWalletAccountTransactionSendingSigner } from "@wallet-ui/react"
 
-export function useWalletUiSigner(): TransactionSigner | undefined {
-  const wallet = useWallet()
+export function useWalletUiSigner() {
+  const { account, cluster } = useSolana()
 
-  // Évite tout usage d'arguments, même dans des erreurs
-  if (!wallet.connected || !wallet.publicKey || !wallet.signTransaction) {
-    return undefined
-  }
+  // PATCH: cluster is a string, not an object with "id"
+  // If cluster is already a moniker like "mainnet-beta", "devnet", etc.
+  const signer = useWalletAccountTransactionSendingSigner(
+      (account ?? {}) as UiWalletAccount,
+      `solana:${cluster}`
+  )
 
-  return {
-    address: wallet.publicKey,
-    signTransaction: wallet.signTransaction,
-  }
+  return account ? signer : null
 }

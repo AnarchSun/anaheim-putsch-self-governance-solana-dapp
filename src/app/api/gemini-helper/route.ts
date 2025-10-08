@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
     `;
 
         const result = await model.generateContent(prompt);
-        const response = await result.response;
+        const response = result.response;
         const text = response.text();
 
         return NextResponse.json({ analysis: text });

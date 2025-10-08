@@ -1,44 +1,32 @@
-// File: src/lib/stakeHelpers.ts
-import { getStakeActivation } from '@anza-xyz/solana-rpc-get-stake-activation'
-import { Connection, PublicKey } from '@solana/web3.js'
+// src/lib/stake/stakeHelpers.ts
+import { Connection, PublicKey, Transaction, SystemProgram, sendAndConfirmTransaction, Signer } from "@solana/web3.js";
 
-export type StakeState = 'active' | 'inactive' | 'activating' | 'deactivating'
-
-export async function getStakeActivationSafe(
+export async function createStakeAccountIfNotExists(
     connection: Connection,
-    pubkey: PublicKey
-): Promise<StakeState | null> {
-  try {
-    const result = await getStakeActivation(connection, pubkey) as unknown as {
-      state: StakeState
-      active: number
-      inactive: number
-    }
-
-    return result.state ?? null
-  } catch (e) {
-    console.error('getStakeActivationSafe error:', e)
-    return null
+    newAccountPubkey: PublicKey,
+    payer: Signer,
+    signers: Signer[],
+    programId: PublicKey,
+    lamports: number,
+    space: number
+): Promise<{ status: string; error?: string; logs?: string[] }> {
+  const accountInfo = await connection.getAccountInfo(newAccountPubkey);
+  if (accountInfo) {
+    return { status: "Compte déjà initialisé", error: "Le compte existe déjà." };
   }
-}
-
-
-export async function fetchStakeState(connection: Connection, pubkey: PublicKey): Promise<StakeState | null> {
   try {
-    const connection = new Connection('https://api.devnet.solana.com')
-
-    // 👇 Forcer le typage si nécessaire
-    const result = await getStakeActivation(connection, pubkey) as unknown as {
-      state: StakeState
-      active: number
-      inactive: number
-    }
-
-    console.log('Stake state:', result.state)
-    return result.state ?? null
-
-  } catch (e) {
-    console.error('fetchStakeState error:', e)
-    return null
+    const tx = new Transaction().add(
+        SystemProgram.createAccount({
+          fromPubkey: payer.publicKey,
+          newAccountPubkey,
+          lamports,
+          space,
+          programId,
+        })
+    );
+    const txid = await sendAndConfirmTransaction(connection, tx, [payer, ...signers]);
+    return { status: "Initialisation réussie", logs: [`Transaction ID: ${txid}`] };
+  } catch (err: any) {
+    return { status: "Initialisation échouée", error: err.message, logs: err.logs || [] };
   }
 }

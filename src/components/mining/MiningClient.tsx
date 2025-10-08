@@ -17,7 +17,7 @@ import { AppAlert } from '../app-alert';
 function useAnaheimAccountQuery() {
     const { connection } = useConnection();
     return useQuery({
-        queryKey: ['anaheim-old-account'],
+        queryKey: ['anaheim-account'],
         queryFn: () => getAnaheimAccount(connection),
     });
 }
@@ -40,7 +40,7 @@ function useIncrementMutation() {
             return signature;
         },
         onSuccess: () => {
-            return queryClient.invalidateQueries({ queryKey: ['anaheim-old-account'] });
+            return queryClient.invalidateQueries({ queryKey: ['anaheim-account'] });
         },
         onError: (error: Error) => console.error('Increment failed:', error),
     });
@@ -57,19 +57,15 @@ export default function MiningClient() {
     const { data: anaheimAccount, isLoading } = useAnaheimAccountQuery();
     const incrementMutation = useIncrementMutation();
 
-    if (isLoading) {
-        return <p className="text-center">Loading on-chain data...</p>;
-    }
+    if (isLoading) return <p className="text-center">Loading on-chain data...</p>;
 
-    // If the account is not found, we now show a simple, informative error message
-    // for the DEVELOPER (you), telling them what command to run.
     if (!anaheimAccount) {
         return (
             <AppAlert action={null}>
                 <div className="text-center font-semibold text-red-500">
                     <h3 className="text-lg font-bold">Program Not Initialized</h3>
-                    <p className="text-sm font-normal text-muted-foreground mt-2">
-                        The main program account was not found. Please run the following command from your project root and restart the server:
+                    <p className="text-sm text-muted-foreground mt-2">
+                        Main program account not found. Run:
                     </p>
                     <pre className="mt-2 p-2 bg-gray-800 text-white rounded font-mono text-xs">
                         pnpm tsx anchor/scripts/initialize.ts
@@ -91,9 +87,9 @@ export default function MiningClient() {
             <Button
                 className="w-full text-lg py-6"
                 onClick={() => incrementMutation.mutate()}
-                disabled={incrementMutation.isPending}
+                disabled={incrementMutation.isLoading}
             >
-                {incrementMutation.isPending ? 'Incrementing...' : 'Increment Count'}
+                {incrementMutation.isLoading ? 'Incrementing...' : 'Increment Count'}
             </Button>
         </div>
     );

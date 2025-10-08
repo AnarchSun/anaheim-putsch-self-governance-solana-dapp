@@ -22,6 +22,12 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "../node_modules/.pnpm/vitest@3.2.4_@types+debug@4.1.12_@types+node@24.3.1_jiti@2.5.1_jsdom@26.1.0_bufferutil@_5f2b3f38442f235b207d57c86be66c58/node_modules/vitest/globals.d.ts"
+  ],
   "exclude": ["node_modules"]
 }

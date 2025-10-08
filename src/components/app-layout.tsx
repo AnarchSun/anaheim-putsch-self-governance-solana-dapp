@@ -1,10 +1,12 @@
-// FILE: src/components/app-layout.tsx
-'use client';
+// src/components/app-layout.tsx
+"use client";
 
-import React from 'react';
-import { AppHeader } from '@/components/app-header';
-import { AppFooter } from '@/components/app-footer';
-import { Toaster } from '@/components/ui/sonner';
+import React from "react";
+import { AppHeader } from "@/components/app-header";
+import { AppFooter } from "@/components/app-footer";
+import { Toaster } from "@/components/ui/sonner";
+import { ThemeProvider } from "@/components/theme-provider";
+import { ClusterUiChecker } from "@/features/cluster/ui/cluster-ui-checker";
 
 export function AppLayout({
                               children,
@@ -14,15 +16,21 @@ export function AppLayout({
     links: { label: string; path: string }[];
 }) {
     return (
-        <div className="flex flex-col min-h-screen">
-            <AppHeader links={links} />
-            <main className="flex-grow container mx-auto p-4">
-                <div className="content-box">
-                    {children}
-                </div>
-            </main>
-            <AppFooter />
-            <Toaster />
-        </div>
+        <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+        >
+            <div className="flex flex-col min-h-screen">
+                <AppHeader links={links} />
+                <main className="flex-grow container mx-auto p-4">
+                    <ClusterUiChecker />
+                    <div className="content-box">{children}</div>
+                </main>
+                <AppFooter />
+                <Toaster />
+            </div>
+        </ThemeProvider>
     );
 }

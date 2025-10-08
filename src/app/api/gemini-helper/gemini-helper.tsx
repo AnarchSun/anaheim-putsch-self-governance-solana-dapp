@@ -1,19 +1,13 @@
-// src/app/api/page.tsx
 import React, { useState, CSSProperties } from 'react';
 
-// For better Markdown rendering, you could install a library:
-// pnpm install react-markdown
-// import ReactMarkdown from 'react-markdown';
-
-// Define types for the inline styles for better type safety
 const styles: { [key: string]: CSSProperties } = {
     container: {
         padding: '2rem',
         maxWidth: '800px',
         margin: '0 auto',
         fontFamily: 'sans-serif',
-        color: '#e0e0e0', // Light text for dark backgrounds
-        backgroundColor: '#1a1a1a', // Dark background
+        color: '#e0e0e0',
+        backgroundColor: '#1a1a1a',
     },
     input: {
         width: '100%',
@@ -51,12 +45,11 @@ const styles: { [key: string]: CSSProperties } = {
         border: '1px solid #444',
         padding: '1rem',
         backgroundColor: '#2a2a2a',
-        whiteSpace: 'pre-wrap', // This helps in rendering markdown-like text
+        whiteSpace: 'pre-wrap',
         lineHeight: '1.6',
         fontFamily: 'monospace',
     },
 };
-
 
 const DevHelperPage: React.FC = () => {
     const [idlInput, setIdlInput] = useState<string>('');
@@ -64,11 +57,12 @@ const DevHelperPage: React.FC = () => {
     const [analysis, setAnalysis] = useState<string>('');
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
+// ...
     const handleAnalyze = async () => {
         let parsedIdl;
         try {
             parsedIdl = JSON.parse(idlInput);
-        } catch (error) {
+        } catch {
             alert('Invalid JSON! Please paste the correct program IDL.');
             return;
         }
@@ -95,57 +89,56 @@ const DevHelperPage: React.FC = () => {
             if (response.ok) {
                 setAnalysis(data.analysis);
             } else {
-                // The error object from our API route has a specific shape
-                throw new Error(data.error || 'Something went wrong');
+                setAnalysis(`Error: ${data.error || 'Something went wrong'}`);
             }
-        } catch (error: any) {
-            setAnalysis(`Error: ${error.message}`);
+        } catch (err: any) {
+            setAnalysis(`Error: ${err.message}`);
         } finally {
             setIsLoading(false);
         }
     };
 
     return (
-        <div style={styles.container}>
-            <h1>Solana Program Analyzer (Powered by Gemini)</h1>
-    <p>
-    Paste your program's IDL JSON below to get a detailed analysis.
-    Start by pasting the "anaheim" or "journal" object from your IDL.
-    </p>
+      <div style={styles.container}>
+          <h1>Solana Program Analyzer (Powered by Gemini)</h1>
+          <p>
+              Paste your program&apos;s IDL JSON below to get a detailed analysis.
+              Start by pasting the &quot;anaheim&quot; or &quot;journal&quot; object from your IDL.
+          </p>
 
-    <input
-    type="text"
-    placeholder="Enter program name (e.g., anaheim)"
-    value={programName}
-    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setProgramName(e.target.value)}
-    style={styles.input}
-    />
+          <input
+            type="text"
+            placeholder="Enter program name (e.g., anaheim)"
+            value={programName}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setProgramName(e.target.value)}
+            style={styles.input}
+          />
 
-    <textarea
-    style={styles.textarea}
-    value={idlInput}
-    onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setIdlInput(e.target.value)}
-    placeholder='// Paste your program IDL JSON here... (e.g., the "anaheim": { ... } object)'
-    />
+          <textarea
+            style={styles.textarea}
+            value={idlInput}
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setIdlInput(e.target.value)}
+            placeholder='// Paste your program IDL JSON here... (e.g., the "anaheim": { ... } object)'
+          />
 
-    <button
-        onClick={handleAnalyze}
-    disabled={isLoading}
-    style={{ ...styles.button, ...(isLoading ? styles.buttonDisabled : {}) }}
->
-    {isLoading ? 'Analyzing...' : 'Analyze Program'}
-    </button>
+          <button
+            onClick={handleAnalyze}
+            disabled={isLoading}
+            style={{ ...styles.button, ...(isLoading ? styles.buttonDisabled : {}) }}
+          >
+              {isLoading ? 'Analyzing...' : 'Analyze Program'}
+          </button>
 
-    {analysis && (
-        <div>
-            <h2>Analysis Result:</h2>
-    <div style={styles.output}>{analysis}</div>
-        {/* For richer formatting, uncomment the line below after installing react-markdown */}
-        {/* <ReactMarkdown>{analysis}</ReactMarkdown> */}
-        </div>
-    )}
-    </div>
-);
+          {analysis && (
+            <div>
+                <h2>Analysis Result:</h2>
+                <div style={styles.output}>{analysis}</div>
+                {/* Pour un rendu markdown, décommentez après installation de react-markdown */}
+                {/* <ReactMarkdown>{analysis}</ReactMarkdown> */}
+            </div>
+          )}
+      </div>
+    );
 };
 
 export default DevHelperPage;

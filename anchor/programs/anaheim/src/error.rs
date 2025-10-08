@@ -1,3 +1,4 @@
+// anchor/programs/anaheim/src/error.rs
 use anchor_lang::prelude::*;
 
 #[error_code]
@@ -37,5 +38,8 @@ pub enum ErrorCode {
   InvalidAuthority,
 
   #[msg("Bump not found in context.")]
-  MissingBump
+  MissingBump,
+
+  #[msg("Empty Content.")]
+  EmptyContent
 }

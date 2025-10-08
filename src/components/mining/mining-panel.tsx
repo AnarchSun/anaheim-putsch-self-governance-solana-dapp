@@ -4,7 +4,7 @@ import { useAnaheimProgram } from "@/hooks/useAnaheimProgram";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { SystemProgram, PublicKey } from "@solana/web3.js";
 import { Program } from "@coral-xyz/anchor";
-import { Anaheim as AnaheimType } from "../../../anchor/target/types/anaheim-old";
+import { Anaheim as AnaheimType } from "../../../anchor/target/types/anaheim";
 import { useEffect, useState } from "react";
 
 export function useInitialize() {
@@ -35,7 +35,7 @@ export function useInitialize() {
         },
 
         onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: ["anaheim-old-account"]}).then(_r => useQueryClient());
+            queryClient.invalidateQueries({queryKey: ["anaheim-account"]}).then(_r => useQueryClient());
         },
     });
 }

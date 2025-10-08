@@ -1,157 +1,79 @@
-// src/components/account/account-data-access.tsx
-import { TOKEN_2022_PROGRAM_ADDRESS, TOKEN_PROGRAM_ADDRESS } from 'gill/programs/token'
-import { getTransferSolInstruction } from 'gill/programs'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { useWalletUi } from '@wallet-ui/react'
-import {
-  type Address,
-  airdropFactory,
-  createTransaction,
-  getBase58Decoder,
-  GetSignatureStatusesApi,
-  lamports, RequestAirdropApi,
-  signAndSendTransactionMessageWithSigners,
-  type SolanaClient,
-} from 'gill'
-import { toast } from 'sonner'
+// FILE: src/components/features/TransferSolFeature.tsx
+'use client';
 
+import { useState } from 'react';
+import { useWallet } from '@solana/wallet-adapter-react';
+import { useTransferSolMutation } from '@/hooks/solana/useTransferSolMutation'; // ✅ On importe notre hook!
+import { type Address } from 'gill';
 
-function useGetBalanceQueryKey({ address }: { address: Address }) {
-  const { cluster } = useWalletUi()
+export function TransferSolFeature() {
+  const wallet = useWallet();
+  const [destination, setDestination] = useState('');
+  const [amount, setAmount] = useState('0');
 
-  return ['get-balance', { cluster, address }]
-}
+  // ✅ On appelle notre hook pour obtenir la fonction de mutation
+  const transferMutation = useTransferSolMutation({
+    address: wallet.publicKey?.toBase58() as Address,
+    wallet: wallet, // On passe l'objet wallet pour la signature
+  }as any);
 
-function useInvalidateGetBalanceQuery({ address }: { address: Address }) {
-  const queryClient = useQueryClient()
-  const queryKey = useGetBalanceQueryKey({ address })
-  return async () => {
-    await queryClient.invalidateQueries({ queryKey })
+  const handleTransfer = () => {
+    if (!destination || !amount || parseFloat(amount) <= 0) {
+      alert("Veuillez entrer une destination et un montant valides.");
+      return;
+    }
+
+    // ✅ On appelle la mutation avec les données du formulaire
+    transferMutation.mutate({
+      destination: destination as Address,
+      amount: parseFloat(amount),
+    });
+  };
+
+  if (!wallet.publicKey) {
+    return <p>Veuillez connecter votre portefeuille pour envoyer des SOL.</p>;
   }
-}
 
-export function useGetBalanceQuery({ address }: { address: Address }) {
-  const { client } = useWalletUi()
-
-  return useQuery({
-    retry: false,
-    queryKey: useGetBalanceQueryKey({ address }),
-    queryFn: () => client.rpc.getBalance(address).send(),
-  })
-}
-
-function useGetSignaturesQueryKey({ address }: { address: Address }) {
-  const { cluster } = useWalletUi()
-
-  return ['get-signatures', { cluster, address }]
-}
-
-function useInvalidateGetSignaturesQuery({ address }: { address: Address }) {
-  const queryClient = useQueryClient()
-  const queryKey = useGetSignaturesQueryKey({ address })
-  return async () => {
-    await queryClient.invalidateQueries({ queryKey })
-  }
-}
-
-export function useGetSignaturesQuery({ address }: { address: Address }) {
-  const { client } = useWalletUi()
-
-  return useQuery({
-    queryKey: useGetSignaturesQueryKey({ address }),
-    queryFn: () => client.getSignaturesForAddress(address).send(),
-  })
-}
-
-async function getTokenAccountsByOwner(
-    rpc: SolanaClient['rpc'],
-    { address, programId }: { address: Address; programId: Address },
-) {
-  return await rpc
-      .getTokenAccountsByOwner(address, { programId }, { commitment: 'confirmed', encoding: 'jsonParsed' })
-      .send()
-      .then((res) => res.value ?? [])
-}
-
-export function useGetTokenAccountsQuery({ address }: { address: Address }) {
-  const { client, cluster } = useWalletUi()
-
-  return useQuery({
-    queryKey: ['get-token-accounts', { cluster, address }],
-    queryFn: async () =>
-        Promise.all([
-          getTokenAccountsByOwner(client["rpc"], { address, programId: TOKEN_PROGRAM_ADDRESS }),
-          getTokenAccountsByOwner(client["rpc"], { address, programId: TOKEN_2022_PROGRAM_ADDRESS }),
-        ]).then(([tokenAccounts, token2022Accounts]) => [...tokenAccounts, ...token2022Accounts]),
-  })
-}
-
-function useWalletUiSigner() {
-  // TODO ORION
-}
-
-export function useTransferSolMutation({ address }: { address: Address }) {
-  const { client } = useWalletUi()
-  const signer = useWalletUiSigner()
-  const invalidateBalanceQuery = useInvalidateGetBalanceQuery({ address })
-  const invalidateSignaturesQuery = useInvalidateGetSignaturesQuery({ address })
-
-  return useMutation({
-    mutationFn: async (input: { destination: Address; amount: number }) => {
-      try {
-        const { value: latestBlockhash } = await client["rpc"].getLatestBlockhash({ commitment: 'confirmed' }).send()
-
-        const transaction = createTransaction({
-          feePayer: signer,
-          version: 0,
-          latestBlockhash,
-          instructions: [
-            getTransferSolInstruction({
-              amount: input.amount,
-              destination: input.destination,
-              source: signer,
-            }),
-          ],
-        })
-
-        const signatureBytes = await signAndSendTransactionMessageWithSigners(transaction)
-        const signature = getBase58Decoder().decode(signatureBytes)
-
-        console.log(signature)
-        return signature
-      } catch (error: unknown) {
-        console.log('error', `Transaction failed! ${error}`)
-
-        return
-      }
-    },
-    onSuccess: async (tx) => {
-      toastTx(tx)
-      await Promise.all([invalidateBalanceQuery(), invalidateSignaturesQuery()])
-    },
-    onError: (error) => {
-      toast.error(`Transaction failed! ${error}`)
-    },
-  })
-}
-
-export function useRequestAirdropMutation({address}: { address: Address }, rpcSubscriptions, Rpc) {
-  const { client } = useWalletUi()
-  const invalidateBalanceQuery = useInvalidateGetBalanceQuery({ address })
-  const invalidateSignaturesQuery = useInvalidateGetSignaturesQuery({ address })
-  const airdrop = airdropFactory( {rpc: Rpc<GetSignatureStatusesApi & RequestAirdropApi> & {"~cluster"?: "devnet"}}
-): AirdropFunction
-
-  return useMutation({
-    mutationFn: async (amount: number = 1) =>
-        airdrop({
-          commitment: 'confirmed',
-          recipientAddress: address,
-          lamports: lamports(BigInt(Math.round(amount * 1_000_000_000))),
-        }),
-    onSuccess: async (tx) => {
-      toastTx(tx)
-      await Promise.all([invalidateBalanceQuery(), invalidateSignaturesQuery()])
-    },
-  })
+  return (
+      <div className="space-y-4 p-4 border rounded-md">
+        <h3 className="text-lg font-bold">Envoyer des SOL</h3>
+        <div className="flex flex-col space-y-2">
+          <label htmlFor="destination">Adresse de destination :</label>
+          <input
+              id="destination"
+              type="text"
+              value={destination}
+              onChange={(e) => setDestination(e.target.value)}
+              placeholder="Entrez l'adresse du destinataire"
+              className="p-2 border rounded"
+          />
+        </div>
+        <div className="flex flex-col space-y-2">
+          <label htmlFor="amount">Montant :</label>
+          <input
+              id="amount"
+              type="number"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+              placeholder="0.0"
+              className="p-2 border rounded"
+          />
+        </div>
+        <button
+            onClick={handleTransfer}
+            disabled={transferMutation.isPending}
+            className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600 disabled:bg-gray-400"
+        >
+          {transferMutation.isPending ? 'Envoi en cours...' : 'Envoyer'}
+        </button>
+        {transferMutation.isSuccess && (
+            <p className="text-green-500">Transaction réussie !</p>
+        )}
+        {transferMutation.isError && (
+            <p className="text-red-500">
+              Erreur : {transferMutation.error.message}
+            </p>
+        )}
+      </div>
+  );
 }

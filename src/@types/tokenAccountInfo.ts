@@ -1,5 +1,4 @@
-
-import { PublicKey } from '@solana/web3.js'
+// Aucun import inutile
 
 declare type Address = string & { readonly "__brand:@solana/kit": unique symbol }
 

@@ -5,8 +5,9 @@ export class SolanaClient {
     connection: Connection;
     cluster: string;
     commitment: Commitment;
+    getBalance: any;
 
-    constructor(cluster: Cluster = 'mainnet-beta', commitment: Commitment = 'confirmed') {
+    constructor(cluster: Cluster = 'devnet', commitment: Commitment = 'confirmed') {
         this.cluster = cluster;
         this.commitment = commitment;
         this.connection = new Connection(clusterApiUrl(cluster), commitment);
@@ -17,6 +18,6 @@ export class SolanaClient {
     }
 }
 
-export const cluster: Cluster = 'mainnet-beta';
+export const cluster: Cluster = 'devnet';
 export const solanaClient = new SolanaClient(cluster);
 export const client = solanaClient.rpc;

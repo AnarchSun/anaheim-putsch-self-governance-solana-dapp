@@ -39,7 +39,7 @@ jobs:
       - name: Setup Anchor
         uses: metadaoproject/setup-anchor@v3.1
         with:
-          anchor-version: '0.30.1'
+          anchor-version: '0.31.1'
           solana-cli-version: '2.0.21'
           node-version: ${{ matrix.node }}
       - name: Configure Git identity
@@ -58,7 +58,7 @@ jobs:
           node-version: ${{ matrix.node }}
 
       - run: pnpm install
-      - run: pnpm build
+      - run: pnpm anchor
 
       - name: Install package manager (if needed)
         run: |

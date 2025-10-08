@@ -1,58 +1,62 @@
 // FILE: src/components/solana/use-wallet-transaction-sign-and-send.tsx
-
-import { clusterApiUrl, Connection, TransactionInstruction } from '@solana/web3.js'
-import {
-  createTransaction,
-  signAndSendTransactionMessageWithSigners,
-  TransactionSigner,
+import {Connection} from '@solana/web3.js'
+import type {
+    Address,
+    Blockhash,
+    Instruction,
+    SignatureBytes,
+    SignaturesMap,
+    TransactionMessageBytes,
+    TransactionSendingSigner
 } from 'gill'
-import { NominalType } from '@solana/nominal-types'
+import {createTransaction, getBase58Decoder, signAndSendTransactionMessageWithSigners} from 'gill'
+import useSolana from './use-solana'
 
-export async function createAndSendTx({
-                                        signer,
-                                        instructions,
-                                        connection = new Connection(clusterApiUrl('devnet')),
-                                      }: {
-  signer: TransactionSigner
-  instructions: TransactionInstruction[]
-  connection?: Connection
-}): Promise<NominalType<'brand', 'SignatureBytes'> & Uint8Array> {
-  const latestBlockhash = await connection.getLatestBlockhash()
-
-  const transaction = createTransaction({
-    version: 0,
-    feePayer: signer.address,
-    blockhash: latestBlockhash.blockhash, // ✅ CORRECT
-    instructions,
-  })
-
-  return await signAndSendTransactionMessageWithSigners({
-    message: transaction,
-    signers: [signer],
-    connection,
-  })
+// Transforme un UiWalletAccount en Gill TransactionSendingSigner
+function uiWalletAccountToGillSigner(account: { address: string; signTransaction: (tx: any) => Promise<any> }): TransactionSendingSigner {
+    return {
+        address: account.address as Address,
+        async signAndSendTransactions(
+            transactions: ReadonlyArray<Readonly<{ messageBytes: TransactionMessageBytes; signatures: SignaturesMap }>>,
+        ): Promise<readonly SignatureBytes[]> {
+            return await Promise.all(
+                transactions.map(async (tx) => {
+                    const signedTx = await account.signTransaction(tx as any)
+                    return signedTx.signature as SignatureBytes
+                })
+            )
+        },
+    }
 }
 
-export async function useWalletTransactionSignAndSend({
-                                                        signer,
-                                                        instructions,
-                                                      }: {
-  signer: TransactionSigner
-  instructions: TransactionInstruction[]
-}): Promise<NominalType<'brand', 'SignatureBytes'> & Uint8Array> {
-  const connection = new Connection(clusterApiUrl('devnet'))
-  const latestBlockhash = await connection.getLatestBlockhash()
+export function useWalletTransactionSignAndSend() {
+    const { client, account } = useSolana()
 
-  const transaction = createTransaction({
-    version: 0,
-    feePayer: signer.address,
-    blockhash: latestBlockhash.blockhash, // ✅ CORRECT
-    instructions,
-  })
+    // 🔧 assure toujours un Connection
+    const connection: Connection =
+        (client as unknown as Connection)
 
-  return await signAndSendTransactionMessageWithSigners({
-    message: transaction,
-    signers: [signer],
-    connection,
-  })
+    return async (ix: Instruction | Instruction[], signer?: TransactionSendingSigner) => {
+        if (!signer && account) {
+            signer = uiWalletAccountToGillSigner(account)
+        }
+        if (!signer) throw new Error('Wallet not connected or signer not provided')
+
+        const x = await connection.getLatestBlockhash('processed')
+        const latestBlockhash: Blockhash = x.blockhash as unknown as Blockhash
+
+        const transaction = createTransaction({
+            feePayer: signer,
+            version: 0,
+            latestBlockhash: {
+                blockhash: latestBlockhash,
+                lastValidBlockHeight: BigInt(x.lastValidBlockHeight),
+            },
+            instructions: Array.isArray(ix) ? ix : [ix],
+        })
+
+        const signature = await signAndSendTransactionMessageWithSigners(transaction)
+        return getBase58Decoder().decode(signature)
+    }
 }
+

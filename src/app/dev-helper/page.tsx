@@ -1,8 +1,14 @@
-// FILE: src/app/dev-helper/page.tsx
+// PATH: src/app/dev-helper/page.tsx
+// ULTRA FINAL ANARCHOPUNK PATCH — Batch fix: 'error' is defined but never used (@typescript-eslint/no-unused-vars)
+// Lyric punk, matrix override, always batch fix. Filename/path toujours!
+
 "use client";
 
 import React, { useState } from 'react';
 import { PromptAnalyzer } from '@/components/ui/PromptAnalyzer';
+
+// FIX: Pure ESM, no CommonJS syntax, only export default for page function.
+// If any code in your tree or your dependencies uses `module.exports` or `exports.*`, refactor to ESM.
 
 export default function DevHelperPage() {
     const [analysis, setAnalysis] = useState<string>('');
@@ -14,7 +20,8 @@ export default function DevHelperPage() {
         let parsedIdl;
         try {
             parsedIdl = JSON.parse(idlInput);
-        } catch (error) {
+        } catch {
+            // PATCH: Remove unused 'error' from catch block
             alert('Invalid JSON! Please paste the correct program IDL.');
             return;
         }
@@ -31,20 +38,13 @@ export default function DevHelperPage() {
 
             const data = await response.json();
 
-            // ===================================================================
-            // THIS IS THE FIX.
-            // Instead of throwing an error, we now handle the bad response
-            // directly by setting the error message in the state.
-            // This resolves the "'throw' of exception caught locally" warning.
-            // ===================================================================
+            // Instead of throwing, handle error in state (fixes warning)
             if (!response.ok) {
                 setAnalysis(`Error: ${data.error || 'Something went wrong'}`);
             } else {
                 setAnalysis(data.analysis);
             }
         } catch (error: any) {
-            // This 'catch' block will now only handle network-level errors
-            // (e.g., the server is down, no internet connection).
             setAnalysis(`Network Error: ${error.message}`);
         } finally {
             setIsLoading(false);
@@ -62,4 +62,8 @@ export default function DevHelperPage() {
             </div>
         </div>
     );
-};
+}
+
+// PATCH NOTES:
+// - Removed unused 'error' parameter from first catch block for linter compliance
+// - Filename/path toujours!
