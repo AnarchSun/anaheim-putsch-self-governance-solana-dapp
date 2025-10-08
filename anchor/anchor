@@ -1,18 +1,58 @@
 #!/usr/bin/env bash
 # PATH: anchor/anchor
+# Anarcho build wrapper — synchronise Program ID après chaque compilation Anchor
 
-set -e
+set -euo pipefail
 
-# Utiliser le vrai binaire anchor
-~/.cargo/bin/anchor "$@"
+# ---------------------------------------------------------------------------
+# COLORS for visual punk flair
+# ---------------------------------------------------------------------------
+RED=$(tput setaf 1)
+GRN=$(tput setaf 2)
+YLW=$(tput setaf 3)
+CYN=$(tput setaf 6)
+RST=$(tput sgr0)
 
-# Si on vient de faire "anchor build", on lance la mise à jour TypeScript
-if [[ "$1" == "build" ]]; then
-  echo "🔄 Post-build: mise à jour du Program ID…"
+# ---------------------------------------------------------------------------
+# Locate and wrap real anchor binary
+# ---------------------------------------------------------------------------
+ANCHOR_BIN="${HOME}/.cargo/bin/anchor"
 
-  # chemin absolu basé sur le répertoire du script
+if [[ ! -x "$ANCHOR_BIN" ]]; then
+  echo "${RED}❌ Erreur:${RST} binaire Anchor introuvable à ${ANCHOR_BIN}"
+  exit 1
+fi
+
+# ---------------------------------------------------------------------------
+# Run Anchor command transparently
+# ---------------------------------------------------------------------------
+"$ANCHOR_BIN" "$@"
+
+# ---------------------------------------------------------------------------
+# POST-BUILD — auto-update Program ID if 'anchor build' was executed
+# ---------------------------------------------------------------------------
+if [[ "${1:-}" == "build" ]]; then
+  echo ""
+  echo "${CYN}🔄 Post-build:${RST} mise à jour du Program ID…"
+
   SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-  pnpm tsx "$SCRIPT_DIR/../scripts/update-program-id.ts"
+  ROOT_DIR="$(dirname "$SCRIPT_DIR")"
 
-  echo "✅ Program ID synchronisé avec src/config/solana.ts et .env.local"
+  # Vérifier pnpm et tsx
+  if ! command -v pnpm >/dev/null 2>&1; then
+    echo "${YLW}⚠️  pnpm non trouvé. Installe-le avec:${RST} npm i -g pnpm"
+    exit 0
+  fi
+  if ! command -v tsx >/dev/null 2>&1; then
+    echo "${YLW}⚠️  tsx non trouvé. Installe-le avec:${RST} pnpm add -g tsx"
+    exit 0
+  fi
+
+  # Lancer la synchro du Program ID
+  if pnpm tsx "$ROOT_DIR/scripts/update-program-id.ts"; then
+    echo "${GRN}✅ Program ID synchronisé avec src/config/solana.ts et .env.local${RST}"
+  else
+    echo "${RED}❌ Échec de la mise à jour du Program ID${RST}"
+    exit 1
+  fi
 fi

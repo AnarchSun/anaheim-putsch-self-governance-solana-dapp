@@ -5,7 +5,7 @@
  * IDL can be found at `target/idl/anaheim.json`.
  */
 export type Anaheim = {
-  "address": "32GxU3uyDqcTn99CnFbbBwQujuCLy9mNwkf6MYqQYHC9",
+  "address": "CnQvXsiaCCvKXZhj6SJeFJsobbYQMt4EoqU6vXEvV8x2",
   "metadata": {
     "name": "anaheim",
     "version": "0.1.0",
@@ -467,6 +467,11 @@ export type Anaheim = {
       "code": 6012,
       "name": "emptyContent",
       "msg": "Empty Content."
+    },
+    {
+      "code": 6013,
+      "name": "notDaoMember",
+      "msg": "Not a DAO member"
     }
   ],
   "types": [
