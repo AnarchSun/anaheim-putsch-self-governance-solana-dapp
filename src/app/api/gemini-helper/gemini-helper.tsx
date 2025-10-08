@@ -74,7 +74,11 @@ const DevHelperPage: React.FC = () => {
         }
 
         if (!programName.trim()) {
+<<<<<<< HEAD
             alert('Please enter a program name (e.g., anaheim).');
+=======
+            alert('Please enter a program name (e.g., anaheim-old).');
+>>>>>>> main
             return;
         }
 

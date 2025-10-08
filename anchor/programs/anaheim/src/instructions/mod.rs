@@ -1,6 +1,10 @@
 // === instructions/create_post.rs ===
 use anchor_lang::prelude::*;
 
+<<<<<<< HEAD
+=======
+use crate::state::post_account::PostAccount; // <- IMPORT DIRECT
+>>>>>>> main
 pub mod vote_post;
 pub mod use_anaheim;
 pub mod update;
@@ -16,7 +20,10 @@ pub use anchor_lang::system_program::System;
 pub use anchor_lang::Accounts;
 pub use anchor_lang::prelude::{Account, Program, Signer};
 use crate::constants::MAX_CONTENT_LENGTH;
+<<<<<<< HEAD
 use crate::PostAccount;
+=======
+>>>>>>> main
 
 #[account]
 pub struct Anaheim {

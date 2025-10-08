@@ -1,0 +1,9 @@
+[programs.devnet]
+anaheim = "8MEoUTwTTyRFRhr2smGtoxT7DonyJakDsWxZJCZxs3nB"
+
+[registry]
+url = "https://anchor.projectserum.com"
+
+[provider]
+cluster = "devnet"
+wallet = "~/.config/solana/id.json"

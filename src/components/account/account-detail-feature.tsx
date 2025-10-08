@@ -29,10 +29,14 @@ function useAirdropMutation(address: string) {
         const lamportsToRequest = amount * LAMPORTS_PER_SOL;
         const signature = await connection.requestAirdrop(new PublicKey(address), lamportsToRequest);
         const blockhash = await connection.getLatestBlockhash();
+<<<<<<< HEAD
         await connection.confirmTransaction({
           signature,
           ...blockhash,
         }, 'confirmed');
+=======
+        await connection.confirmTransaction({ signature, ...blockhash }, 'confirmed');
+>>>>>>> main
         console.log(`Airdrop confirmed: ${signature}`);
         return signature;
       } catch (error) {
@@ -65,12 +69,19 @@ function useGetBalance(address: string) {
 }
 
 // ===================================================================
+<<<<<<< HEAD
 // THIS IS THE DEFINITIVE FIX FOR THE CRASH.
 // The placeholder comments have been replaced with the full, correct
 // component code, including the essential `return` statements.
 // ===================================================================
 
 // COMPONENT: Displays the balance using the hook.
+=======
+// THIS IS THE DEFINITIVE FIX FOR THE TS2355 ERROR.
+// The placeholder comments have been replaced with the full, correct
+// component code, including the essential `return` statements.
+// ===================================================================
+>>>>>>> main
 const AccountBalance: React.FC<{ address: string }> = ({ address }) => {
   const { data, isLoading } = useGetBalance(address);
   if (isLoading) {
@@ -79,9 +90,13 @@ const AccountBalance: React.FC<{ address: string }> = ({ address }) => {
   return <span>{(data ?? 0).toFixed(4)} SOL</span>;
 };
 
+<<<<<<< HEAD
 // COMPONENT: Placeholder for token list.
 const AccountTokens: React.FC<{ address: string }> = ({ address }) => {
   // This component now correctly uses the 'address' prop, fixing the linter warning.
+=======
+const AccountTokens: React.FC<{ address: string }> = ({ address }) => {
+>>>>>>> main
   return <div>Tokens for {ellipsify(address)}</div>;
 };
 

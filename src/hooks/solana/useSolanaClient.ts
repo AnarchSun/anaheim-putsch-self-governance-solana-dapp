@@ -1,4 +1,5 @@
 // src/hooks/solana/useSolanaClient.ts
+<<<<<<< HEAD
 import { Connection, PublicKey } from '@solana/web3.js'
 import { useMemo } from 'react'
 import { getStakeActivation } from '@anza-xyz/solana-rpc-get-stake-activation'
@@ -65,4 +66,24 @@ export async function getStakeActivationSafe(connection: Connection, pubkey: Pub
 
 export class useSolanaClient {
   rpcEndpoint: getPublicSolanaRpcUrl | undefined;
+=======
+import { useQuery } from '@tanstack/react-query'
+import { useWalletUi } from '@wallet-ui/react'
+import { createSolanaClient, type Address } from 'gill'
+
+export function useSolanaClient() {
+  const { cluster } = useWalletUi()
+  const client = createSolanaClient({ cluster })
+  return { client }
+}
+
+export function useGetBalanceQuery({ address }: { address: Address }) {
+  const { cluster } = useWalletUi()
+  const { client } = useSolanaClient()
+
+  return useQuery({
+    queryKey: ['get-balance', { cluster, address }],
+    queryFn: () => client.rpc.getBalance(address).send(),
+  })
+>>>>>>> main
 }

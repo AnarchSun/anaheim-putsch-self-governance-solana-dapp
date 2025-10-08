@@ -35,4 +35,10 @@ pub enum ErrorCode {
   
   #[msg("Invalid authority on post.")]
   InvalidAuthority,
+<<<<<<< HEAD
+=======
+
+  #[msg("Bump not found in context.")]
+  MissingBump
+>>>>>>> main
 }

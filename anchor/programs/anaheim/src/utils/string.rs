@@ -1,4 +1,4 @@
-// programs/anaheim/src/utils/string.rs
+// programs/anaheim-old/src/utils/string.rs
 use std::str;
 
 /// Safely decode `[u8]` to `&str`, trimming nulls and handling invalid UTF-8.

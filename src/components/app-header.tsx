@@ -5,21 +5,32 @@ import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { ThemeSelect } from '@/components/theme-select';
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
+<<<<<<< HEAD
 
 // ===================================================================
 // THIS IS THE DEFINITIVE FIX FOR THE HYDRATION ERROR.
 // We are importing and using our new ClientOnly component to wrap the
 // WalletMultiButton, preventing it from rendering on the server.
 // ===================================================================
+=======
+>>>>>>> main
 import { ClientOnly } from '@/components/ClientOnly';
 
 export function AppHeader({ links = [] }: { links: { label: string; path: string }[] }) {
     const pathname = usePathname();
 
+<<<<<<< HEAD
+=======
+    // This is the full, correct implementation of the isActive function.
+>>>>>>> main
     function isActive(path: string) {
         return path === '/' ? pathname === '/' : pathname.startsWith(path);
     }
 
+<<<<<<< HEAD
+=======
+    // The return statement is now guaranteed to be correct.
+>>>>>>> main
     return (
         <header className="relative z-50 px-4 py-2 bg-neutral-100 dark:bg-neutral-900 dark:text-neutral-400 border-b dark:border-neutral-800">
             <div className="mx-auto flex justify-between items-center">

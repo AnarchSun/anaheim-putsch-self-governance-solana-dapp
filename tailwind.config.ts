@@ -1,4 +1,5 @@
 // FILE: tailwind.config.ts
+<<<<<<< HEAD
 
 import type { Config } from "tailwindcss";
 
@@ -11,15 +12,24 @@ const config = {
   darkMode: "class",
 
   // This content array must be correct to ensure Tailwind scans your files.
+=======
+import type { Config } from "tailwindcss";
+
+const config: Config = {
+  darkMode: "class",
+>>>>>>> main
   content: [
     './pages/**/*.{ts,tsx}',
     './components/**/*.{ts,tsx}',
     './app/**/*.{ts,tsx}',
     './src/**/*.{ts,tsx}',
   ],
+<<<<<<< HEAD
 
   // The rest of your theme configuration remains the same.
   prefix: "",
+=======
+>>>>>>> main
   theme: {
     container: {
       center: true,
@@ -86,6 +96,12 @@ const config = {
     },
   },
   plugins: [require("tailwindcss-animate")],
+<<<<<<< HEAD
 } satisfies Config
 
 export default config
+=======
+}
+
+export default config;
+>>>>>>> main

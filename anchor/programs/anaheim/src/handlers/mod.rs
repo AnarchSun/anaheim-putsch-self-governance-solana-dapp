@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 // anchor/programs/anaheim/src/handlers/mod.rs
+=======
+>>>>>>> main
 pub mod handle_create_user;
 pub mod handle_create_post;
 pub mod handle_close_post;
@@ -13,6 +16,7 @@ pub mod handler_mine;
 pub mod close;
 pub use close::close_post_account;
 
+<<<<<<< HEAD
 pub use handle_create_post::*;
 pub use handle_close_post::*;
 pub use decrement_handler::*;
@@ -21,3 +25,5 @@ pub use shared::*;
 pub use update_post::*;
 pub use handler_mine::*;
 pub use close::*;
+=======
+>>>>>>> main

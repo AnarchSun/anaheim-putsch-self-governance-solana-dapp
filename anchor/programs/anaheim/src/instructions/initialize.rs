@@ -1,5 +1,6 @@
-// === instructions/initialize.rs ou contexts/initialize.rs ===
+// FILE: anchor/programs/anaheim-old/src/instructions/initialize.rs
 use anchor_lang::prelude::*;
+<<<<<<< HEAD
 use crate::state::AnaheimAccount;
 
 #[derive(Accounts)]
@@ -12,9 +13,18 @@ pub struct Initialize<'info> {
     bump
   )]
   pub anaheim: Account<'info, AnaheimAccount>,
+=======
+use crate::contexts::initialize::Initialize;
 
-  #[account(mut)]
-  pub user: Signer<'info>,
+pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
+  let bump = ctx.bumps.anaheim;
 
-  pub system_program: Program<'info, System>,
+  let anaheim = &mut ctx.accounts.anaheim;
+  anaheim.bump = bump;
+  anaheim.authority = *ctx.accounts.payer.key;
+  anaheim.count = 0;
+  anaheim.value = 0;
+>>>>>>> main
+
+  Ok(())
 }

@@ -14,7 +14,11 @@ pub struct VotePost<'info> {
         has_one = author @ ErrorCode::InvalidAuthority,
   )]
   pub post: Account<'info, PostAccount>,
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> main
   pub vote_marker: Account<'info, UserVoteMarker>,
 
   /// CHECK: Ce champ est juste comparé par clé

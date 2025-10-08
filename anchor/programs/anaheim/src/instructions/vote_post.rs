@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 // ==================== anchor/programs/anaheim/src/instructions/vote_post.rs ====================
+=======
+
+>>>>>>> main
 use anchor_lang::prelude::*;
 use crate::state::{PostAccount, UserVoteMarker};
 use crate::error::ErrorCode;
@@ -9,6 +13,7 @@ pub struct VotePost<'info> {
     #[account(mut)]
     pub user: Signer<'info>,
 
+<<<<<<< HEAD
     #[account(
     mut,
     has_one = author @ ErrorCode::InvalidAuthority,
@@ -46,15 +51,44 @@ pub fn handler(ctx: Context<VotePost>, _bump: u8, upvote: bool) -> Result<()> {
     // Comptage des votes
     if upvote {
         post.vote_count = post.vote_count.checked_add(1).ok_or(ErrorCode::Overflow)?;
+=======
+    #[account(mut)]
+    pub post: Account<'info, PostAccount>,
+
+    #[account(
+        init_if_needed,
+        payer = user,
+        space = UserVoteMarker::SIZE,
+        seeds = [b"vote", user.key().as_ref(), post.key().as_ref()],
+        bump
+    )]
+    pub vote_marker: Account<'info, UserVoteMarker>,
+
+    pub system_program: Program<'info, System>,
+}
+
+pub fn handler(ctx: Context<VotePost>, upvote: bool) -> Result<()> {
+    let post = &mut ctx.accounts.post;
+    let vote_marker = &mut ctx.accounts.vote_marker;
+
+    require!(!vote_marker.has_voted, ErrorCode::AlreadyVoted);
+
+    if upvote {
+        post.vote_count += 1;
+>>>>>>> main
     } else {
         post.vote_count = post.vote_count.saturating_sub(1);
     }
 
+<<<<<<< HEAD
     // Mise à jour du marqueur de vote
     vote_marker.has_voted = true;
     vote_marker.is_upvote = upvote;
     vote_marker.post = post.key();
     vote_marker.user = ctx.accounts.user.key();
 
+=======
+    vote_marker.has_voted = true;
+>>>>>>> main
     Ok(())
 }

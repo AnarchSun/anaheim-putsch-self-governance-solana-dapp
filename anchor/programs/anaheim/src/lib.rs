@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // anchor/programs/anaheim/src/lib.rs
 #![allow(deprecated)]
 #![allow(unexpected_cfgs)]
@@ -5,6 +6,14 @@
 use anchor_lang::prelude::*;
 
 pub use state::*;
+=======
+// PATH: anchor/programs/anaheim-old/src/lib.rs
+#![allow(deprecated)]
+#![allow(unexpected_cfgs)]
+#[cfg(test)]
+use anchor_lang::prelude::*;
+use anchor_lang::solana_program::pubkey::Pubkey;
+>>>>>>> main
 
 pub mod instructions;
 pub mod handlers;
@@ -15,6 +24,7 @@ pub mod constants;
 pub mod utils;
 pub mod close;
 mod validate_post_content;
+<<<<<<< HEAD
 pub use close::close_post;
 use crate::close::CloseAccount;
 pub use close::close_post::ClosePost;
@@ -25,16 +35,39 @@ pub use instructions::create_user;
 pub use instructions::create_post;
 
 declare_id!("CHTVq7e9xEFqMf261QhruAmBZsuLCBAEr8NDgcYAnqcV");
+=======
+pub mod test_post_account;
+
+// Re-exports for easier access
+pub use accounts::*;
+pub use close::*;
+pub use constants::*;
+pub use contexts::*;
+pub use error::*;
+pub use handlers::*;
+pub use instructions::*;
+pub mod post;
+pub use state::*;
+pub use utils::*;
+declare_id!("DzSr3g6JfuN6nigqsX4AXLomPMVGZ6kJUqchB74H7gwt");
+>>>>>>> main
 
 pub const ANAHEIM_IDL_ID: Pubkey = Pubkey::new_from_array([
   132, 157, 218, 39, 146, 184, 154, 229, 157, 208, 222, 217, 179, 105, 214, 114,
   145, 251, 14, 120, 48, 169, 34, 96, 132, 73, 172, 248, 93, 142, 25, 203,
 ]);
 
+<<<<<<< HEAD
 // 👇 Déclare le trait manquant
 pub trait IdlInstruction {
   fn id() -> Pubkey;
 }
+=======
+pub trait IdlInstruction {
+  fn id() -> Pubkey;
+}
+
+>>>>>>> main
 pub const MAX_CONTENT_LENGTH: usize = 256;
 pub const MAX_USERNAME_LENGTH: usize = 32;
 
@@ -71,12 +104,34 @@ pub struct AnaheimAccount {
   pub authority: Pubkey,
   pub count: u64,
   pub value: u8,
+<<<<<<< HEAD
 }
 impl AnaheimAccount {
   pub const SIZE: usize = 8 + 32 + 8 + 1;
+=======
+  pub bump: u8, // added bump so it matches Initialize
+}
+impl AnaheimAccount {
+  pub const SIZE: usize = 8 + 32 + 8 + 1 + 1;
+>>>>>>> main
 }
 
 /// ─── CONTEXTES D'INSTRUCTIONS ───────────────────────────────────────────────
+#[derive(Accounts)]
+pub struct Initialize<'info> {
+  #[account(
+        init,
+        payer = payer,
+        space = AnaheimAccount::SIZE,
+        seeds = [b"anaheim-old", payer.key().as_ref()],
+        bump
+  )]
+  pub anaheim: Account<'info, AnaheimAccount>,
+  #[account(mut)]
+  pub payer: Signer<'info>,
+  pub system_program: Program<'info, System>,
+}
+
 #[derive(Accounts)]
 pub struct CreateUser<'info> {
   #[account(init, payer = authority, space = UserAccount::SIZE)]
@@ -96,6 +151,7 @@ pub struct CreatePost<'info> {
 }
 
 #[derive(Accounts)]
+<<<<<<< HEAD
 pub struct Initialize<'info> {
   #[account(init, payer = payer, space = AnaheimAccount::SIZE)]
   pub anaheim: Account<'info, AnaheimAccount>,
@@ -105,6 +161,8 @@ pub struct Initialize<'info> {
 }
 
 #[derive(Accounts)]
+=======
+>>>>>>> main
 pub struct UseAnaheim<'info> {
   #[account(mut)]
   pub anaheim: Account<'info, AnaheimAccount>,
@@ -118,7 +176,10 @@ pub struct CloseAnaheim<'info> {
   pub payer: Signer<'info>,
 }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> main
 impl IdlInstruction for Anaheim {
   fn id() -> Pubkey {
     ANAHEIM_IDL_ID
@@ -130,6 +191,18 @@ impl IdlInstruction for Anaheim {
 pub mod anaheim {
   use super::*;
 
+<<<<<<< HEAD
+=======
+  pub fn initialize(ctx: Context<Initialize>, bump: u8) -> Result<()> {
+    let anaheim_account = &mut ctx.accounts.anaheim;
+    anaheim_account.bump = bump;
+    anaheim_account.authority = *ctx.accounts.payer.key;
+    anaheim_account.count = 0;
+    anaheim_account.value = 0;
+    Ok(())
+  }
+
+>>>>>>> main
   pub fn create_user(ctx: Context<CreateUser>, username: String) -> Result<()> {
     let trimmed = username.trim();
     if trimmed.is_empty() {
@@ -138,11 +211,17 @@ pub mod anaheim {
     if trimmed.len() > MAX_USERNAME_LENGTH {
       return err!(ErrorCode::UsernameTooLong);
     }
+<<<<<<< HEAD
 
     let user_account = &mut ctx.accounts.user_account;
     user_account.name = trimmed.to_string();
     user_account.user_authority = *ctx.accounts.authority.key;
 
+=======
+    let user_account = &mut ctx.accounts.user_account;
+    user_account.name = trimmed.to_string();
+    user_account.user_authority = *ctx.accounts.authority.key;
+>>>>>>> main
     Ok(())
   }
 
@@ -154,11 +233,11 @@ pub mod anaheim {
     if trimmed.len() > MAX_CONTENT_LENGTH {
       return err!(ErrorCode::ContentTooLong);
     }
-
     let post_account = &mut ctx.accounts.post_account;
     post_account.content = trimmed.to_string();
     post_account.author = *ctx.accounts.user.key;
     post_account.timestamp = Clock::get()?.unix_timestamp;
+<<<<<<< HEAD
 
     msg!(
       "Post created by {:?} at {}",
@@ -174,6 +253,13 @@ pub mod anaheim {
     account.authority = *ctx.accounts.payer.key;
     account.count = 0;
     account.value = 0;
+=======
+    msg!(
+            "Post created by {:?} at {}",
+            post_account.author,
+            post_account.timestamp
+        );
+>>>>>>> main
     Ok(())
   }
 
@@ -195,8 +281,17 @@ pub mod anaheim {
   pub fn close(_ctx: Context<CloseAnaheim>) -> Result<()> {
     Ok(())
   }
+<<<<<<< HEAD
 }
 pub fn close_post_account(_ctx: Context<CloseAccount>) -> Result<()> {
   msg!("Account will be closed!");
   Ok(())
 }
+=======
+
+  pub fn close_post_account(_ctx: Context<CloseAccount>) -> Result<()> {
+    msg!("Account will be closed!");
+    Ok(())
+  }
+}
+>>>>>>> main

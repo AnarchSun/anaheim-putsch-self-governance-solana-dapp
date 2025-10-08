@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 // anarcrypt.sol/anaheim-putsch-self-governance-solana-dapp/src/lib/solana/dummyWallet.ts
+=======
+// anarcrypt.sol/anaheim-old-putsch-self-governance-solana-dapp/src/lib/solana/dummyWallet.ts
+>>>>>>> main
 import { Keypair, Transaction, VersionedTransaction, Signer } from '@solana/web3.js'
 import type { Wallet } from '@coral-xyz/anchor'
 

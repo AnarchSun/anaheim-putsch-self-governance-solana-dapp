@@ -2,9 +2,12 @@
 
 {
   "compilerOptions": {
+<<<<<<< HEAD
     // ==================================================================
     // Your existing settings are preserved below.
     // ==================================================================
+=======
+>>>>>>> main
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
@@ -17,6 +20,7 @@
     "noImplicitReturns": true,
     "strictFunctionTypes": true,
     "module": "ESNext",
+<<<<<<< HEAD
 
     // ==================================================================
     // THIS IS THE ONLY CHANGE.
@@ -29,10 +33,17 @@
     // ==================================================================
     // The rest of your settings are preserved.
     // ==================================================================
+=======
+    "moduleResolution": "bundler",
+>>>>>>> main
     "target": "ESNext",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
+<<<<<<< HEAD
+=======
+    "allowArbitraryExtensions": true,
+>>>>>>> main
     "types": ["vitest/globals", "node"],
     "baseUrl": ".",
     "paths": {

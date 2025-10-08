@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 // programs/anaheim/src/handlers/close.rs
+=======
+// programs/anaheim-old/src/handlers/close.rs
+>>>>>>> main
 use anchor_lang::prelude::*;
 pub use crate::close::close_post::ClosePost;
 use crate::close::CloseAccount;

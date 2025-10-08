@@ -12,7 +12,11 @@ codegen-units = 1
 [profile.release.build-override]
 opt-level = 3
 incremental = false
+<<<<<<< HEAD
 codegen-units = 1
 
 
 
+=======
+codegen-units = 1
+>>>>>>> main
