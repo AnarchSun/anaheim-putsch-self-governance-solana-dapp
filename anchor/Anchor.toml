@@ -6,7 +6,7 @@ resolution = true
 skip-lint = false
 
 [programs.devnet]
-anaheim = "9sYXLc1kpKdvJ4HUv16EcLB99eaeHTnK28LdGTNFpxBz"
+anaheim = "DV7eTRbWHnDjgh6uHGo6k8ExXBvgWEVPNNqSmdGrXAnJ"
 
 [registry]
 url = "https://api.apr.dev"
@@ -17,3 +17,6 @@ wallet = "~/.config/solana/id.json"
 
 [workspace]
 members = ["programs/anaheim"]
+
+[scripts]
+Initialize = "pnpm run Initialize"

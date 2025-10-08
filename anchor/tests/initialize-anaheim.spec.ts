@@ -2,7 +2,7 @@ import * as anchor from '@coral-xyz/anchor'
 import { config } from 'dotenv'
 import { Keypair } from '@solana/web3.js'
 import { describe, it, beforeAll, expect } from 'vitest'
-import type { Anaheim } from '../target/types/anaheim'
+import type { Anaheim } from '../target/types/anaheim-old'
 
 config() // Load environment variables
 
