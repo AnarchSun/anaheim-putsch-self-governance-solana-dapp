@@ -13,7 +13,7 @@ import {
     // Ajoute ici ton wallet officiel si installé, GlowWalletAdapter, etc.
 } from '@solana/wallet-adapter-wallets';
 
-import { GILL_HOOK_KEY_CONFIG, GillConfig } from "gill-monorepo/packages/react/src";
+import { GILL_HOOK_KEY_CONFIG, GillConfig } from "@/lib/gill";
 import '@solana/wallet-adapter-react-ui/styles.css';
 
 // PATCH: Import endpoint from punk config source!

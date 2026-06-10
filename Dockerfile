@@ -15,7 +15,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
     && apt-get install -y nodejs \
-    && npm install -g pnpm@${PNPM_VERSION}
+    && npm install -g pnpm@10.18.1
 
 RUN curl https://sh.rustup.rs -sSf | bash -s -- -y \
     && . $HOME/.cargo/env \

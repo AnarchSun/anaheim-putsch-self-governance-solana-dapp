@@ -1,35 +1,60 @@
 {
   "compilerOptions": {
-    "moduleResolution": "node",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "moduleResolution": "bundler",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
     "noEmit": true,
     "isolatedModules": true,
     "incremental": true,
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "noImplicitAny": true,
     "noImplicitReturns": true,
     "strictFunctionTypes": true,
     "module": "ESNext",
     "target": "ESNext",
     "allowArbitraryExtensions": true,
-    "types": ["vitest/globals", "node"],
+    "types": [
+      "vitest/globals",
+      "node"
+    ],
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
     "paths": {
-      "anchor/*": ["../../anchor/*"],
-      "@/*": ["src/*"],
-      "@coral-xyz/anchor": ["node_modules/@coral-xyz/anchor"],
-      "@stake-lib/*": ["eco-subsystem/complementary-modules/getStakeActivation/js/src/*"],
-      "@solana/web3.js": ["node_modules/@solana/web3.js"],
-      "@anaheim/anchor-client": ["../../packages/anchor-client/src/index.ts"],
-      "@vendor/*": ["vendor/*"]
+      "anchor/*": [
+        "../../anchor/*"
+      ],
+      "@/*": [
+        "src/*"
+      ],
+      "@coral-xyz/anchor": [
+        "node_modules/@coral-xyz/anchor"
+      ],
+      "@stake-lib/*": [
+        "eco-subsystem/complementary-modules/getStakeActivation/js/src/*"
+      ],
+      "@solana/web3.js": [
+        "node_modules/@solana/web3.js"
+      ],
+      "@anaheim/anchor-client": [
+        "../../packages/anchor-client/src/index.ts"
+      ],
+      "@vendor/*": [
+        "vendor/*"
+      ]
     },
-    "plugins": [{ "name": "next" }]
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
   "include": [
     "next-env.d.ts",
@@ -47,7 +72,10 @@
     "node_modules/.pnpm/hash.js@1.1.7/node_modules/hash.js/lib/hash.d.ts",
     "node_modules/.pnpm/hash.js@1.1.7/node_modules/hash.js/lib/hash.d.ts",
     "node_modules/.pnpm/hash.js@1.1.7/node_modules/hash.js/lib/hash.d.ts",
-    "node_modules/.pnpm/hash.js@1.1.7/node_modules/hash.js/lib/hash.d.ts"
+    "node_modules/.pnpm/hash.js@1.1.7/node_modules/hash.js/lib/hash.d.ts",
+    ".next/dev/types/**/*.ts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules"
+  ]
 }
