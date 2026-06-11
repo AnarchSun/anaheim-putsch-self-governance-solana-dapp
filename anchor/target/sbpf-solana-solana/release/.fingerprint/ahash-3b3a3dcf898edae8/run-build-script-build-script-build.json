@@ -1,0 +1,1 @@
+{"rustc":10071411861207962412,"features":"","declared_features":"","target":0,"profile":0,"path":0,"deps":[[966925859616469517,"build_script_build",false,17795459589771917919]],"local":[{"RerunIfChanged":{"output":"sbpf-solana-solana/release/build/ahash-3b3a3dcf898edae8/output","paths":["build.rs"]}}],"rustflags":["-Zremap-cwd-prefix="],"config":0,"compile_kind":0}

@@ -1,22 +1,16 @@
-// FILE: state/user_vote_marker.rs
+// FILE: anchor/programs/anaheim/src/state/user_vote_marker.rs
 use anchor_lang::prelude::*;
 
 #[account]
 pub struct UserVoteMarker {
-<<<<<<< HEAD
   pub user: Pubkey,
   pub post: Pubkey,
-  pub is_upvote: bool,
-  pub has_voted: bool, // Add this field
-  pub bump: u8,
-=======
   pub has_voted: bool,
   pub is_upvote: bool,
-  pub post: Pubkey,
-  pub user: Pubkey,
->>>>>>> main
+  pub bump: u8, // ✅ SOLUTION : Le champ 'bump' est maintenant ici.
 }
 
 impl UserVoteMarker {
-  pub const SIZE: usize = 8 + (32 * 2) + 1 + 1;
+  // 8 (discriminator) + 32 (user) + 32 (post) + 1 (has_voted) + 1 (is_upvote) + 1 (bump)
+  pub const SIZE: usize = 8 + 32 + 32 + 1 + 1 + 1;
 }

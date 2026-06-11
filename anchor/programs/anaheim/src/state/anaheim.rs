@@ -1,7 +1,6 @@
-// anchor/programs/anaheim/src/state/anaheim.rs
-
 use anchor_lang::prelude::*;
-#[derive(AnchorSerialize, AnchorDeserialize, Clone)]
+
+#[account]
 pub struct Anaheim {
   pub authority: Pubkey,
   pub count: u64,

@@ -1,0 +1,9 @@
+/home/anarchsun/RustroverProjects/anarcrypt.sol/anaheim-worker/anaheim-putsch-self-governance-solana-dapp/anchor/target/sbpf-solana-solana/release/deps/solana_instruction-2316b312df634667.d: /home/anarchsun/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-instruction-3.4.0/src/lib.rs /home/anarchsun/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-instruction-3.4.0/src/account_meta.rs /home/anarchsun/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-instruction-3.4.0/src/syscalls.rs
+
+/home/anarchsun/RustroverProjects/anarcrypt.sol/anaheim-worker/anaheim-putsch-self-governance-solana-dapp/anchor/target/sbpf-solana-solana/release/deps/libsolana_instruction-2316b312df634667.rlib: /home/anarchsun/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-instruction-3.4.0/src/lib.rs /home/anarchsun/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-instruction-3.4.0/src/account_meta.rs /home/anarchsun/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-instruction-3.4.0/src/syscalls.rs
+
+/home/anarchsun/RustroverProjects/anarcrypt.sol/anaheim-worker/anaheim-putsch-self-governance-solana-dapp/anchor/target/sbpf-solana-solana/release/deps/libsolana_instruction-2316b312df634667.rmeta: /home/anarchsun/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-instruction-3.4.0/src/lib.rs /home/anarchsun/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-instruction-3.4.0/src/account_meta.rs /home/anarchsun/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-instruction-3.4.0/src/syscalls.rs
+
+/home/anarchsun/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-instruction-3.4.0/src/lib.rs:
+/home/anarchsun/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-instruction-3.4.0/src/account_meta.rs:
+/home/anarchsun/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-instruction-3.4.0/src/syscalls.rs:

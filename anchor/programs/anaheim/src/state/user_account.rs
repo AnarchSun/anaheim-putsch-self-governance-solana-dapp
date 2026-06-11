@@ -1,30 +1,19 @@
-<<<<<<< HEAD
 // FILE: anchor/programs/anaheim/src/state/user_account.rs
-=======
-// ===================== state/user_account.rs =====================
->>>>>>> main
 use anchor_lang::prelude::*;
+use crate::constants::MAX_USERNAME_LENGTH;
 
 #[account]
+#[derive(Default)]
 pub struct UserAccount {
-<<<<<<< HEAD
-  pub username: String,
-  pub authority: Pubkey,
-  pub bump: u8,
-  pub timestamp: i64,
-}
-
-impl UserAccount {
-  pub const SIZE: usize = 8 + 4 + 32 + 1 + 8;
-=======
-  pub username: [u8; 32],
   pub authority: Pubkey,
   pub timestamp: i64,
+  pub username_len: u8,
+  pub username: [u8; MAX_USERNAME_LENGTH],
+  pub post_count: u64,
   pub bump: u8,
 }
 
 impl UserAccount {
-  pub const SIZE: usize = 32 + 32 + 8 + 1; // username + authority + timestamp + bump
->>>>>>> main
+  // The total size needed for space allocation
+  pub const SIZE: usize = 32 + 8 + 1 + MAX_USERNAME_LENGTH + 8;
 }
-

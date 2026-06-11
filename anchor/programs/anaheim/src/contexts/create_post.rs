@@ -1,28 +1,32 @@
-// ===================== contexts/create_post.rs =====================
+// FILE: anchor/programs/anaheim/src/contexts/create_post.rs
 use anchor_lang::prelude::*;
-<<<<<<< HEAD
-use crate::state::post_account::PostAccount;
-=======
 
-use crate::state::PostAccount;
+use crate::state::{PostAccount, UserAccount};
 
->>>>>>> main
 #[derive(Accounts)]
 pub struct CreatePost<'info> {
-  #[account(
+    #[account(
         init,
         payer = user,
-        space = 8 + PostAccount::SIZE,
-        seeds = [b"post", user.key().as_ref(), clock.unix_timestamp.to_le_bytes().as_ref()],
+        space = PostAccount::SIZE,
+        seeds = [
+            b"post",
+            user.key().as_ref(),
+            user_profile.post_count.to_le_bytes().as_ref()
+        ],
         bump
-  )]
-  pub post_account: Account<'info, PostAccount>,
+    )]
+    pub post: Account<'info, PostAccount>,
 
-  #[account(mut)]
-  pub user: Signer<'info>,
+    #[account(
+        mut,
+        seeds = [b"user", user.key().as_ref()],
+        bump
+    )]
+    pub user_profile: Account<'info, UserAccount>,
 
-  // <- C'est ici que tu dois déclarer le system_program
-  pub system_program: Program<'info, System>,
+    #[account(mut)]
+    pub user: Signer<'info>,
 
-  pub clock: Sysvar<'info, Clock>,
+    pub system_program: Program<'info, System>,
 }

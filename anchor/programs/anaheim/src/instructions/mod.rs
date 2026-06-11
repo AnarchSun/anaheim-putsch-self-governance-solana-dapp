@@ -1,25 +1,3 @@
-<<<<<<< HEAD
-// === instructions/mod.rs ===
-pub mod vote_post;
-pub mod use_anaheim;
-pub mod update;
-pub mod decrement;
-pub mod create_post;
-pub mod create_user;
-pub mod initialize;
-pub mod mine;
-
-pub use anchor_lang::system_program::System;
-pub use anchor_lang::Accounts;
-pub use anchor_lang::prelude::{Account, Program, Signer};
-
-pub use update::*;
-pub use decrement::*;
-pub use create_post::*;
-pub use create_user::*;
-pub use initialize::*;
-pub use mine::*;
-=======
 // === instructions/create_post.rs ===
 use anchor_lang::prelude::*;
 
@@ -29,12 +7,12 @@ pub mod use_anaheim;
 pub mod update;
 pub mod decrement;
 pub mod create_post;
-pub mod create_user;
-
-pub use create_user::*;
 pub mod initialize;
 pub mod mine;
-
+pub mod set_data;
+pub mod increment;
+pub use set_data::*;
+pub use increment::*;
 pub use anchor_lang::system_program::System;
 pub use anchor_lang::Accounts;
 pub use anchor_lang::prelude::{Account, Program, Signer};
@@ -65,4 +43,3 @@ pub struct CreatePost<'info> {
 
   pub system_program: Program<'info, System>,
 }
->>>>>>> main

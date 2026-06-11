@@ -1,45 +1,34 @@
-<<<<<<< HEAD
 // FILE: anchor/programs/anaheim/src/state/post_account.rs
-=======
-// state/post_account.rs
->>>>>>> main
-
 use anchor_lang::prelude::*;
+use crate::constants::MAX_CONTENT_LENGTH;
 
 #[account]
 pub struct PostAccount {
-<<<<<<< HEAD
     pub author: Pubkey,
-    pub content: String,
-    pub upvotes: u64, // Add this field
-    pub downvotes: u64, // Add this field
     pub timestamp: i64,
-    pub vote_count: u64,
-    pub bump: u8,
+    pub content_len: u16,
+    pub content: [u8; MAX_CONTENT_LENGTH],
+    pub vote_count: i64,
+}
+
+impl Default for PostAccount {
+    fn default() -> Self {
+        Self {
+            author: Pubkey::default(),
+            timestamp: 0,
+            content_len: 0,
+            content: [0; MAX_CONTENT_LENGTH],
+            vote_count: 0,
+        }
+    }
 }
 
 impl PostAccount {
-    pub const SIZE: usize = 8               // discriminator
-        + 32                              // author Pubkey
-        + 4 + 280                         // content string prefix + max length
-        + 8                              // upvotes u64
-        + 8                              // downvotes u64
-        + 8                              // timestamp i64
-        + 8                              // vote_count u64
-        + 1;                             // bump u8
-=======
-  pub content: [u8; 280],
-  pub author: Pubkey,
-  pub created_at: i64,
-  pub vote_count: u64, // <-- Ajoute ce champ ici
+    pub const SIZE: usize =
+        8 + // discriminator
+            32 + // author
+            8 + // timestamp
+            2 + // content_len
+            MAX_CONTENT_LENGTH +
+            8; // vote_count
 }
-
-impl PostAccount {
-  pub const SIZE: usize = 8 // Discriminator Anchor
-    + 280 // content: [u8; 280]
-    + 32 // author: Pubkey
-    + 8  // created_at: i64
-    + 8; // vote_count: u64
->>>>>>> main
-}
-

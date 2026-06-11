@@ -1,26 +1,20 @@
-<<<<<<< HEAD
 // FILE: anchor/programs/anaheim/src/handlers/initialize_handler.rs
-use anchor_lang::prelude::*;
-use super::super::instructions::initialize::Initialize;
+// VERSION FINALE ET CORRECTE
 
-pub fn handle_initialize(ctx: Context<Initialize>) -> Result<()> {
-    let account = &mut ctx.accounts.anaheim;
-    account.authority = *ctx.accounts.payer.key;
-    account.count = 0;
-    account.value = 0;
-    Ok(())
-}
-=======
-// FILE: anchor/programs/anaheim-old/src/handlers/initialize_handler.rs
 use anchor_lang::prelude::*;
-use crate::contexts::initialize::Initialize;
+use crate::contexts::Initialize;
 
+// In your `initialize_handler` function:
 pub fn initialize_handler(ctx: Context<Initialize>) -> Result<()> {
-  let bump = ctx.bumps.anaheim; // ✅ Fix ici
+  let anaheim_account = &mut ctx.accounts.anaheim_account;
 
-  let account = &mut ctx.accounts.anaheim;
-  account.bump = bump;
+  // ✅ IMPORTANT: When initializing the account, set its authority
+  // to the public key of the user who is creating it (the payer/signer).
+  anaheim_account.authority = ctx.accounts.user.key();
+
+  // Initialize other fields
+  anaheim_account.count = 0;
+  anaheim_account.value = 0;
 
   Ok(())
 }
->>>>>>> main

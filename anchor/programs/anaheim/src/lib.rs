@@ -1,167 +1,52 @@
-#![allow(deprecated)]
+// FILE: anchor/programs/anaheim/src/lib.rs
 #![allow(unexpected_cfgs)]
-
+#[allow(deprecated)]
 use anchor_lang::prelude::*;
-use anchor_lang::system_program::System;
 
-use crate::error::ErrorCode;
+pub mod contexts;
+pub mod handlers;
+pub mod state;
 pub mod error;
 pub mod constants;
-pub mod validate_post_content;
 pub mod utils;
+pub mod close;
+pub mod validate_post_content;
 
-declare_id!("qrXvBtncGo13otJbxoDdoZUhybeoExevsLC4dCgTQmP");
+use contexts::create_user::*;
+use contexts::create_post::*;
+use contexts::initialize::*;
+use contexts::increment::*;
+use contexts::decrement::*;
+use handlers::increment_handler::increment_handler;
+use handlers::initialize_handler;
+use crate::handlers::{decrement_handler, handle_create_post, handle_create_user};
 
-pub const MAX_CONTENT_LENGTH: usize = 256;
-pub const MAX_USERNAME_LENGTH: usize = 32;
-
+declare_id!("BL8RBD5RsuqCbwPSJ4dsmG3ykMcuWfitioAPzf7uPk9L");
+// 4. Le module principal du programme.
 #[program]
 pub mod anaheim {
   use super::*;
 
   pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
-    let anaheim = &mut ctx.accounts.anaheim;
-
-    anaheim.authority = *ctx.accounts.payer.key;
-    anaheim.count = 0;
-    anaheim.value = 0;
-
-    Ok(())
+    initialize_handler::initialize_handler(ctx)
   }
+
+  pub fn increment(ctx: Context<Increment>) -> Result<()> {
+    increment_handler(ctx)
+  }
+
+  // Pour que 'decrement' fonctionne, vous devez créer `contexts/decrement.rs`
+   pub fn decrement(ctx: Context<Decrement>) -> Result<()> {
+       decrement_handler(ctx)
+   }
 
   pub fn create_user(ctx: Context<CreateUser>, username: String) -> Result<()> {
-    let trimmed = username.trim();
-
-    require!(!trimmed.is_empty(), ErrorCode::InvalidContent);
-    require!(trimmed.len() <= MAX_USERNAME_LENGTH, ErrorCode::UsernameTooLong);
-
-    let user = &mut ctx.accounts.user_account;
-    user.name = trimmed.to_string();
-    user.user_authority = *ctx.accounts.authority.key;
-
-    Ok(())
+    handle_create_user::create_user(ctx, username)
   }
 
+  // This instruction now correctly delegates to the handler that does the resizing.
   pub fn create_post(ctx: Context<CreatePost>, content: String) -> Result<()> {
-    let trimmed = content.trim();
-
-    require!(!trimmed.is_empty(), ErrorCode::InvalidContent);
-    require!(trimmed.len() <= MAX_CONTENT_LENGTH, ErrorCode::ContentTooLong);
-
-    let post = &mut ctx.accounts.post_account;
-    post.content = trimmed.to_string();
-    post.author = ctx.accounts.user.key();
-    post.timestamp = Clock::get()?.unix_timestamp;
-
-    Ok(())
+    handle_create_post::handle_create_post(ctx, content)
   }
 
-  pub fn increment(ctx: Context<UseAnaheim>) -> Result<()> {
-    ctx.accounts.anaheim.count += 1;
-    Ok(())
-  }
-
-  pub fn decrement(ctx: Context<UseAnaheim>) -> Result<()> {
-    ctx.accounts.anaheim.count -= 1;
-    Ok(())
-  }
-
-  pub fn set(ctx: Context<UseAnaheim>, value: u64) -> Result<()> {
-    ctx.accounts.anaheim.count = value;
-    Ok(())
-  }
-
-  pub fn close(_ctx: Context<CloseAnaheim>) -> Result<()> {
-    Ok(())
-  }
-
-  pub fn close_post_account(_ctx: Context<CloseAccount>) -> Result<()> {
-    msg!("Account closed");
-    Ok(())
-  }
-}
-
-#[derive(Accounts)]
-pub struct Initialize<'info> {
-  #[account(mut)]
-  pub payer: Signer<'info>,
-
-  #[account(init, payer = payer, space = 8 + 32 + 8 + 8)]
-  pub anaheim: Account<'info, Anaheim>,
-
-  pub system_program: Program<'info, System>,
-}
-
-#[derive(Accounts)]
-pub struct CreateUser<'info> {
-  #[account(mut)]
-  pub authority: Signer<'info>,
-
-  #[account(
-    init,
-    payer = authority,
-    space = 8 + 4 + MAX_USERNAME_LENGTH + 32
-  )]
-  pub user_account: Account<'info, User>,
-
-  pub system_program: Program<'info, System>,
-}
-
-#[derive(Accounts)]
-pub struct CreatePost<'info> {
-  #[account(mut)]
-  pub user: Signer<'info>,
-
-  #[account(
-    init,
-    payer = user,
-    space = 8 + 4 + MAX_CONTENT_LENGTH + 32 + 8
-  )]
-  pub post_account: Account<'info, Post>,
-
-  pub system_program: Program<'info, System>,
-}
-
-#[derive(Accounts)]
-pub struct UseAnaheim<'info> {
-  #[account(mut)]
-  pub anaheim: Account<'info, Anaheim>,
-}
-
-#[derive(Accounts)]
-pub struct CloseAnaheim<'info> {
-  #[account(mut, close = payer)]
-  pub anaheim: Account<'info, Anaheim>,
-
-  #[account(mut)]
-  pub payer: Signer<'info>,
-}
-
-#[derive(Accounts)]
-pub struct CloseAccount<'info> {
-  #[account(mut, close = user)]
-  pub post_account: Account<'info, Post>,
-
-  #[account(mut)]
-  pub user: Signer<'info>,
-}
-
-#[account]
-pub struct Anaheim {
-  pub authority: Pubkey,
-  pub count: u64,
-  pub value: u64,
-}
-
-#[account]
-pub struct User {
-  pub name: String,
-  pub user_authority: Pubkey,
-}
-
-#[account]
-pub struct Post {
-  pub content: String,
-  pub author: Pubkey,
-  pub timestamp: i64,
 }

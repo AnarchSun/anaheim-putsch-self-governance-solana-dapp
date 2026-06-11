@@ -1,8 +1,9 @@
+// anchor/programs/anaheim/src/handlers/increment_handler.rs
 use anchor_lang::prelude::*;
-use crate::contexts::update::UpdatePost;
+use crate::contexts::Increment;
 
-pub fn handler(ctx: Context<UpdatePost>) -> Result<()> {
-  let anaheim = &mut ctx.accounts.anaheim;
-  anaheim.count = anaheim.count.checked_add(1).unwrap();
+pub fn increment_handler(ctx: Context<Increment>) -> Result<()> {
+  let account = &mut ctx.accounts.anaheim_account;
+  account.count = account.count.checked_add(1).unwrap();
   Ok(())
 }

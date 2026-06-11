@@ -1,9 +1,7 @@
 use anchor_lang::prelude::*;
+use crate::contexts::update::UpdatePost;
 
-use crate::instructions::use_anaheim::UseAnaheim;
-
-
-pub fn handle_increment(ctx: Context<UseAnaheim>) -> Result<()> {
+pub fn handle_increment(ctx: Context<UpdatePost>) -> Result<()> {
   let anaheim = &mut ctx.accounts.anaheim;
   anaheim.count += 1;
   Ok(())

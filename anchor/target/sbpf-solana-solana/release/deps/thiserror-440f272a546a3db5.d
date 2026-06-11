@@ -1,0 +1,10 @@
+/home/anarchsun/RustroverProjects/anarcrypt.sol/anaheim-worker/anaheim-putsch-self-governance-solana-dapp/anchor/target/sbpf-solana-solana/release/deps/thiserror-440f272a546a3db5.d: /home/anarchsun/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-1.0.69/src/lib.rs /home/anarchsun/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-1.0.69/src/aserror.rs /home/anarchsun/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-1.0.69/src/display.rs /home/anarchsun/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-1.0.69/src/provide.rs
+
+/home/anarchsun/RustroverProjects/anarcrypt.sol/anaheim-worker/anaheim-putsch-self-governance-solana-dapp/anchor/target/sbpf-solana-solana/release/deps/libthiserror-440f272a546a3db5.rlib: /home/anarchsun/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-1.0.69/src/lib.rs /home/anarchsun/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-1.0.69/src/aserror.rs /home/anarchsun/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-1.0.69/src/display.rs /home/anarchsun/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-1.0.69/src/provide.rs
+
+/home/anarchsun/RustroverProjects/anarcrypt.sol/anaheim-worker/anaheim-putsch-self-governance-solana-dapp/anchor/target/sbpf-solana-solana/release/deps/libthiserror-440f272a546a3db5.rmeta: /home/anarchsun/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-1.0.69/src/lib.rs /home/anarchsun/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-1.0.69/src/aserror.rs /home/anarchsun/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-1.0.69/src/display.rs /home/anarchsun/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-1.0.69/src/provide.rs
+
+/home/anarchsun/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-1.0.69/src/lib.rs:
+/home/anarchsun/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-1.0.69/src/aserror.rs:
+/home/anarchsun/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-1.0.69/src/display.rs:
+/home/anarchsun/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-1.0.69/src/provide.rs:
