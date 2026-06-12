@@ -1,29 +1,18 @@
-// anchor/programs/anaheim/src/instructions/update.rs
 use anchor_lang::prelude::*;
-
-use crate::close::close_anaheim::CloseAnaheim;
 use crate::contexts::update::UpdatePost;
-use crate::contexts::initialize::Initialize;
-use crate::handlers::initialize_handler::initialize_handler;
+use crate::error::ErrorCode;
 
-pub fn close(_ctx: Context<CloseAnaheim>) -> Result<()> {
-  Ok(())
-}
+pub fn update_post(ctx: Context<UpdatePost>, new_content: String) -> Result<()> {
+  let post = &mut ctx.accounts.post;
 
-pub fn decrement(ctx: Context<UpdatePost>) -> Result<()> {
-  ctx.accounts.anaheim.count = ctx.accounts.anaheim.count.checked_sub(1).unwrap();
-  Ok(())
-}
+  require!(!new_content.is_empty(), ErrorCode::EmptyContent);
 
-pub fn increment(ctx: Context<UpdatePost>) -> Result<()> {
-  ctx.accounts.anaheim.count = ctx.accounts.anaheim.count.checked_add(1).unwrap();
-  Ok(())
-}
+  let bytes = new_content.as_bytes();
 
-pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
-  initialize_handler(ctx)
-}
-pub fn set(ctx: Context<UpdatePost>, value: u8) -> Result<()> {
-  ctx.accounts.anaheim.count = value as u64;
+  post.content.fill(0);
+  post.content[..bytes.len()].copy_from_slice(bytes);
+  post.content_len = bytes.len() as u16;
+  post.timestamp = Clock::get()?.unix_timestamp;
+
   Ok(())
 }

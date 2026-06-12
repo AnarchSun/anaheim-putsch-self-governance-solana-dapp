@@ -6,6 +6,20 @@ packages:
   - anchor
   - src/app/**"
 
+allowBuilds:
+  '@stellar/stellar-sdk': true
+  bigint-buffer: true
+  blake-hash: true
+  bufferutil: true
+  esbuild: true
+  keccak: true
+  protobufjs: true
+  secp256k1: true
+  sharp: true
+  tiny-secp256k1: true
+  usb: true
+  utf-8-validate: true
+
 catalogs:
   react16:
     react: ^16.7.0

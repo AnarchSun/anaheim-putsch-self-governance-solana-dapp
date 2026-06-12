@@ -2,10 +2,10 @@
 // VERSION FINALE ET CORRECTE
 
 use anchor_lang::prelude::*;
-use crate::contexts::Initialize;
+use crate::contexts::initialize;
 
 // In your `initialize_handler` function:
-pub fn initialize_handler(ctx: Context<Initialize>) -> Result<()> {
+pub fn initialize_handler(ctx: Context<initialize>) -> Result<()> {
   let anaheim_account = &mut ctx.accounts.anaheim_account;
 
   // ✅ IMPORTANT: When initializing the account, set its authority

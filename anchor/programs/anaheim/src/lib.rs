@@ -1,6 +1,7 @@
 // FILE: anchor/programs/anaheim/src/lib.rs
 #![allow(unexpected_cfgs)]
-#[allow(deprecated)]
+#![allow(deprecated)]
+
 use anchor_lang::prelude::*;
 
 pub mod contexts;
@@ -11,42 +12,48 @@ pub mod constants;
 pub mod utils;
 pub mod close;
 pub mod validate_post_content;
+pub mod instructions;
 
-use contexts::create_user::*;
-use contexts::create_post::*;
-use contexts::initialize::*;
-use contexts::increment::*;
-use contexts::decrement::*;
-use handlers::increment_handler::increment_handler;
-use handlers::initialize_handler;
-use crate::handlers::{decrement_handler, handle_create_post, handle_create_user};
+use contexts::{
+  create_user::CreateUser,
+  create_post::CreatePost,
+  increment::Increment,
+  decrement::Decrement,
+  initialize::Initialize,
+};
 
-declare_id!("BL8RBD5RsuqCbwPSJ4dsmG3ykMcuWfitioAPzf7uPk9L");
-// 4. Le module principal du programme.
+use handlers::{
+  handle_create_user,
+  handle_create_post,
+  handle_increment,
+  initialize_handler,
+  decrement_handler,
+};
+
+declare_id!("GLVH5PNybwuUQsKU2auqhm7eUTfhdHRQw9mYnuthz6yA");
+
+use contexts::__client_accounts_increment;
 #[program]
 pub mod anaheim {
   use super::*;
 
   pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
-    initialize_handler::initialize_handler(ctx)
+    initialize_handler(ctx)
   }
 
   pub fn increment(ctx: Context<Increment>) -> Result<()> {
-    increment_handler(ctx)
+    handle_increment(ctx)
   }
 
-  // Pour que 'decrement' fonctionne, vous devez créer `contexts/decrement.rs`
-   pub fn decrement(ctx: Context<Decrement>) -> Result<()> {
-       decrement_handler(ctx)
-   }
+  pub fn decrement(ctx: Context<Decrement>) -> Result<()> {
+    decrement_handler(ctx)
+  }
 
   pub fn create_user(ctx: Context<CreateUser>, username: String) -> Result<()> {
-    handle_create_user::create_user(ctx, username)
+    handle_create_user(ctx, username)
   }
 
-  // This instruction now correctly delegates to the handler that does the resizing.
   pub fn create_post(ctx: Context<CreatePost>, content: String) -> Result<()> {
-    handle_create_post::handle_create_post(ctx, content)
+    handle_create_post(ctx, content)
   }
-
 }

@@ -14,7 +14,6 @@ pub struct CreateUser<'info> {
     pub user_account: Account<'info, UserAccount>,
 
     #[account(mut)]
-    // ✅ FIX: The signer is named `authority` to match the handler's usage.
     pub authority: Signer<'info>,
 
     pub system_program: Program<'info, System>,

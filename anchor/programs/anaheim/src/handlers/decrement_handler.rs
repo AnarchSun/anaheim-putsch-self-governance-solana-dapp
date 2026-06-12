@@ -2,10 +2,10 @@
 // VERSION FINALE ET CORRECTE
 
 use anchor_lang::prelude::*;
-use crate::contexts::Decrement; // ✅ On utilise le nouveau contexte 'Decrement'
+use crate::contexts::decrement; // ✅ On utilise le nouveau contexte 'Decrement'
 use crate::error::ErrorCode;   // Assurez-vous d'avoir un enum d'erreur
 
-pub fn decrement_handler(ctx: Context<Decrement>) -> Result<()> {
+pub fn decrement_handler(ctx: Context<decrement>) -> Result<()> {
   // ✅ On accède au bon compte, 'anaheim_account'.
   let anaheim_account = &mut ctx.accounts.anaheim_account;
 

@@ -50,38 +50,3 @@ pub fn create_post(ctx: Context<CreatePost>, content: String) -> Result<()> {
   msg!("Post created: {}", content);
   Ok(())
 }
-
-
-// NOTE : Les 3 handlers suivants utilisent le même contexte `UpdatePost'.
-// C'est possible, mais assurez-vous que `UpdatePost` contient bien `anaheim : Account<'info, AnaheimAccount>`.
-
-pub fn set_value(ctx: Context<UpdatePost>, value: u8) -> Result<()> {
-  let anaheim_account = &mut ctx.accounts.anaheim;
-
-  // ✅ Ceci est correct et va maintenant compiler, car 'value' est un champ.
-  anaheim_account.value = value;
-
-  Ok(())
-}
-
-pub fn increment(ctx: Context<UpdatePost>) -> Result<()> {
-  let anaheim = &mut ctx.accounts.anaheim;
-  anaheim.count = anaheim.count.checked_add(1).ok_or(ErrorCode::Overflow)?;
-  Ok(())
-}
-
-pub fn decrement(ctx: Context<UpdatePost>) -> Result<()> {
-  let anaheim = &mut ctx.accounts.anaheim;
-  anaheim.count = anaheim.count.checked_sub(1).ok_or(ErrorCode::Underflow)?;
-  Ok(())
-}
-
-// NOTE : Vous avez `increment` et `handle_increment'. C'est redondant.
-// Je commente `handle_increment` car il semble moins correct (incrémente `value` au lieu de `count').
-/*
-pub fn handle_increment(ctx: Context<UpdatePost>) -> Result<()> {
-  let anaheim = &mut ctx.accounts.anaheim;
-  anaheim.value = anaheim.value.checked_add(1).unwrap_or(anaheim.value);
-  Ok(())
-}
-*/

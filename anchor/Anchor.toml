@@ -7,7 +7,7 @@ resolution = true
 skip-lint = false
 
 [programs.devnet]
-anaheim = "BL8RBD5RsuqCbwPSJ4dsmG3ykMcuWfitioAPzf7uPk9L"
+anaheim = "GLVH5PNybwuUQsKU2auqhm7eUTfhdHRQw9mYnuthz6yA"
 
 [provider]
 cluster = "devnet"

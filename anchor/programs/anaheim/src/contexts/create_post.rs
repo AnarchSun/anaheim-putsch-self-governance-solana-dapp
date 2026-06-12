@@ -1,6 +1,5 @@
 // FILE: anchor/programs/anaheim/src/contexts/create_post.rs
 use anchor_lang::prelude::*;
-
 use crate::state::{PostAccount, UserAccount};
 
 #[derive(Accounts)]
@@ -9,11 +8,7 @@ pub struct CreatePost<'info> {
         init,
         payer = user,
         space = PostAccount::SIZE,
-        seeds = [
-            b"post",
-            user.key().as_ref(),
-            user_profile.post_count.to_le_bytes().as_ref()
-        ],
+        seeds = [b"post", user.key().as_ref()],
         bump
     )]
     pub post: Account<'info, PostAccount>,

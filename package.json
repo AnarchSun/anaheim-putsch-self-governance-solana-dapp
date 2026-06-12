@@ -13,10 +13,10 @@
     "wallet-ui"
   ],
   "type": "module",
-  "packageManager": "pnpm@10.18.1",
+  "packageManager": "pnpm@11.5.3",
   "engines": {
     "node": ">=20.0.0",
-    "pnpm": "10.18.1"
+    "pnpm": "11.5.3"
   },
   "workspaces": [
     "src/gill"

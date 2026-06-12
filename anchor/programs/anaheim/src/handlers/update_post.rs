@@ -1,20 +1,23 @@
 use anchor_lang::prelude::*;
+use crate::contexts::update::UpdatePost;
+use crate::error::ErrorCode;
 
-pub use crate::state::post_account::PostAccount;
+pub fn handle_update_post(
+    ctx: Context<UpdatePost>,
+    new_content: String,
+) -> Result<()> {
+    require!(!new_content.trim().is_empty(), ErrorCode::EmptyContent);
+    require!(new_content.len() <= 280, ErrorCode::ContentTooLong);
 
-#[derive(Accounts)]
-pub struct UpdatePost<'info> {
+    let post = &mut ctx.accounts.post;
 
-  #[account(
-        mut,
-        realloc = 8 + 32 + 8 + 4 + 280,
-        realloc::payer = user,
-        realloc::zero = true
-  )]
-  pub post: Account<'info, PostAccount>,
+    let bytes = new_content.as_bytes();
 
-  #[account(mut)]
-  pub user: Signer<'info>,
+    post.content.fill(0);
+    post.content[..bytes.len()].copy_from_slice(bytes);
+    post.content_len = bytes.len() as u16;
 
-  pub system_program: Program<'info, System>,
+    post.timestamp = Clock::get()?.unix_timestamp;
+
+    Ok(())
 }
