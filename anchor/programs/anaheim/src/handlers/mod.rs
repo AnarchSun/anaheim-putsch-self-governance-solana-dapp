@@ -1,19 +1,11 @@
-pub mod close;
-pub mod decrement_handler;
-pub mod handle_close_post;
 pub mod handle_create_post;
 pub mod handle_create_user;
-pub mod handle_increment;
-pub mod handler_mine;
-pub mod increment_handler;
 pub mod initialize_handler;
-pub mod set;
-pub mod shared;
 pub mod update_post;
+pub mod post;
 
 pub use handle_create_post::handle_create_post;
 pub use handle_create_user::handle_create_user;
-pub use handle_increment::handle_increment;
 pub use initialize_handler::initialize_handler;
-pub use decrement_handler::decrement_handler;
 pub use update_post::handle_update_post;
+pub use post::*;

@@ -1,15 +1,11 @@
 // ===================== state/mod.rs =====================
-pub mod anaheim;
+
 pub mod anaheim_account;
 pub mod post;
-pub mod post_account;
-pub mod user_account;
-pub mod user_vote_marker;
+pub mod user;
+pub mod dao;
 
-// exports propres
-pub use anaheim::*;
 pub use anaheim_account::*;
 pub use post::*;
-pub use post_account::PostAccount;
-pub use user_account::UserAccount;
-pub use user_vote_marker::UserVoteMarker;
+pub use user::*;
+pub use dao::*;

@@ -1,9 +1,0 @@
-pub mod create_post;
-pub mod decrement;
-pub mod increment;
-pub mod initialize;
-pub mod mine;
-pub mod set_data;
-pub mod update;
-pub mod use_anaheim;
-pub mod vote_post;

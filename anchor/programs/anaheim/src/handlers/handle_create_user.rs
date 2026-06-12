@@ -1,5 +1,5 @@
 use anchor_lang::prelude::*;
-use crate::contexts::create_user::CreateUser;
+pub(crate) use crate::contexts::create_user::CreateUser;
 use crate::error::ErrorCode;
 
 pub fn handle_create_user(ctx: Context<CreateUser>, username: String) -> Result<()> {
