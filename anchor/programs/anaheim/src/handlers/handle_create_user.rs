@@ -1,20 +1,24 @@
 use anchor_lang::prelude::*;
-pub(crate) use crate::contexts::create_user::CreateUser;
+use crate::contexts::create_user::CreateUser;
+use crate::state::User;
 use crate::error::ErrorCode;
 
-pub fn handle_create_user(ctx: Context<CreateUser>, username: String) -> Result<()> {
-  let user_account = &mut ctx.accounts.user_account;
+pub fn handle_create_user(
+  ctx: Context<CreateUser>,
+  username: String,
+) -> Result<()> {
+  let user = &mut ctx.accounts.user_account;
 
-  let name_bytes = username.as_bytes();
-  require!(name_bytes.len() <= 32, ErrorCode::UsernameTooLong);
+  let bytes = username.as_bytes();
+  require!(bytes.len() <= 32, ErrorCode::UsernameTooLong);
 
-  user_account.authority = ctx.accounts.authority.key();
-  user_account.timestamp = Clock::get()?.unix_timestamp;
+  user.username = [0u8; 32];
+  user.username[..bytes.len()].copy_from_slice(bytes);
 
-  user_account.username_len = name_bytes.len() as u8;
-  user_account.username[..name_bytes.len()].copy_from_slice(name_bytes);
-
-  user_account.post_count = 0;
+  user.username_len = bytes.len() as u8;
+  user.authority = ctx.accounts.authority.key();
+  user.timestamp = Clock::get()?.unix_timestamp;
+  user.post_count = 0;
 
   Ok(())
 }

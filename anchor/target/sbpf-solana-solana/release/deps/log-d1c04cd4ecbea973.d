@@ -1,0 +1,10 @@
+/home/anarchsun/RustroverProjects/anarcrypt.sol/anaheim-worker/anaheim-putsch-self-governance-solana-dapp/anchor/target/sbpf-solana-solana/release/deps/log-d1c04cd4ecbea973.d: /home/anarchsun/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/log-0.4.32/src/lib.rs /home/anarchsun/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/log-0.4.32/src/macros.rs /home/anarchsun/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/log-0.4.32/src/serde.rs /home/anarchsun/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/log-0.4.32/src/__private_api.rs
+
+/home/anarchsun/RustroverProjects/anarcrypt.sol/anaheim-worker/anaheim-putsch-self-governance-solana-dapp/anchor/target/sbpf-solana-solana/release/deps/liblog-d1c04cd4ecbea973.rlib: /home/anarchsun/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/log-0.4.32/src/lib.rs /home/anarchsun/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/log-0.4.32/src/macros.rs /home/anarchsun/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/log-0.4.32/src/serde.rs /home/anarchsun/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/log-0.4.32/src/__private_api.rs
+
+/home/anarchsun/RustroverProjects/anarcrypt.sol/anaheim-worker/anaheim-putsch-self-governance-solana-dapp/anchor/target/sbpf-solana-solana/release/deps/liblog-d1c04cd4ecbea973.rmeta: /home/anarchsun/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/log-0.4.32/src/lib.rs /home/anarchsun/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/log-0.4.32/src/macros.rs /home/anarchsun/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/log-0.4.32/src/serde.rs /home/anarchsun/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/log-0.4.32/src/__private_api.rs
+
+/home/anarchsun/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/log-0.4.32/src/lib.rs:
+/home/anarchsun/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/log-0.4.32/src/macros.rs:
+/home/anarchsun/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/log-0.4.32/src/serde.rs:
+/home/anarchsun/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/log-0.4.32/src/__private_api.rs:

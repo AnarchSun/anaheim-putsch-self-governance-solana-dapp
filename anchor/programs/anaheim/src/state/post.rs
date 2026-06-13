@@ -8,4 +8,13 @@ pub struct Post {
   pub content_len: u16,
   pub vote_count: i64,
   pub timestamp: i64,
+  pub bump: u8,
+}
+impl Post {
+  pub const SIZE: usize =
+    32 + // author
+        280 + // content
+        8 + // timestamp
+        8 + // id
+        1; // bump
 }

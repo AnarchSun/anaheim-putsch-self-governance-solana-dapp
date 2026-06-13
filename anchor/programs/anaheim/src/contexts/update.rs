@@ -1,11 +1,11 @@
 // ===================== contexts/update.rs =====================
 use anchor_lang::prelude::*;
-use crate::state::{PostAccount, AnaheimAccount};
+use crate::state::{Post, AnaheimAccount};
 
 #[derive(Accounts)]
 pub struct UpdatePost<'info> {
   #[account(mut)]
-  pub post: Account<'info, PostAccount>,
+  pub post: Account<'info, Post>,
 
   #[account(mut)]
   pub anaheim: Account<'info, AnaheimAccount>,
